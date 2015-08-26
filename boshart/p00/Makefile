@@ -1,8 +1,8 @@
 AutomatedMakefile = am
 CC = g++
 
-INC_DIRS = -I./CSC2110 -I/usr/local/include -I/opt/X11/include
-LIB_DIRS = -L./CSC2110 -I/usr/local/lib -I/opt/X11/lib
+INC_DIRS = -I../../CSC2110 -I/usr/local/include -I/opt/X11/include
+LIB_DIRS = -L../../CSC2110 -I/usr/local/lib -I/opt/X11/lib
 LIBS =  -framework OpenGL -framework GLUT -lCSC2110
 
 COMPILE = $(CC) $(INC_DIRS) -c
