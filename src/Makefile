@@ -1,7 +1,7 @@
 
-HEADER=
-FILES = main.cpp
-OBJ   = main.o
+HEADER= window.h
+FILES = main.cpp window.cpp
+OBJ   = main.o window.o
 
 TARGET=program
 
@@ -22,3 +22,7 @@ clean:
 main.o: main.cpp $(HEADER)
 
 	$(COMPILE) main.cpp
+
+window.o: window.cpp window.h
+
+	$(COMPILE) window.cpp
