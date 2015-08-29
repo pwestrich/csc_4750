@@ -1,7 +1,7 @@
 AutomatedMakefile = am
 
 #utility information
-CC = g++ -std=c++11
+CC = g++ -g -std=c++11
 RM = rm -f
 AR = ar -r
 MV = mv
