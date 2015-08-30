@@ -1,7 +1,17 @@
 
+#include <cassert>
 #include <cmath>
 
 #include "Vector3.h"
+Vector3::Vector3(const float *newValues){
+
+	assert(newValues);
+
+	_x = newValues[0];
+	_y = newValues[1];
+	_z = newValues[2];
+
+}
 
 Vector3::Vector3(const float x, const float y, const float z){
 
@@ -35,7 +45,7 @@ Vector3 Vector3::cross(const Vector3 &other) const {
 }
 
 //operators
-Vector3 Vector3::operator*(const float scalar){
+Vector3 Vector3::operator*(const float scalar) const {
 
 	float nx = _x * scalar;
 	float ny = _y * scalar;
@@ -51,6 +61,16 @@ Vector3 Vector3::operator+(const Vector3 &other) const {
 	float nx = _x + other.x();
 	float ny = _y + other.y();
 	float nz = _z + other.z();
+
+	return Vector3(nx, ny, nz);
+
+}
+
+Vector3 Vector3::operator-(const Vector3 &other) const {
+
+	float nx = _x - other.x();
+	float ny = _y - other.y();
+	float nz = _z - other.z();
 
 	return Vector3(nx, ny, nz);
 

@@ -87,4 +87,8 @@ BasicObject::BasicObject(const std::string &filename){
 BasicObject::~BasicObject(){}
 
 //draws the object
-void BasicObject::render(){}
+void BasicObject::render(){
+
+	//for now, let's try to draw only dots or something
+
+}

@@ -15,6 +15,8 @@ private:
 
 public:
 
+	//Vector3 will make its own copy of this array
+	Vector3(const float *newValues);
 	Vector3(const float x, const float y, const float z);
 	~Vector3();
 
@@ -31,10 +33,12 @@ public:
 	Vector3 cross(const Vector3 &other) const;
 
 	//operators
-	Vector3 operator*(const float scalar);
+	Vector3 operator*(const float scalar) const;
 
 	//adds two vectors
 	Vector3 operator+(const Vector3 &other) const;
+
+	Vector3 operator-(const Vector3 &other) const;
 
 };
 

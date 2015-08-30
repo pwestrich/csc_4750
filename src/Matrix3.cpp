@@ -4,6 +4,8 @@
 #include "Matrix3.h"
 #include "Vector3.h"
 
+//const Matrix3 IDENTITY({1, 0, 0, 0, 1, 0, 0, 0, 1});
+
 //the Matrix class will keep its own copy of this array
 //there must be exactly nine elements
 Matrix3::Matrix3(const float *newVals){
@@ -129,6 +131,36 @@ Matrix3 Matrix3::operator+(const float scalar) const {
 	for (int i = 0; i < 9; ++i){
 
 		newVals[i] = values[i] + scalar;
+
+	}
+
+	return Matrix3(newVals);
+
+}
+
+//subtracts two matricies
+Matrix3 Matrix3::operator-(const Matrix3 &other) const {
+
+	float newVals[9];
+
+	for (int i = 0; i < 9; ++i){
+
+		newVals[i] = values[i] - other[i];
+
+	}
+
+	return Matrix3(newVals);
+
+}
+
+//subtracts a scalar from the martix
+Matrix3 Matrix3::operator-(const float scalar) const {
+
+	float newVals[9];
+
+	for (int i = 0; i < 9; ++i){
+
+		newVals[i] = values[i] - scalar;
 
 	}
 

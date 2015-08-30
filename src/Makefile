@@ -1,7 +1,7 @@
 
-HEADER= utilities.h window.h Vector3.h Matrix3.h Vertex.h Face.h BasicObject.h
-FILES = main.cpp utilities.cpp window.cpp Vector3.cpp Matrix3.cpp Vertex.cpp Face.cpp BasicObject.cpp
-OBJ   = main.o utilities.o window.o Vector3.o Matrix3.o Vertex.o Face.o BasicObject.o
+HEADER= utilities.h window.h Vector3.h Vector4.h Matrix3.h Matrix4.h Vertex.h Face.h BasicObject.h
+FILES = main.cpp utilities.cpp window.cpp Vector3.cpp Vector4.cpp Matrix3.cpp Matrix4.cpp Vertex.cpp Face.cpp BasicObject.cpp
+OBJ   = main.o utilities.o window.o Vector3.o Vector4.o Matrix3.o Matrix4.o Vertex.o Face.o BasicObject.o
 
 TARGET=program
 
@@ -35,9 +35,17 @@ Vector3.o: Vector3.cpp Vector3.h
 
 	$(COMPILE) Vector3.cpp
 
+Vector4.o: Vector4.cpp Vector4.h Vector3.h
+
+	$(COMPILE) Vector4.cpp
+
 Matrix3.o: Matrix3.cpp Matrix3.h Vector3.h
 
 	$(COMPILE) Matrix3.cpp
+
+Matrix4.o: Matrix4.cpp Matrix4.h Vector4.h
+
+	$(COMPILE) Matrix4.cpp
 
 Vertex.o: Vertex.cpp Vertex.h Vector3.h
 

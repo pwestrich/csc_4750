@@ -14,7 +14,7 @@ private:
 
 	float values[9];
 
-	inline float index(const int row, const int col) const {
+	inline int index(const int row, const int col) const {
 
 		return ((col * 3) + row);
 
@@ -54,6 +54,12 @@ public:
 
 	//adds a scalar to the whole matrix
 	Matrix3 operator+(const float scalar) const;
+
+	//subtracts two matricies
+	Matrix3 operator-(const Matrix3 &other) const;
+
+	//subtracts a scalar from the martix
+	Matrix3 operator-(const float scalar) const;
 
 	//returns the item at index
 	float operator[](const int index) const;
