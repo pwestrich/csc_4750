@@ -5,6 +5,76 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+Vector4 Vector4::identity(){
+
+	static Vector4 vec(1, 1, 1, 1);
+	return vec;
+
+}
+
+Vector4 Vector4::zero(){
+
+	static Vector4 vec(0, 0, 0, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::x_up(){
+
+	static Vector4 vec(1, 0, 0, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::y_up(){
+
+	static Vector4 vec(0, 1, 0, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::z_up(){
+
+	static Vector4 vec(0, 0, 1, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::w_up(){
+
+	static Vector4 vec(0, 0, 0, 1);
+	return vec;
+
+}
+
+Vector4 Vector4::x_down(){
+
+	static Vector4 vec(-1, 0, 0, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::y_down(){
+
+	static Vector4 vec(0, -1, 0, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::z_down(){
+
+	static Vector4 vec(0, 0, -1, 0);
+	return vec;
+
+}
+
+Vector4 Vector4::w_down(){
+
+	static Vector4 vec(0, 0, 0, -1);
+	return vec;
+
+}
+
 //Vector4 will make a copy of this array for itself
 Vector4::Vector4(const float *newValues) {
 

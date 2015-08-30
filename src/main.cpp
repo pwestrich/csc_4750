@@ -1,16 +1,16 @@
 
-#include "BasicObject.h"
-#include "window.h"
+#include "Window.h"
 
 const char *title = "CSC 4750";
 
 int main(const int argc, const char **argv){
 
-	const std::string name("sphere.txt");
-	BasicObject obj(name);
+	Window *win = Window::getWindow();
 
-	Window win(argc, argv, 1280, 768, 0, 0, title);
-	win.show();
+	win->initWindow(argc, argv, 1280, 768, 25, 25, title);
+	win->show();
+
+	delete win;
 
 	return 0;
 

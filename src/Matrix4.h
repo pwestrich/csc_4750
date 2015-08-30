@@ -18,6 +18,8 @@ private:
 
 public:
 
+	static Matrix4 identity();
+
 	//the Matrix class will keep its own copy of this array
 	//there must be exactly 16 elements
 	Matrix4(const float *newVals);

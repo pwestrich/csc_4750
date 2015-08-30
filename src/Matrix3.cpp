@@ -4,7 +4,13 @@
 #include "Matrix3.h"
 #include "Vector3.h"
 
-//const Matrix3 IDENTITY({1, 0, 0, 0, 1, 0, 0, 0, 1});
+Matrix3 Matrix3::identity(){
+
+	static float matValues[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+	static Matrix3 mat(matValues);
+	return mat;
+
+}
 
 //the Matrix class will keep its own copy of this array
 //there must be exactly nine elements

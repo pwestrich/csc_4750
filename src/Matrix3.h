@@ -5,9 +5,6 @@
 class Vector3;
 class Matrix3;
 
-//the identity matrix
-extern const Matrix3 IDENTITY;
-
 class Matrix3 {
 
 private:
@@ -21,6 +18,9 @@ private:
 	}
 
 public:
+
+	//helper functions to create standard matricies
+	static Matrix3 identity();
 
 	//the Matrix class will keep its own copy of this array
 	//there must be exactly nine elements

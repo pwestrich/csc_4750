@@ -3,6 +3,63 @@
 #include <cmath>
 
 #include "Vector3.h"
+
+Vector3 Vector3::identity(){
+
+	static Vector3 vec(1, 1, 1);
+	return vec;
+
+}
+
+Vector3 Vector3::zero(){
+
+	static Vector3 vec(0, 0, 0);
+	return vec;
+
+}
+
+Vector3 Vector3::x_up(){
+
+	static Vector3 vec(1, 0, 0);
+	return vec;
+
+}
+
+Vector3 Vector3::y_up(){
+
+	static Vector3 vec(0, 1, 0);
+	return vec;
+
+}
+
+Vector3 Vector3::z_up(){
+
+	static Vector3 vec(0, 0, 1);
+	return vec;
+
+}
+
+Vector3 Vector3::x_down(){
+
+	static Vector3 vec(-11, 0, 0);
+	return vec;
+
+}
+
+Vector3 Vector3::y_down(){
+
+	static Vector3 vec(0, -1, 0);
+	return vec;
+
+}
+
+Vector3 Vector3::z_down(){
+
+	static Vector3 vec(0, 0, -1);
+	return vec;
+
+}
+
 Vector3::Vector3(const float *newValues){
 
 	assert(newValues);

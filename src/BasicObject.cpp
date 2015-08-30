@@ -4,6 +4,7 @@
 #include <string>
 
 #include "utilities.h"
+#include "Window.h"
 #include "BasicObject.h"
 #include "Face.h"
 #include "Vertex.h"
@@ -47,11 +48,11 @@ BasicObject::BasicObject(const std::string &filename){
 
 		} else if (line.find("usemtl") == 0){
 
-			goto next_line;
+			goto next_line; //no materials
 
 		} else if (line.find("end") == 0){
 
-			goto next_line;
+			goto next_line; //end of file marker
 
 		} else if (line.find("v") == 0){
 
@@ -62,7 +63,7 @@ BasicObject::BasicObject(const std::string &filename){
 			float y = atof(tokens[2].c_str());
 			float z = atof(tokens[3].c_str());
 
-			points.push_back(new Vertex(x, y, z));
+			points.push_back(new Vertex(x, y, z, 1.0));
 
 		} else if (line.find("f") == 0){
 
@@ -89,6 +90,14 @@ BasicObject::~BasicObject(){}
 //draws the object
 void BasicObject::render(){
 
+	Window *win = Window::getWindow();
+
 	//for now, let's try to draw only dots or something
+	for (int i = 0; i < points.size(); ++i){
+
+		Vertex *point = points[i];
+		win->drawPixel(point->x(), point->y(), 1, 0, 0);
+
+	}
 
 }

@@ -15,6 +15,15 @@ private:
 
 public:
 
+	static Vector3 identity();
+	static Vector3 zero();
+	static Vector3 x_up();
+	static Vector3 y_up();
+	static Vector3 z_up();
+	static Vector3 x_down();
+	static Vector3 y_down();
+	static Vector3 z_down();
+
 	//Vector3 will make its own copy of this array
 	Vector3(const float *newValues);
 	Vector3(const float x, const float y, const float z);
@@ -27,7 +36,7 @@ public:
 	inline float length() const { return mag; }
 
 	//returns a normalizes version of this vector
-	Vector3 normalize() const ;
+	Vector3 normalize() const;
 
 	//returns the cross product of this X other
 	Vector3 cross(const Vector3 &other) const;

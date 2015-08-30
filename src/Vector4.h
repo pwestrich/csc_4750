@@ -15,6 +15,17 @@ private:
 
 public:
 
+	static Vector4 identity();
+	static Vector4 zero();
+	static Vector4 x_up();
+	static Vector4 y_up();
+	static Vector4 z_up();
+	static Vector4 w_up();
+	static Vector4 x_down();
+	static Vector4 y_down();
+	static Vector4 z_down();
+	static Vector4 w_down();
+
 	//Vector4 will make a copy of this array for itself
 	Vector4(const float *newValues);
 	Vector4(const Vector3 &vec, const float w);

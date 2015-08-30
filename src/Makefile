@@ -1,7 +1,7 @@
 
-HEADER= utilities.h window.h Vector3.h Vector4.h Matrix3.h Matrix4.h Vertex.h Face.h BasicObject.h
-FILES = main.cpp utilities.cpp window.cpp Vector3.cpp Vector4.cpp Matrix3.cpp Matrix4.cpp Vertex.cpp Face.cpp BasicObject.cpp
-OBJ   = main.o utilities.o window.o Vector3.o Vector4.o Matrix3.o Matrix4.o Vertex.o Face.o BasicObject.o
+HEADER= utilities.h Window.h Vector3.h Vector4.h Matrix3.h Matrix4.h Vertex.h Face.h BasicObject.h Picture.h
+FILES = main.cpp utilities.cpp Window.cpp Vector3.cpp Vector4.cpp Matrix3.cpp Matrix4.cpp Vertex.cpp Face.cpp BasicObject.cpp Picture.cpp
+OBJ   = main.o utilities.o Window.o Vector3.o Vector4.o Matrix3.o Matrix4.o Vertex.o Face.o BasicObject.o Picture.o
 
 TARGET=program
 
@@ -19,7 +19,7 @@ clean:
 
 	$(RM) $(OBJ) $(TARGET)
 
-main.o: main.cpp $(HEADER)
+main.o: main.cpp Window.h
 
 	$(COMPILE) main.cpp
 
@@ -27,9 +27,9 @@ utilities.o: utilities.h
 
 	$(COMPILE) utilities.cpp
 
-window.o: window.cpp window.h
+Window.o: Window.cpp Window.h Picture.h
 
-	$(COMPILE) window.cpp
+	$(COMPILE) Window.cpp
 
 Vector3.o: Vector3.cpp Vector3.h
 
@@ -47,14 +47,18 @@ Matrix4.o: Matrix4.cpp Matrix4.h Vector4.h
 
 	$(COMPILE) Matrix4.cpp
 
-Vertex.o: Vertex.cpp Vertex.h Vector3.h
+Vertex.o: Vertex.cpp Vertex.h Vector4.h
 
 	$(COMPILE) Vertex.cpp
 
-Face.o: Face.cpp Face.h Vertex.h Vector3.h
+Face.o: Face.cpp Face.h Vertex.h Vector4.h
 
 	$(COMPILE) Face.cpp
 
-BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vertex.h Vector3.h
+BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vertex.h Vector4.h Window.h
 
 	$(COMPILE) BasicObject.cpp
+
+Picture.o: Picture.cpp Picture.h BasicObject.h
+	
+	$(COMPILE) Picture.cpp
