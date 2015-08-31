@@ -17,6 +17,7 @@ public:
 
 	~Vertex();
 
+	inline Vector4 vector() const { return location;}
 	inline float x() const { return location.x();}
 	inline float y() const { return location.y();}
 	inline float z() const { return location.z();}

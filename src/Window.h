@@ -2,6 +2,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+class Matrix4;
+
 class Window {
 
 private:
@@ -23,8 +25,15 @@ public:
 	//displays the window on screen
 	void show();
 
-	//draws one pixel on the screen, converting it to window coordinates
-	void drawPixel(const int x, const int y, const float r, const float g, const float b);
+	//draws one pixel on the screen. takes window coordinates.
+	void drawPixel(const int x, const int y, const float r, const float g, const float b) const;
+
+	//get the width and height of the window 
+	int getWidth() const;
+	int getHeight() const;
+
+	//returns the matrix to convert window coordinates to screen coordinates
+	Matrix4 getWindowingMatrix() const;
 
 };
 

@@ -3,6 +3,7 @@
 
 #include "Window.h"
 #include "Picture.h"
+#include "Matrix4.h"
 
 class Pixel;
 
@@ -46,13 +47,13 @@ void Window::show(){
 
 }
 
-//draws one pixel on the screen, converting it to window coordinates
-void Window::drawPixel(const int x, const int y, const float r, const float g, const float b){
+//draws one pixel on the screen. Takes window coordinates.
+void Window::drawPixel(const int x, const int y, const float r, const float g, const float b) const {
 
 	const int w = glutGet(GLUT_WINDOW_WIDTH);
 	const int h = glutGet(GLUT_WINDOW_HEIGHT);
 
-	//calculate the window coordinates
+	//convert the window coordinates to what openGL wants
 	float xCanon = (x * 2.0) / w + (-1.0 * (w - 1)) / w;
 	float yCanon = (-2.0 * y) / h + (1.0 * (h - 1)) / h;
 
@@ -63,6 +64,28 @@ void Window::drawPixel(const int x, const int y, const float r, const float g, c
 	glBegin(GL_POINTS);
 	glVertex2f(xCanon, yCanon);
 	glEnd();
+
+}
+
+//get the width and height of the window 
+int Window::getWidth() const {
+
+	return glutGet(GLUT_WINDOW_WIDTH);
+
+}
+
+int Window::getHeight() const {
+
+	return glutGet(GLUT_WINDOW_HEIGHT);
+
+}
+
+//returns the matrix to convert window coordinates to screen coordinates
+Matrix4 Window::getWindowingMatrix() const {
+
+	static float values[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+	static Matrix4 mat(values);
+	return mat;
 
 }
 

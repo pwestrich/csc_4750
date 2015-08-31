@@ -90,13 +90,12 @@ BasicObject::~BasicObject(){}
 //draws the object
 void BasicObject::render(){
 
-	Window *win = Window::getWindow();
+	const Window *win = Window::getWindow();
 
 	//for now, let's try to draw only dots or something
-	for (int i = 0; i < points.size(); ++i){
+	for (int i = 0; i < faces.size(); ++i){
 
-		Vertex *point = points[i];
-		win->drawPixel(point->x(), point->y(), 1, 0, 0);
+		faces[i]->render();
 
 	}
 

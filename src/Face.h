@@ -3,6 +3,7 @@
 #define FACE_H
 
 class Vertex;
+class Vector4;
 
 class Face {
 
@@ -14,6 +15,12 @@ private:
 
 	//Vector3 normal //future
 
+	//implements the DDA line drawing algorithm
+	void renderDDA(const Vector4 &start, const Vector4 &end) const;
+
+	//implements the Bresham line drawing algorithm
+	void renderBresham(const Vector4 &start, const Vector4 &end) const;
+
 public:
 
 	//Face will retain a pointer to these, but will not delete them
@@ -23,6 +30,9 @@ public:
 	inline Vertex *getFirst() const { return pointOne;}
 	inline Vertex *getSecond() const { return pointTwo;}
 	inline Vertex *getThird() const { return pointThree;}
+
+	//renders the face (draws only lines for now)
+	void render() const;
 
 };
 
