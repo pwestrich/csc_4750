@@ -6,6 +6,7 @@
 #include "Face.h"
 #include "Vertex.h"
 #include "Vector4.h"
+#include "Matrix4.h"
 
 //Face will retain a pointer to these, but will not delete them
 Face::Face(Vertex *first, Vertex *second, Vertex *third){
@@ -25,20 +26,25 @@ Face::~Face(){}
 //renders the face (draws only lines for now)
 void Face::render() const {
 
-	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst = pointOne->vector();
-	const Vector4 newSecond = pointTwo->vector();
-	const Vector4 newThird = pointThree->vector();
+	const Window *win = Window::getWindow();
 
-	//draw using the DDa algorithm first
+	const Matrix4 aspect = win->getAspectRatioMatrix();
+	const Matrix4 windowing = win->getWindowingMatrix();
+
+	//convert the coordinates to screen coordinates first
+	const Vector4 newFirst  = windowing * aspect * pointOne->vector();
+	const Vector4 newSecond = windowing * aspect * pointTwo->vector();
+	const Vector4 newThird  = windowing * aspect * pointThree->vector();
+
+	//draw using the DDA algorithm first
 	renderDDA(newFirst, newSecond);
 	renderDDA(newSecond, newThird);
 	renderDDA(newThird, newFirst);
 
 	//then draw the Bresham version on top of it
-	renderBresham(newFirst, newSecond);
-	renderBresham(newSecond, newThird);
-	renderBresham(newThird, newFirst);
+	//renderBresham(newFirst, newSecond);
+	//renderBresham(newSecond, newThird);
+	//renderBresham(newThird, newFirst);
 
 }
 

@@ -83,9 +83,16 @@ int Window::getHeight() const {
 //returns the matrix to convert window coordinates to screen coordinates
 Matrix4 Window::getWindowingMatrix() const {
 
-	static float values[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
-	static Matrix4 mat(values);
-	return mat;
+	float values[16] = {static_cast<float>(getHeight() / 2.0), 0, 0, static_cast<float>(getWidth() / 2.0), 0, static_cast<float>(getWidth() / -2.0), 0, static_cast<float>(getHeight() / 2.0), 0, 0, 1, 0, 0, 0, 0, 1};
+	return Matrix4(values);
+
+}
+
+//returns the aspect matrix
+Matrix4 Window::getAspectRatioMatrix() const {
+
+	float values[16] = {1, 0, 0, 0, 0, static_cast<float>(getHeight() / static_cast<float>(getWidth())), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+	return Matrix4(values);
 
 }
 

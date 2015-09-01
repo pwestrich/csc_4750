@@ -35,6 +35,9 @@ public:
 	//returns the matrix to convert window coordinates to screen coordinates
 	Matrix4 getWindowingMatrix() const;
 
+	//returns the aspect matrix
+	Matrix4 getAspectRatioMatrix() const;
+
 };
 
 #endif
