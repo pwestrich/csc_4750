@@ -74,7 +74,7 @@ BasicObject::BasicObject(const std::string &filename){
 			int two = atoi(tokens[2].c_str());
 			int three = atoi(tokens[3].c_str());
 
-			faces.push_back(new Face(points[--one], points[--two], points[--three]));
+			faces.push_back(new Face(points[one - 1], points[two - 1], points[three - 1]));
 
 		}
 
@@ -90,9 +90,7 @@ BasicObject::~BasicObject(){}
 //draws the object
 void BasicObject::render(){
 
-	const Window *win = Window::getWindow();
-
-	//for now, let's try to draw only dots or something
+	//tell each face to render itself
 	for (int i = 0; i < faces.size(); ++i){
 
 		faces[i]->render();

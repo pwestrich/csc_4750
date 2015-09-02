@@ -32,9 +32,9 @@ void Face::render() const {
 	const Matrix4 windowing = win->getWindowingMatrix();
 
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = windowing * aspect * pointOne->vector();
-	const Vector4 newSecond = windowing * aspect * pointTwo->vector();
-	const Vector4 newThird  = windowing * aspect * pointThree->vector();
+	const Vector4 newFirst  = windowing * (aspect * pointOne->vector());
+	const Vector4 newSecond = windowing * (aspect * pointTwo->vector());
+	const Vector4 newThird  = windowing * (aspect * pointThree->vector());
 
 	//draw using the DDA algorithm first
 	renderDDA(newFirst, newSecond);
