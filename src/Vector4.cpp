@@ -85,6 +85,8 @@ Vector4::Vector4(const float *newValues) {
 	values[2] = newValues[2];
 	values[3] = newValues[3];
 
+	mag = calculateMag();
+
 }
 
 Vector4::Vector4(const Vector3 &vec, const float w){
@@ -94,6 +96,8 @@ Vector4::Vector4(const Vector3 &vec, const float w){
 	values[2] = vec.z();
 	values[3] = w;
 
+	mag = calculateMag();
+
 }
 
 Vector4::Vector4(const float x, const float y, const float z, const float w){
@@ -102,6 +106,8 @@ Vector4::Vector4(const float x, const float y, const float z, const float w){
 	values[1] = y;
 	values[2] = z;
 	values[3] = w;
+
+	mag = calculateMag();
 
 }
 
@@ -146,6 +152,13 @@ Vector4 Vector4::operator-(const Vector4 &other) const {
 	float nw = values[3] - other.w();
 
 	return Vector4(nx, ny, nz, nw);
+
+}
+
+float Vector4::operator[](const int index) const {
+
+	assert(index >= 0 && index < 4);
+	return values[index];
 
 }
 

@@ -73,8 +73,13 @@ Vector4 Matrix4::operator*(const Vector4 &vec) const {
 
 	for (int i = 0; i < 4; ++i){
 
-		newVals[i] = (values[index(i, 0)] * vec.x()) + (values[index(i, 1)] * vec.y()) + (values[index(i, 2)] * vec.z()) 
-					+ (values[index(i, 3)] * vec.w());
+		newVals[i] = 0.0;
+
+		for (int j = 0; j < 4; ++j){
+
+			newVals[i] += (values[index(j, i)] * vec[j]); 
+
+		}
 
 	}
 
@@ -91,7 +96,7 @@ Matrix4 Matrix4::operator*(const Matrix4 &mat) const {
 
 		for (int j = 0; j < 4; j++) {
 
-			newVals[(4 * i) + j] = 0;
+			newVals[(4 * i) + j] = 0.0;
 			for (int k = 0; k < 4; k++) {
 
 			    newVals[(4 * i) + j] += values[(4 * i) + k] * mat[(4 * k) + j];

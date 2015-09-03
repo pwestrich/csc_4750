@@ -50,6 +50,8 @@ public:
 
 	Vector4 operator-(const Vector4 &other) const;
 
+	float operator[](const int index) const;
+
 };
 
 #endif
