@@ -1,10 +1,7 @@
 
 HEADER = $(wildcard *.h)
-#utilities.h Window.h Vector3.h Vector4.h Matrix3.h Matrix4.h Vertex.h Face.h BasicObject.h Picture.h
 FILES  = $(wildcard *.cpp)
-#main.cpp utilities.cpp Window.cpp Vector3.cpp Vector4.cpp Matrix3.cpp Matrix4.cpp Vertex.cpp Face.cpp BasicObject.cpp Picture.cpp
 OBJ    = $(patsubst %.cpp,%.o,$(wildcard *.cpp))
-#main.o utilities.o Window.o Vector3.o Vector4.o Matrix3.o Matrix4.o Vertex.o Face.o BasicObject.o Picture.o
 
 TARGET = program
 
