@@ -5,5 +5,4 @@
 DIR=`printf "%q\n" "$(pwd)"`
 
 clear
-#make -kj 4 all PROJECT_DIR=$DIR
-make $1 PROJECT_DIR="$DIR"
+make -kj 4 $1 PROJECT_DIR="$DIR"

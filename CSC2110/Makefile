@@ -9,15 +9,18 @@ LIB_NAME = libCSC2110.a
 
 all: install
 
-install: $(OBJ)
+install: $(LIB_NAME)
 
-	$(AR) $(LIB_NAME) $(OBJ)
-	$(MV) $(LIB_NAME) $(PROJECT_DIR)/lib/$(LIB_NAME)
+	$(MV) $(LIB_NAME) ../lib/$(LIB_NAME)
 
 clean:
 
 	$(RM) $(OBJ)
 	$(RM) $(PROJECT_DIR)/lib/$(LIB_NAME)
+
+$(LIB_NAME): $(OBJ)
+
+	$(AR) $(LIB_NAME) $(OBJ)
 
 ReadFile.o: ReadFile.cpp
 

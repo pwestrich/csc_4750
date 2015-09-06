@@ -32,32 +32,19 @@ LIBS 	 :=  -framework OpenGL -framework GLUT -lCSC2110
 
 RM 		 := rm -f
 MV 		 := mv
+MAKE 	 := make
 
 else ifneq (, $(findstring mingw, $(SYS)))
 # Do mingw things
 $(info System detected to be Windows MinGW)
 
-INC_DIRS := -I$(PROJECT_DIR)/include 
-LIB_DIRS := -L$(PROJECT_DIR)/lib -I/usr/local/lib -I/opt/X11/lib
-LIBS 	 := -lCSC2110
+INC_DIRS := -I$(PROJECT_DIR)/include -I$(DRIVE_LETTER)/TDM-GCC-64/include
+LIB_DIRS := -L$(PROJECT_DIR)/lib -I$(DRIVE_LETTER)/TDM-GCC-64/lib
+LIBS 	 := -lCSC2110 -lfreeglut -lopengl32
 
 RM   	 := del
-MV 		 := move
-
-$(error Set LIBS and INC_DIRS flags first before building with MinGW!)
-
-else ifneq (, $(findstring cygwin, $(SYS)))
-# Do cygwin things
-$(info System detected to be Windows CyGWin)
-
-INC_DIRS := -I$(PROJECT_DIR)/include 
-LIB_DIRS := -L$(PROJECT_DIR)/lib -I/usr/local/lib -I/opt/X11/lib
-LIBS 	 := -lCSC2110
-
-RM 		 := del
-MV 		 := move
-
-$(error Set LIBS and INC_DIRS flags first before building with CyGWin!)
+MV 		 := copy /Y 
+MAKE 	 := mingw32-make
 
 else ifneq (, $(findstring linux, $(SYS)))
 # Do linux things
@@ -69,6 +56,7 @@ LIBS 	 :=  -lCSC2110
 
 RM 		 := rm -f
 MV 		 := mv
+MAKE 	 := make
 
 $(error Set LIBS and INC_DIRS flags first before trying to build on Linux!)
 
@@ -85,14 +73,16 @@ LINK := $(CC) $(LIB_DIRS) -o
 #export variables so that make chains can have them
 export
 
+all: setup boshart program
+
 csc2110: setup
 
-	make -C ./CSC2110 all
+	$(MAKE) -C ./CSC2110 all
 
 boshart: setup
 
-	make -C ./boshart/p00 all
+	$(MAKE) -C ./boshart/p00 all
 
 program: setup csc2110
 
-	make -C ./src all
+	$(MAKE) -C ./src all

@@ -1,4 +1,5 @@
 p0
 *.a
 *.o
+*.exe
 program
