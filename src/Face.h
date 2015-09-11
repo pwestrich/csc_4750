@@ -2,6 +2,7 @@
 #ifndef FACE_H
 #define FACE_H
 
+class Matrix4;
 class Vertex;
 class Vector4;
 
@@ -32,7 +33,7 @@ public:
 	inline Vertex *getThird() const { return pointThree;}
 
 	//renders the face (draws only lines for now)
-	void render() const;
+	void render(const Matrix4 &transform) const;
 
 };
 

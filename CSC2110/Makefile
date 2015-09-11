@@ -1,26 +1,27 @@
 
 #files in the folder
-FILES = ReadFile.cpp WriteFile.cpp Keyboard.cpp Matrix.cpp Poly.cpp Integer.cpp Double.cpp Permutation.cpp
-OBJ   = ReadFile.o WriteFile.o Keyboard.o Matrix.o Poly.o Integer.o Double.o Permutation.o
+HEADER := $(wildcard *.h)
+FILES  := $(wildcard *.cpp)
+OBJ    := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
-LIB_NAME = libCSC2110.a
+TARGET = libCSC2110.a
 
 .PHONY: all install clean
 
 all: install
 
-install: $(LIB_NAME)
+install: $(TARGET)
 
-	$(MV) $(LIB_NAME) ../lib/$(LIB_NAME)
+	$(MV) $(TARGET) ../lib/$(TARGET)
 
 clean:
 
 	$(RM) $(OBJ)
-	$(RM) $(PROJECT_DIR)/lib/$(LIB_NAME)
+	$(RM) $(PROJECT_DIR)/lib/$(TARGET)
 
-$(LIB_NAME): $(OBJ)
+$(TAR): $(OBJ)
 
-	$(AR) $(LIB_NAME) $(OBJ)
+	$(AR) $(TARGET) $(OBJ)
 
 ReadFile.o: ReadFile.cpp
 
@@ -53,4 +54,12 @@ Double.o: Double.cpp
 Permutation.o: Permutation.cpp
 
 	$(COMPILE) Permutation.cpp
+
+String.o: String.cpp
+
+	$(COMPILE) String.cpp
+
+Tokens.o: Tokens.cpp
+
+	$(COMPILE) Tokens.cpp
 

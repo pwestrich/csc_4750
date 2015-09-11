@@ -25,17 +25,12 @@ Face::Face(Vertex *first, Vertex *second, Vertex *third){
 Face::~Face(){}
 
 //renders the face (draws only lines for now)
-void Face::render() const {
-
-	const Window *win = Window::getWindow();
-
-	const Matrix4 aspect = win->getAspectRatioMatrix();
-	const Matrix4 windowing = win->getWindowingMatrix();
+void Face::render(const Matrix4 &transform) const {
 
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (windowing * (aspect * pointOne->vector()));
-	const Vector4 newSecond = (windowing * (aspect * pointTwo->vector()));
-	const Vector4 newThird  = (windowing * (aspect * pointThree->vector()));
+	const Vector4 newFirst  = (transform * pointOne->vector());
+	const Vector4 newSecond = (transform * pointTwo->vector());
+	const Vector4 newThird  = (transform * pointThree->vector());
 
 	//draw using the DDA algorithm first
 	renderDDA(newFirst, newSecond);

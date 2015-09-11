@@ -1,7 +1,7 @@
 
-HEADER = $(wildcard *.h)
-FILES  = $(wildcard *.cpp)
-OBJ    = $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+HEADER := $(wildcard *.h)
+FILES  := $(wildcard *.cpp)
+OBJ    := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
 TARGET = program
 
@@ -57,10 +57,14 @@ Face.o: Face.cpp Face.h Vertex.h Vector4.h Window.h
 
 	$(COMPILE) Face.cpp
 
-BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vertex.h Vector4.h Window.h
+BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vertex.h Vector4.h Matrix4.h
 
 	$(COMPILE) BasicObject.cpp
 
-Picture.o: Picture.cpp Picture.h BasicObject.h
+InstanceObject.o: InstanceObject.cpp InstanceObject.h BasicObject.h Matrix4.h Vector4.h
+
+	$(COMPILE) InstanceObject.cpp
+
+Picture.o: Picture.cpp Picture.h BasicObject.h Window.h
 	
 	$(COMPILE) Picture.cpp

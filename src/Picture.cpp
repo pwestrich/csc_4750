@@ -1,6 +1,8 @@
 
+#include "Window.h"
 #include "Picture.h"
 #include "BasicObject.h"
+#include "Matrix4.h"
 
 //singletons everywhere
 Picture::Picture(){
@@ -22,9 +24,16 @@ Picture::~Picture(){}
 //renders the picture
 void Picture::render(){
 
+	const Window *win = Window::getWindow();
+
+	const Matrix4 aspect = win->getAspectRatioMatrix();
+	const Matrix4 windowing = win->getWindowingMatrix();
+
+	const Matrix4 transform = windowing * aspect;
+
 	for (int i = 0; i < objects.size(); ++i){
 
-		objects[i]->render();
+		objects[i]->render(transform);
 
 	}
 

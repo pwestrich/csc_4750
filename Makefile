@@ -11,7 +11,7 @@ SYS := $(shell $(CC) -dumpmachine)
 
 all: csc2110 boshart program
 
-run: all
+run: program
 
 	make -C ./src run
 
@@ -27,7 +27,7 @@ ifneq (, $(findstring apple, $(SYS)))
 $(info System detected to be Mac OS X)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I/usr/local/include -I/opt/X11/include
-LIB_DIRS := -L$(PROJECT_DIR)/lib -I/usr/local/lib -I/opt/X11/lib
+LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
 LIBS 	 :=  -framework OpenGL -framework GLUT -lCSC2110
 
 RM 		 := rm -f
@@ -39,7 +39,7 @@ else ifneq (, $(findstring mingw, $(SYS)))
 $(info System detected to be Windows MinGW)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I$(DRIVE_LETTER)/TDM-GCC-64/include
-LIB_DIRS := -L$(PROJECT_DIR)/lib -I$(DRIVE_LETTER)/TDM-GCC-64/lib
+LIB_DIRS := -L$(PROJECT_DIR)/lib -L$(DRIVE_LETTER)/TDM-GCC-64/lib
 LIBS 	 := -lCSC2110 -lfreeglut -lopengl32
 
 RM   	 := del
@@ -51,7 +51,7 @@ else ifneq (, $(findstring linux, $(SYS)))
 $(info System detected to be GNU/Linux)
 
 INC_DIRS := -I$(PROJECT_DIR)/include 
-LIB_DIRS := -L$(PROJECT_DIR)/lib -I/usr/local/lib -I/opt/X11/lib
+LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
 LIBS 	 :=  -lCSC2110
 
 RM 		 := rm -f
@@ -79,10 +79,10 @@ csc2110: setup
 
 	$(MAKE) -C ./CSC2110 all
 
-boshart: setup
+boshart: setup csc2110
 
 	$(MAKE) -C ./boshart/p00 all
 
-program: setup csc2110
+program: setup
 
 	$(MAKE) -C ./src all

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+class Matrix4;
 class Vertex;
 class Face;
 
@@ -27,7 +28,7 @@ public:
 	~BasicObject();
 
 	//draws the object
-	void render();
+	void render(const Matrix4 &transform);
 
 };
 

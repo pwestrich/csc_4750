@@ -4,8 +4,8 @@
 #include <string>
 
 #include "utilities.h"
-#include "Window.h"
 #include "BasicObject.h"
+#include "Matrix4.h"
 #include "Face.h"
 #include "Vertex.h"
 
@@ -88,12 +88,12 @@ BasicObject::BasicObject(const std::string &filename){
 BasicObject::~BasicObject(){}
 
 //draws the object
-void BasicObject::render(){
+void BasicObject::render(const Matrix4 &transform){
 
 	//tell each face to render itself
 	for (int i = 0; i < faces.size(); ++i){
 
-		faces[i]->render();
+		faces[i]->render(transform);
 
 	}
 
