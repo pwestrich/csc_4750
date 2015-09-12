@@ -25,7 +25,7 @@ public:
 	static Window *getWindow();
 
 	//creates a window for us to draw in
-	void initWindow(const int argc, const char**argv, const int width, const int height, const int x, const int y, const char *title);
+	void initWindow(const int argc, const char **argv, const int width, const int height, const int x, const int y, const char *title);
 
 	//displays the window on screen
 	void show();

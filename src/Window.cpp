@@ -17,7 +17,7 @@ Window *Window::getWindow(){
 
 }
 
-void Window::initWindow(const int argc, const char**argv, const int width, const int height, const int x, const int y, const char *title){
+void Window::initWindow(const int argc, const char **argv, const int width, const int height, const int x, const int y, const char *title){
 
 	if (init) return;
 

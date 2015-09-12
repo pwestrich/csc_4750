@@ -49,6 +49,10 @@ Matrix4.o: Matrix4.cpp Matrix4.h Vector4.h
 
 	$(COMPILE) Matrix4.cpp
 
+AffineTransformations.o: AffineTransformations.cpp AffineTransformations.h Vector4.h Matrix4.h
+
+	$(COMPILE) AffineTransformations.cpp
+
 Vertex.o: Vertex.cpp Vertex.h Vector4.h
 
 	$(COMPILE) Vertex.cpp
