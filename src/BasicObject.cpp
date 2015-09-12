@@ -84,11 +84,8 @@ BasicObject::BasicObject(const std::string &filename){
 
 }
 
-//deallocates the memory for the entire object
-BasicObject::~BasicObject(){}
-
 //draws the object
-void BasicObject::render(const Matrix4 &transform){
+void BasicObject::render(const Matrix4 &transform) const {
 
 	//tell each face to render itself
 	for (int i = 0; i < faces.size(); ++i){

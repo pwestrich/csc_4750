@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <utility>
@@ -118,12 +119,12 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 	const Window *win = Window::getWindow();
 
 	//calculate the change in x and y
-	int dx = round(end.x() - start.x());
-	int dy = round(end.y() - start.y());
+	int dx = round(end.x()) - round(start.x());
+	int dy = round(end.y()) - round(start.y());
 
 	//calculate the increment in x and y
-	int xInc = ((dx > 0) - (dx < 0));
-	int yInc = ((dy > 0) - (dy < 0));
+	const int xInc = ((dx > 0) - (dx < 0));
+	const int yInc = ((dy > 0) - (dy < 0));
 
 	//convert changes into positive double themselves
 	dx = abs(dx) << 1;
@@ -132,8 +133,8 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 	//get our starting and ending x and y
 	int xc = round(start.x());
 	int yc = round(start.y());
-	int xf = round(end.x());
-	int yf = round(end.y());
+	const int xf = round(end.x());
+	const int yf = round(end.y());
 
 	//draw the starting point and begin the loop
 	win->drawPixel(xc, yc, 0.0, 0.0, 1.0);
@@ -142,6 +143,7 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 
 		int e = dy - (dx >> 1);
 
+		//loop over x case
 		while (xc < xf){
 
 			if ((e >= 0) && (e || xInc > 0)){
@@ -162,6 +164,7 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 
 		int e = dx - (dy >> 1);
 
+		//loop over y case
 		while (yc < yf){
 
 			if ((e >= 0) && (e || (yInc > 0))){

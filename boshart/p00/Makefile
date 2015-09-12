@@ -12,7 +12,7 @@ all: $(TARGET)
 
 clean:
 
-	$(RM) $(FILES)
+	$(RM) $(OBJ)
 
 $(TARGET): $(OBJ)
 

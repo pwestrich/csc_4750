@@ -2,7 +2,7 @@ AutomatedMakefile := am
 
 # compiler information
 CC      := g++
-CCFLAGS := -g -std=c++11 -O2
+CCFLAGS := -g -std=c++11 -O0
 AR 		:= ar -r
 
 SYS := $(shell $(CC) -dumpmachine)

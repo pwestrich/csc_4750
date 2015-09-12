@@ -3,8 +3,6 @@
 #include "BasicObject.h"
 #include "Matrix4.h"
 
-InstanceObject::~InstanceObject(){}
-
 //used to build up several transforms
 void InstanceObject::buildTransform(const Matrix4 &newTransform){
 
@@ -14,9 +12,9 @@ void InstanceObject::buildTransform(const Matrix4 &newTransform){
 }
 
 //renders the object using the current instance transform
-void InstanceObject::render(){
+void InstanceObject::render(const Matrix4 &transform) const {
 
 	//tell the BasicObject to render with the instance transform
-	parent->render(instanceTransform);
+	parent->render(instanceTransform * transform);
 
 }

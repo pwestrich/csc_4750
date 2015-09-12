@@ -29,7 +29,7 @@ utilities.o: utilities.h
 
 	$(COMPILE) utilities.cpp
 
-Window.o: Window.cpp Window.h Picture.h Matrix4.h
+Window.o: Window.cpp Window.h Matrix4.h Scene.h
 
 	$(COMPILE) Window.cpp
 
@@ -65,6 +65,6 @@ InstanceObject.o: InstanceObject.cpp InstanceObject.h BasicObject.h Matrix4.h Ve
 
 	$(COMPILE) InstanceObject.cpp
 
-Picture.o: Picture.cpp Picture.h BasicObject.h Window.h
-	
-	$(COMPILE) Picture.cpp
+Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h
+
+	$(COMPILE) Scene.cpp

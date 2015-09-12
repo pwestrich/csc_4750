@@ -22,16 +22,14 @@ private:
 public:
 
 	//constructs the InstanceObject with its parent and optional initial transform
-	InstanceObject(BasicObject *obj) : InstanceObject(obj, Matrix4::identity()){}
-	InstanceObject(BasicObject *obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform){}
-
-	~InstanceObject();
+	InstanceObject(std::shared_ptr<BasicObject> obj) : InstanceObject(obj, Matrix4::identity()){}
+	InstanceObject(std::shared_ptr<BasicObject> obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform){}
 
 	//used to build up several transforms
 	void buildTransform(const Matrix4 &newTransform);
 
 	//renders the object using the current instance transform
-	void render();
+	void render(const Matrix4 &transform) const;
 
 };
 

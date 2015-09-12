@@ -24,11 +24,8 @@ public:
 	//reads in an object from a .obj file
 	BasicObject(const std::string &filename);
 
-	//deallocates the memory for the entire object
-	~BasicObject();
-
 	//draws the object
-	void render(const Matrix4 &transform);
+	void render(const Matrix4 &transform) const;
 
 };
 

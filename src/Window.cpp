@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 
 #include "Window.h"
-#include "Picture.h"
+#include "Scene.h"
 #include "Matrix4.h"
 
 class Pixel;
@@ -16,8 +16,6 @@ Window *Window::getWindow(){
 	return &win;
 
 }
-
-Window::~Window(){}
 
 void Window::initWindow(const int argc, const char**argv, const int width, const int height, const int x, const int y, const char *title){
 
@@ -37,6 +35,8 @@ void Window::initWindow(const int argc, const char**argv, const int width, const
 	glutDisplayFunc(display);
 	glutReshapeFunc(resize);
 
+	scene = std::make_shared<Scene>();
+
 	init = true;
 
 }
@@ -44,6 +44,15 @@ void Window::initWindow(const int argc, const char**argv, const int width, const
 void Window::show(){
 
 	glutMainLoop();
+
+}
+
+void Window::render() const {
+
+	const Matrix4 windowing = getWindowingMatrix();
+	const Matrix4 aspect = getAspectRatioMatrix();
+
+	scene->render(windowing * aspect);
 
 }
 
@@ -127,9 +136,11 @@ void resize(const int w, const int h){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_CULL_FACE);
 
-	//draw the pixel here
-	Picture *pic = Picture::getPicture();
-	pic->render();
+	//draw the scene here
+
+	static Window *win = Window::getWindow();
+
+	win->render();
 
 	glutSwapBuffers();
 	glFlush();
