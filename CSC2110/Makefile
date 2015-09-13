@@ -19,7 +19,7 @@ clean:
 	$(RM) $(OBJ)
 	$(RM) $(PROJECT_DIR)/lib/$(TARGET)
 
-$(TAR): $(OBJ)
+$(TARGET): $(OBJ)
 
 	$(AR) $(TARGET) $(OBJ)
 

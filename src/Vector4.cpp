@@ -164,7 +164,7 @@ float Vector4::operator[](const int index) const {
 
 //private methods ---------------------------------------------------------------------------------
 
-float Vector4::calculateMag(){
+float Vector4::calculateMag() const {
 
 	float sum = (values[0] * values[0]) + (values[1] * values[1]) + (values[2] * values[2]) + (values[3] * values[3]);
 	return sqrt(sum);

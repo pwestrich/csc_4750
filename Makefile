@@ -2,23 +2,36 @@ AutomatedMakefile := am
 
 # compiler information
 CC      := g++
-CCFLAGS := -g -std=c++11 -O0
+CCFLAGS := -g -std=c++11 -O0 -pedantic -Wall -Wextra
 AR 		:= ar -r
 
 SYS := $(shell $(CC) -dumpmachine)
 
 .PHONY: all run clean csc2110 boshart program setup
 
-all: csc2110 boshart program
+all: boshart program
 
 run: program
 
-	make -C ./src run
+	$(MAKE) -C ./src run
 
 clean: setup
 
-	make -C ./boshart/p00 clean
-	make -C ./src clean
+	$(MAKE) -C ./boshart/p00 clean
+	$(MAKE) -C ./CSC2110 clean
+	$(MAKE) -C ./src clean
+
+csc2110: setup
+
+	$(MAKE) -C ./CSC2110 all
+
+boshart: setup csc2110
+
+	$(MAKE) -C ./boshart/p00 all
+
+program: setup
+
+	$(MAKE) -C ./src all
 
 setup:
 
@@ -72,17 +85,3 @@ LINK := $(CC) $(LIB_DIRS) -o
 
 #export variables so that make chains can have them
 export
-
-all: setup boshart program
-
-csc2110: setup
-
-	$(MAKE) -C ./CSC2110 all
-
-boshart: setup csc2110
-
-	$(MAKE) -C ./boshart/p00 all
-
-program: setup
-
-	$(MAKE) -C ./src all

@@ -68,6 +68,8 @@ Vector3::Vector3(const float *newValues){
 	_y = newValues[1];
 	_z = newValues[2];
 
+	mag = calculateMag();
+
 }
 
 Vector3::Vector3(const float x, const float y, const float z){
@@ -135,7 +137,7 @@ Vector3 Vector3::operator-(const Vector3 &other) const {
 
 //private methods ---------------------------------------------------------------------------------
 
-float Vector3::calculateMag(){
+float Vector3::calculateMag() const {
 
 	//the length of a vector is the square root of the sum of the squares of its components
 	float sum = (_x * _x) + (_y * _y) + (_z * _z);

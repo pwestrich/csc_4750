@@ -18,7 +18,7 @@ Scene::Scene(){
 //renders every InstanceObjectgiven the windowing matrix
 void Scene::render(const Matrix4 &windowingMatrix) const {
 
-	for (int i = 0; i < instances.size(); ++i){
+	for (size_t i = 0; i < instances.size(); ++i){
 
 		instances[i]->render(windowingMatrix);
 

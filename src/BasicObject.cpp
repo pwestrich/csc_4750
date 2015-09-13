@@ -88,7 +88,7 @@ BasicObject::BasicObject(const std::string &filename){
 void BasicObject::render(const Matrix4 &transform) const {
 
 	//tell each face to render itself
-	for (int i = 0; i < faces.size(); ++i){
+	for (size_t i = 0; i < faces.size(); ++i){
 
 		faces[i]->render(transform);
 

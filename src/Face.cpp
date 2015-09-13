@@ -69,7 +69,6 @@ void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
 
 		//use 1 / m and loop over y
 		m = 1.0 / m;
-		float b = two.y() - (m * two.x());
 		int currentY = round(one.y());
 		int endY = round(two.y());
 

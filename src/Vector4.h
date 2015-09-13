@@ -11,7 +11,7 @@ private:
 	float values[4];
 	float mag;
 
-	float calculateMag();
+	float calculateMag() const;
 
 public:
 
