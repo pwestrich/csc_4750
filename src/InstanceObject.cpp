@@ -15,6 +15,6 @@ void InstanceObject::buildTransform(const Matrix4 &newTransform){
 void InstanceObject::render(const Matrix4 &transform) const {
 
 	//tell the BasicObject to render with the instance transform
-	parent->render(instanceTransform * transform);
+	parent->render(transform * instanceTransform);
 
 }
