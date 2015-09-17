@@ -23,7 +23,7 @@ Scene::Scene(){
 
 	std::shared_ptr<InstanceObject> inst2 = std::make_shared<InstanceObject>(obj);
 
-	//inst2->buildTransform(translate);
+	inst2->buildTransform(translate);
 	inst2->buildTransform(rotateX);
 	inst2->buildTransform(rotateY);
 	inst2->buildTransform(rotateZ);

@@ -20,7 +20,7 @@ Matrix4 createScaleMatrix(const float sx, const float sy, const float sz){
 //creates the translation matrix given the translation in each direction
 Matrix4 createTranslateMatrix(const float tx, const float ty, const float tz){
 
-	float values[16] = {0, 0, 0, tx, 0, 0, 0, ty, 0, 0, 0, tz, 0, 0, 0, 1};
+	float values[16] = {1, 0, 0, tx, 0, 1, 0, ty, 0, 0, 1, tz, 0, 0, 0, 1};
 	return Matrix4(values);
 
 }
