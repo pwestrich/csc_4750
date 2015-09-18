@@ -8,7 +8,7 @@
 Scene::Scene(){
 
 	//make shared pointers for each instance and basic object
-	std::shared_ptr<BasicObject> obj = std::make_shared<BasicObject>("sphere.txt");
+	BasicObject *obj = new BasicObject("sphere.txt");
 	objects.push_back(obj);
 
 	//let's try to make a different sphere.
@@ -19,8 +19,8 @@ Scene::Scene(){
 	Matrix4 scale = createScaleMatrix(-0.3, 0.3, 0.0);
 
 	//replace the filename with a different one if you want
-	std::shared_ptr<InstanceObject> inst1 = std::make_shared<InstanceObject>(obj, "trs1.txt");
-	std::shared_ptr<InstanceObject> inst2 = std::make_shared<InstanceObject>(obj, "trs2.txt");
+	InstanceObject *inst1 = new InstanceObject(obj, "trs1.txt");
+	InstanceObject *inst2 = new InstanceObject(obj, "trs2.txt");
 
 	instances.push_back(inst1);
 	instances.push_back(inst2);

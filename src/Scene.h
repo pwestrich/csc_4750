@@ -2,7 +2,6 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <memory>
 #include <vector>
 
 class BasicObject;
@@ -14,8 +13,9 @@ class Scene {
 private:
 
 	//keep track of all the basic and shared objects
-	std::vector<std::shared_ptr<BasicObject>> objects;
-	std::vector<std::shared_ptr<InstanceObject>> instances;
+	//the vectors will memory manage for me
+	std::vector<BasicObject*> objects;
+	std::vector<InstanceObject*> instances;
 
 public:
 

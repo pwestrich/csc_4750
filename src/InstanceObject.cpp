@@ -8,7 +8,7 @@
 #include "Matrix4.h"
 #include "AffineTransformations.h"
 
-InstanceObject::InstanceObject(std::shared_ptr<BasicObject> obj, const std::string &filename) : InstanceObject(obj, Matrix4::identity()){
+InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filename) : InstanceObject(obj, Matrix4::identity()){
 
 	std::ifstream inFile(filename);
 
