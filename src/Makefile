@@ -69,7 +69,7 @@ InstanceObject.o: InstanceObject.cpp InstanceObject.h BasicObject.h Matrix4.h Ve
 
 	$(COMPILE) InstanceObject.cpp
 
-Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h
+Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h SceneNode.h
 
 	$(COMPILE) Scene.cpp
 

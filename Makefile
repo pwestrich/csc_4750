@@ -7,9 +7,9 @@ AR 		:= ar -r
 
 SYS := $(shell $(CC) -dumpmachine)
 
-.PHONY: all run clean csc2110 boshart program setup
+.PHONY: all run clean program setup
 
-all: boshart program
+all: program
 
 run: program
 
@@ -17,17 +17,7 @@ run: program
 
 clean: setup
 
-	$(MAKE) -C ./boshart/p00 clean
-	$(MAKE) -C ./CSC2110 clean
 	$(MAKE) -C ./src clean
-
-csc2110: setup
-
-	$(MAKE) -C ./CSC2110 all
-
-boshart: setup csc2110
-
-	$(MAKE) -C ./boshart/p00 all
 
 program: setup
 
@@ -41,7 +31,7 @@ $(info System detected to be Mac OS X)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I/usr/local/include -I/opt/X11/include
 LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
-LIBS 	 :=  -framework OpenGL -framework GLUT -lCSC2110
+LIBS 	 :=  -framework OpenGL -framework GLUT 
 
 RM 		 := rm -f
 MV 		 := mv
@@ -53,7 +43,7 @@ $(info System detected to be Windows MinGW)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I$(DRIVE_LETTER)/TDM-GCC-64/include
 LIB_DIRS := -L$(PROJECT_DIR)/lib -L$(DRIVE_LETTER)/TDM-GCC-64/lib
-LIBS 	 := -lCSC2110 -lfreeglut -lopengl32
+LIBS 	 := -lfreeglut -lopengl32
 
 RM   	 := del
 MV 		 := copy /Y 
@@ -65,7 +55,7 @@ $(info System detected to be GNU/Linux)
 
 INC_DIRS := -I$(PROJECT_DIR)/include 
 LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
-LIBS 	 :=  -lCSC2110
+LIBS 	 := 
 
 RM 		 := rm -f
 MV 		 := mv

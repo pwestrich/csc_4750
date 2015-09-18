@@ -1,5 +1,6 @@
 
 #include "Scene.h"
+#include "SceneNode.h"
 #include "BasicObject.h"
 #include "InstanceObject.h"
 #include "Matrix4.h"
@@ -7,16 +8,12 @@
 
 Scene::Scene(){
 
-	//make shared pointers for each instance and basic object
+	//the root scene node has no parent
+	rootSceneNode = new SceneNode(NULL);
+
+	//make pointers for each instance and basic object
 	BasicObject *obj = new BasicObject("sphere.txt");
 	objects.push_back(obj);
-
-	//let's try to make a different sphere.
-	Matrix4 translate = createTranslateMatrix(1.0, 0.2, 1.0);
-	Matrix4 rotateX = createRotationMatrixX(45.0);
-	Matrix4 rotateY = createRotationMatrixY(10.0);
-	Matrix4 rotateZ = createRotationMatrixZ(0.0);
-	Matrix4 scale = createScaleMatrix(-0.3, 0.3, 0.0);
 
 	//replace the filename with a different one if you want
 	InstanceObject *inst1 = new InstanceObject(obj, "trs1.txt");
@@ -25,15 +22,30 @@ Scene::Scene(){
 	instances.push_back(inst1);
 	instances.push_back(inst2);
 
+	//create scene nodes for the objects with th root as the parent
+	SceneNode *node1 = new SceneNode(rootSceneNode);
+	SceneNode *node2 = new SceneNode(rootSceneNode);
+
+	rootSceneNode->addChildNode(node1);
+	rootSceneNode->addChildNode(node2);
+
+	node1->addChildObject(inst1);
+	node2->addChildObject(inst2);
+
+	nodes.push_back(node1);
+	nodes.push_back(node2);
+
+}
+
+Scene::~Scene(){
+
+	delete rootSceneNode;
+
 }
 
 //renders every InstanceObjectgiven the windowing matrix
 void Scene::render(const Matrix4 &windowingMatrix) const {
 
-	for (size_t i = 0; i < instances.size(); ++i){
-
-		instances[i]->render(windowingMatrix);
-
-	}
+	rootSceneNode->render(windowingMatrix);
 
 }

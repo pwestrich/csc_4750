@@ -13,7 +13,7 @@ void SceneNode::buildTransform(const Matrix4 &newTransform){
 }
 
 //renders every child
-void SceneNode::render(const Matrix4 &newTransform){
+void SceneNode::render(const Matrix4 &newTransform) const {
 
 	//apply this node's instance transform to every child
 	Matrix4 current = newTransform * transform;

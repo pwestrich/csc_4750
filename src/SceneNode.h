@@ -33,7 +33,7 @@ public:
 	void buildTransform(const Matrix4 &newTransform);
 
 	//renders every child
-	void render(const Matrix4 &newTransform);
+	void render(const Matrix4 &newTransform) const;
 
 	//add a new child node
 	void addChildNode(SceneNode *newNode);
