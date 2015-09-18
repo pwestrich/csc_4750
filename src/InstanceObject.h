@@ -3,6 +3,7 @@
 #define INSTANCE_OBJECT_H
 
 #include <memory>
+#include <string>
 
 #include "Matrix4.h"
 
@@ -24,6 +25,9 @@ public:
 	//constructs the InstanceObject with its parent and optional initial transform
 	InstanceObject(std::shared_ptr<BasicObject> obj) : InstanceObject(obj, Matrix4::identity()){}
 	InstanceObject(std::shared_ptr<BasicObject> obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform){}
+
+	//optional constructor to accept a transformation file
+	InstanceObject(std::shared_ptr<BasicObject> obj, const std::string &filename);// : InstanceObject(obj, Matrix4::identity());
 
 	//used to build up several transforms
 	void buildTransform(const Matrix4 &newTransform);

@@ -29,7 +29,7 @@ Matrix4 createTranslateMatrix(const float tx, const float ty, const float tz){
 Matrix4 createRotationMatrix(const float rx, const float ry, const float rz, const float rw){
 
 	//first, I'll need the degree measurement in radians, as well as its (co)sine
-	float angle = (180.0 * rw) / M_PI;
+	float angle = (M_PI * rw) / 180.0;
 	float cosine = cos(angle);
 	float sine 	 = sin(angle);
 
@@ -72,7 +72,7 @@ Matrix4 createRotationMatrix(const float rx, const float ry, const float rz, con
 Matrix4 createRotationMatrixX(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (180.0 * degrees) / M_PI;
+	float radians = (M_PI * degrees) / 180.0;
 	float cosine = cos(radians);
 	float sine = sin(radians);
 
@@ -89,7 +89,7 @@ Matrix4 createRotationMatrixX(const float degrees){
 Matrix4 createRotationMatrixY(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (180.0 * degrees) / M_PI;
+	float radians = (M_PI * degrees) / 180.0;
 	float cosine = cos(radians);
 	float sine = sin(radians);
 
@@ -106,7 +106,7 @@ Matrix4 createRotationMatrixY(const float degrees){
 Matrix4 createRotationMatrixZ(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (180.0 * degrees) / M_PI;
+	float radians = (M_PI * degrees) / 180.0;
 	float cosine = cos(radians);
 	float sine = sin(radians);
 
