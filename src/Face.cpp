@@ -39,9 +39,9 @@ void Face::render(const Matrix4 &transform) const {
 	renderDDA(newThird, newFirst);
 
 	//then draw the Bresham version on top of it
-	renderBresham(newFirst, newSecond);
-	renderBresham(newSecond, newThird);
-	renderBresham(newThird, newFirst);
+	//renderBresham(newFirst, newSecond);
+	//renderBresham(newSecond, newThird);
+	//renderBresham(newThird, newFirst);
 
 }
 

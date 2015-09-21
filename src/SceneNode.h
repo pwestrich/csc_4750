@@ -12,9 +12,6 @@ class SceneNode {
 
 private:
 
-	//the parent scene node of this object
-	const SceneNode *parent;
-
 	//this object's children
 	std::vector<SceneNode*> children;
 
@@ -27,7 +24,7 @@ private:
 public:
 
 	//create a new SceneNode with an optional transform
-	SceneNode(const SceneNode *newParent, const Matrix4 &newTransform = Matrix4::identity()) : parent(newParent), transform(newTransform){}
+	SceneNode(const Matrix4 &newTransform = Matrix4::identity()) : transform(newTransform){}
 
 	//build up transforms
 	void buildTransform(const Matrix4 &newTransform);
