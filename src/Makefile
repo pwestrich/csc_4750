@@ -53,15 +53,11 @@ AffineTransformations.o: AffineTransformations.cpp AffineTransformations.h Vecto
 
 	$(COMPILE) AffineTransformations.cpp
 
-Vertex.o: Vertex.cpp Vertex.h Vector4.h
-
-	$(COMPILE) Vertex.cpp
-
-Face.o: Face.cpp Face.h Vertex.h Vector4.h Window.h
+Face.o: Face.cpp Face.h Vector4.h Window.h
 
 	$(COMPILE) Face.cpp
 
-BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vertex.h Vector4.h Matrix4.h
+BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vector4.h Matrix4.h
 
 	$(COMPILE) BasicObject.cpp
 

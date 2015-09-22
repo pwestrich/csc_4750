@@ -120,6 +120,18 @@ Vector4 Vector4::normalize() const {
 
 }
 
+//homogenizes the vector
+Vector4 Vector4::homogenize() const {
+
+	float nx = values[0] / values[3];
+	float ny = values[1] / values[3];
+	float nz = values[2] / values[3];
+	float nw = values[3] / values[3];
+
+	return Vector4(nx, ny, nz, nw);
+
+}
+
 //operators
 Vector4 Vector4::operator*(const float scalar) const {
 

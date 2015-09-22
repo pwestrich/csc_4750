@@ -3,16 +3,15 @@
 #define FACE_H
 
 class Matrix4;
-class Vertex;
 class Vector4;
 
 class Face {
 
 private:
 
-	Vertex *pointOne;
-	Vertex *pointTwo;
-	Vertex *pointThree;
+	Vector4 *pointOne;
+	Vector4 *pointTwo;
+	Vector4 *pointThree;
 
 	//Vector3 normal //future
 
@@ -25,12 +24,12 @@ private:
 public:
 
 	//Face will retain a pointer to these, but will not delete them
-	Face(Vertex *first, Vertex *second, Vertex *third);
+	Face(Vector4 *first, Vector4 *second, Vector4 *third);
 	~Face();
 
-	inline Vertex *getFirst() const { return pointOne;}
-	inline Vertex *getSecond() const { return pointTwo;}
-	inline Vertex *getThird() const { return pointThree;}
+	inline Vector4 *getFirst() const { return pointOne;}
+	inline Vector4 *getSecond() const { return pointTwo;}
+	inline Vector4 *getThird() const { return pointThree;}
 
 	//renders the face (draws only lines for now)
 	void render(const Matrix4 &transform) const;

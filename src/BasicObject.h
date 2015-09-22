@@ -6,7 +6,7 @@
 #include <vector>
 
 class Matrix4;
-class Vertex;
+class Vector4;
 class Face;
 
 class BasicObject {
@@ -14,7 +14,7 @@ class BasicObject {
 private:
 
 	//every point that makes up this object
-	std::vector<Vertex*> points;
+	std::vector<Vector4*> points;
 
 	//every face that amkes up this object
 	std::vector<Face*> faces;

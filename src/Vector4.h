@@ -40,7 +40,10 @@ public:
 	inline float length() const { return mag; }
 
 	//returns a normalizes version of this vector
-	Vector4 normalize() const ;
+	Vector4 normalize() const;
+
+	//homogenizes the vector
+	Vector4 homogenize() const;
 
 	//operators
 	Vector4 operator*(const float scalar) const;

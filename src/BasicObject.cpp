@@ -6,8 +6,8 @@
 #include "utilities.h"
 #include "BasicObject.h"
 #include "Matrix4.h"
+#include "Vector4.h"
 #include "Face.h"
-#include "Vertex.h"
 
 //reads in an object from a .obj file
 BasicObject::BasicObject(const std::string &filename){
@@ -63,7 +63,7 @@ BasicObject::BasicObject(const std::string &filename){
 			float y = atof(tokens[2].c_str());
 			float z = atof(tokens[3].c_str());
 
-			points.push_back(new Vertex(x, y, z, 1.0));
+			points.push_back(new Vector4(x, y, z, 1.0));
 
 		} else if (line.find("f") == 0){
 

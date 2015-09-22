@@ -6,12 +6,11 @@
 
 #include "Window.h"
 #include "Face.h"
-#include "Vertex.h"
 #include "Vector4.h"
 #include "Matrix4.h"
 
 //Face will retain a pointer to these, but will not delete them
-Face::Face(Vertex *first, Vertex *second, Vertex *third){
+Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 
 	assert(first);
 	assert(second);
@@ -29,9 +28,9 @@ Face::~Face(){}
 void Face::render(const Matrix4 &transform) const {
 
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (transform * pointOne->vector());
-	const Vector4 newSecond = (transform * pointTwo->vector());
-	const Vector4 newThird  = (transform * pointThree->vector());
+	const Vector4 newFirst  = (transform * (*pointOne));
+	const Vector4 newSecond = (transform * (*pointTwo));
+	const Vector4 newThird  = (transform * (*pointThree));
 
 	//draw using the DDA algorithm first
 	renderDDA(newFirst, newSecond);
