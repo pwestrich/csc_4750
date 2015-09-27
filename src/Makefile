@@ -29,21 +29,13 @@ utilities.o: utilities.h
 
 	$(COMPILE) utilities.cpp
 
-Window.o: Window.cpp Window.h Matrix4.h Scene.h
+Window.o: Window.cpp Window.h Matrix4.h Vector4.h Scene.h
 
 	$(COMPILE) Window.cpp
 
-Vector3.o: Vector3.cpp Vector3.h
-
-	$(COMPILE) Vector3.cpp
-
-Vector4.o: Vector4.cpp Vector4.h Vector3.h
+Vector4.o: Vector4.cpp Vector4.h
 
 	$(COMPILE) Vector4.cpp
-
-Matrix3.o: Matrix3.cpp Matrix3.h Vector3.h
-
-	$(COMPILE) Matrix3.cpp
 
 Matrix4.o: Matrix4.cpp Matrix4.h Vector4.h
 

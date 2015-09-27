@@ -30,7 +30,7 @@ ifneq (, $(findstring apple, $(SYS)))
 $(info System detected to be Mac OS X)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I/usr/local/include -I/opt/X11/include
-LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
+LIB_DIRS := -L/usr/local/lib -L/opt/X11/lib
 LIBS 	 :=  -framework OpenGL -framework GLUT 
 
 RM 		 := rm -f
@@ -42,7 +42,7 @@ else ifneq (, $(findstring mingw, $(SYS)))
 $(info System detected to be Windows MinGW)
 
 INC_DIRS := -I$(PROJECT_DIR)/include -I$(DRIVE_LETTER)/TDM-GCC-64/include
-LIB_DIRS := -L$(PROJECT_DIR)/lib -L$(DRIVE_LETTER)/TDM-GCC-64/lib
+LIB_DIRS := -L$(DRIVE_LETTER)/TDM-GCC-64/lib
 LIBS 	 := -lfreeglut -lopengl32
 
 RM   	 := del
@@ -54,7 +54,7 @@ else ifneq (, $(findstring linux, $(SYS)))
 $(info System detected to be GNU/Linux)
 
 INC_DIRS := -I$(PROJECT_DIR)/include 
-LIB_DIRS := -L$(PROJECT_DIR)/lib -L/usr/local/lib -L/opt/X11/lib
+LIB_DIRS := -L/usr/local/lib -L/opt/X11/lib
 LIBS 	 := 
 
 RM 		 := rm -f

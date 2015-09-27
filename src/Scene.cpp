@@ -14,10 +14,19 @@ Scene::Scene(){
 	//create the absic objects for the robot
 	BasicObject *basicCube = new BasicObject("cube.txt");
 	BasicObject *basicCylinder = new BasicObject("cylinder.txt");
+	BasicObject *basicSphere = new BasicObject("sphere.txt");
 
 	objects.push_back(basicCube);
 	objects.push_back(basicCylinder);
+	objects.push_back(basicSphere);
 
+	InstanceObject *sphere = new InstanceObject(basicSphere, "trs.txt");
+
+	rootSceneNode->addChildObject(sphere);
+
+	instances.push_back(sphere);
+
+	/*
 	//now make the instance objects needed of each
 	InstanceObject *upperArm = new InstanceObject(basicCube);
 	InstanceObject *lowerArm = new InstanceObject(basicCube);
@@ -105,6 +114,7 @@ Scene::Scene(){
 	robotArm2->buildTransform(rotateX);
 	robotArm2->buildTransform(translate1);
 	robotArm2->buildTransform(scale);
+	*/
 
 }
 

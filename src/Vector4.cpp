@@ -2,7 +2,6 @@
 #include <cassert>
 #include <cmath>
 
-#include "Vector3.h"
 #include "Vector4.h"
 
 Vector4 Vector4::identity(){
@@ -89,17 +88,6 @@ Vector4::Vector4(const float *newValues) {
 
 }
 
-Vector4::Vector4(const Vector3 &vec, const float w){
-
-	values[0] = vec.x();
-	values[1] = vec.y();
-	values[2] = vec.z();
-	values[3] = w;
-
-	mag = calculateMag();
-
-}
-
 Vector4::Vector4(const float x, const float y, const float z, const float w){
 
 	values[0] = x;
@@ -111,7 +99,22 @@ Vector4::Vector4(const float x, const float y, const float z, const float w){
 
 }
 
-Vector4::~Vector4(){}
+float Vector4::dot(const Vector4 &other) const {
+
+	return (x() * other.x())+ (y() * other.y()) + (z() * other.z());
+
+}
+
+//returns the cross product of two vectors
+Vector4 Vector4::cross(const Vector4 &other) const {
+
+	float nx = y() * other.z() - z() - other.y();
+	float ny = z() * other.x() - x() - other.z();
+	float nz = x() * other.y() - y() - other.x();
+
+	return Vector4(nx, ny, nz, 0.0);
+
+}
 
 //returns a normalizes version of this vector
 Vector4 Vector4::normalize() const {

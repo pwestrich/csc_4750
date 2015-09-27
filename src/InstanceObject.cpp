@@ -51,6 +51,8 @@ InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filena
 	float yt = stof(lines[10]);
 	float zt = stof(lines[11]);
 
+	inFile.close();
+
 	//create the transform matricies
 	Matrix4 T = createTranslateMatrix(xt, yt, zt);
 	Matrix4 RX = createRotationMatrixX(xr);

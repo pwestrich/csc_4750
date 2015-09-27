@@ -1,9 +1,15 @@
 
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <string>
+
 #include <GL/glut.h>
 
 #include "Window.h"
 #include "Scene.h"
 #include "Matrix4.h"
+#include "Vector4.h"
 
 class Pixel;
 
@@ -17,7 +23,8 @@ Window *Window::getWindow(){
 
 }
 
-void Window::initWindow(const int argc, const char **argv, const int width, const int height, const int x, const int y, const char *title){
+void Window::initWindow(const int argc, const char **argv, const int width, const int height, const int x, const int y, 
+					const char *title, const std::string &normalFile, const std::string &cameraFile){
 
 	if (init) return;
 
@@ -35,9 +42,23 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	glutDisplayFunc(display);
 	glutReshapeFunc(resize);
 
-	scene = std::make_shared<Scene>();
+	scene = new Scene();
+
+	normalMatrix = createNormalMatrix(normalFile);
+	cameraMatrix = createCameraMatrix(cameraFile);
 
 	init = true;
+
+}
+
+Window::~Window(){
+
+	if (scene){
+
+		delete scene;
+		scene = NULL;
+
+	}
 
 }
 
@@ -52,7 +73,7 @@ void Window::render() const {
 	const Matrix4 windowing = getWindowingMatrix();
 	const Matrix4 aspect = getAspectRatioMatrix();
 
-	scene->render(windowing * aspect);
+	scene->render(windowing * normalMatrix * aspect * cameraMatrix);
 
 }
 
@@ -89,11 +110,72 @@ int Window::getHeight() const {
 
 }
 
+//private methods & functions ---------------------------------------------------------------------
+
+Window::Window(){
+
+	init = false;
+
+}
+
 //returns the matrix to convert window coordinates to screen coordinates
 Matrix4 Window::getWindowingMatrix() const {
 
-	float values[16] = {static_cast<float>(getHeight() / 2.0), 0, 0, static_cast<float>((getWidth() - 1.0) / 2.0), 0, static_cast<float>(getWidth() / -2.0), 0, static_cast<float>((getHeight() - 1.0) / 2.0), 0, 0, 1, 0, 0, 0, 0, 1};
-	//float values[16] = {400.0, 0.0, 0.0, 399.5, 0.0, -300.0, 0.0, 299.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+	float values[16] = {static_cast<float>((getHeight() - 1.0) / 2.0), 0, 0, 
+						static_cast<float>((getWidth() - 1.0) / 2.0), 0, 
+						static_cast<float>(getWidth() / -2.0), 0, 
+						static_cast<float>((getHeight() - 1.0) / 2.0), 0, 0, 1, 0, 0, 0, 0, 1};
+
+	return Matrix4(values);
+
+}
+
+//returns the normal matrix
+Matrix4 Window::createNormalMatrix(const std::string &filename) const {
+
+	std::fstream inFile(filename);
+
+	if (!inFile){
+
+		std::cerr << "Invalid filename: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	std::string buffer;
+	std::vector<std::string> lines;
+
+	do {
+
+		getline(inFile, buffer);
+		lines.push_back(buffer);
+
+	} while (!inFile.eof());
+
+	if (lines.size() != 7){
+
+		std::cerr << "Error: File invalid: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	//line 1 is the FOV
+	float fov = stof(lines[1]);
+
+	//line 3 is zmax (near clip)
+	float near = stof(lines[3]);
+
+	//line 5 is zmin (far clip)
+	float far = stof(lines[5]);
+
+	inFile.close();
+
+	//calculate the normal matrix
+	float alpha = (near + far) / (far - near);
+	float beta  = (2 * near * far) / (near - far);
+
+	float values[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, alpha, beta, 0, 0, -1, 0};
+
 	return Matrix4(values);
 
 }
@@ -101,17 +183,95 @@ Matrix4 Window::getWindowingMatrix() const {
 //returns the aspect matrix
 Matrix4 Window::getAspectRatioMatrix() const {
 
-	float values[16] = {1, 0, 0, 0, 0, static_cast<float>(getHeight() / static_cast<float>(getWidth())), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
-	//float values[16] = {1.0, 0.0, 0.0, 0.0, 0.0, (2.0 / 1.5), 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+	float values[16] = {1, 0, 0, 0, 0, static_cast<float>(getHeight() / 
+						static_cast<float>(getWidth())), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+
 	return Matrix4(values);
 
 }
 
-//private methods & functions ---------------------------------------------------------------------
+//returns the camera matrix
+Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 
-Window::Window(){
+	std::fstream inFile(filename);
 
-	init = false;
+	if (!inFile){
+
+		std::cerr << "Invalid filename: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	std::string buffer;
+	std::vector<std::string> lines;
+
+	do {
+
+		getline(inFile, buffer);
+		lines.push_back(buffer);
+
+	} while (!inFile.eof());
+
+	if (lines.size() != 13){
+
+		std::cerr << "Error: File invalid: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	//lines 1, 2, 3 are the eye point
+	float ex = stof(lines[1]);
+	float ey = stof(lines[2]);
+	float ez = stof(lines[3]);
+
+	Vector4 E(ex, ey, ez, 1.0);
+
+	//lines 5, 6, 7 are the at point
+	float ax = stof(lines[5]);
+	float ay = stof(lines[6]);
+	float az = stof(lines[7]);
+
+	Vector4 A(ax, ay, az, 1.0);
+
+	//lines 9, 10, 11 are the up vector
+	float ux = stof(lines[9]);
+	float uy = stof(lines[10]);
+	float uz = stof(lines[11]);
+
+	inFile.close();
+
+	Vector4 vup(ux, uy, uz, 0);
+	vup = vup.normalize();
+
+	//now calculate N, U, and V
+	Vector4 N = (E - A).normalize();
+
+	//v is hard
+	float vdotN = vup.dot(N);
+	float vdotN2 = vdotN * vdotN;
+	float bottom = sqrt(1 - vdotN2);
+	float alpha = vdotN / bottom;
+	float beta = 1.0 / bottom;
+
+	Vector4 one = N * alpha;
+	Vector4 two = vup * beta;
+	Vector4 V = (one + two).normalize();
+
+	//u isn't so bad now
+	Vector4 U = (V.cross(N)).normalize();
+
+	//now we can work on the matrix
+	float edotU = -1.0 * E.dot(U);
+	float edotV = -1.0 * E.dot(V);
+	float eDotN = -1.0 * E.dot(N);
+
+	float values[16] = {U.x(), U.y(), U.z(), edotU,
+						V.x(), V.y(), V.z(), edotV,
+						N.x(), N.y(), N.z(), eDotN,
+						0.0  , 0.0  , 0.0  , 1.0   };
+
+	return Matrix4(values);
+
 
 }
 

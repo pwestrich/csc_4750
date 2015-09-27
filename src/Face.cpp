@@ -28,9 +28,9 @@ Face::~Face(){}
 void Face::render(const Matrix4 &transform) const {
 
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (transform * (*pointOne));
-	const Vector4 newSecond = (transform * (*pointTwo));
-	const Vector4 newThird  = (transform * (*pointThree));
+	const Vector4 newFirst  = (transform * (*pointOne)).homogenize();
+	const Vector4 newSecond = (transform * (*pointTwo)).homogenize();
+	const Vector4 newThird  = (transform * (*pointThree)).homogenize();
 
 	//draw using the DDA algorithm first
 	renderDDA(newFirst, newSecond);

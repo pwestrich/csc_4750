@@ -4,13 +4,16 @@
 #include "Matrix4.h"
 #include "Vector4.h"
 
+float identityValues[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+
 Matrix4 Matrix4::identity(){
 
-	static float matValues[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
-	static Matrix4 mat(matValues);
+	static Matrix4 mat(identityValues);
 	return mat;
 
 }
+
+Matrix4::Matrix4() : Matrix4(identityValues){}
 
 //the Matrix class will keep its own copy of this array
 //there must be exactly 16 elements
