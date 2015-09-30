@@ -1,4 +1,7 @@
 
+//for math constants, like pi
+#define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -10,6 +13,7 @@
 #include "Scene.h"
 #include "Matrix4.h"
 #include "Vector4.h"
+#include "AffineTransformations.h"
 
 class Pixel;
 
@@ -121,17 +125,17 @@ Window::Window(){
 //returns the matrix to convert window coordinates to screen coordinates
 Matrix4 Window::getWindowingMatrix() const {
 
-	float values[16] = {static_cast<float>((getHeight() - 1.0) / 2.0), 0, 0, 
-						static_cast<float>((getWidth() - 1.0) / 2.0), 0, 
-						static_cast<float>(getWidth() / -2.0), 0, 
-						static_cast<float>((getHeight() - 1.0) / 2.0), 0, 0, 1, 0, 0, 0, 0, 1};
+	float values[16] = {static_cast<float>((getHeight()) / 2.0), 0, 0, static_cast<float>((getWidth() - 1.0) / 2.0),
+						0, static_cast<float>(getWidth() / -2.0), 0, static_cast<float>((getHeight() - 1.0) / 2.0), 
+						0, 0, 1, 0,
+						0, 0, 0, 1};
 
 	return Matrix4(values);
 
 }
 
 //returns the normal matrix
-Matrix4 Window::createNormalMatrix(const std::string &filename) const {
+Matrix4 Window::createNormalMatrix(const std::string &filename) {
 
 	std::fstream inFile(filename);
 
@@ -160,7 +164,7 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) const {
 	}
 
 	//line 1 is the FOV
-	float fov = stof(lines[1]);
+	fov = stof(lines[1]);
 
 	//line 3 is zmax (near clip)
 	float near = stof(lines[3]);
@@ -183,10 +187,11 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) const {
 //returns the aspect matrix
 Matrix4 Window::getAspectRatioMatrix() const {
 
-	float values[16] = {1, 0, 0, 0, 0, static_cast<float>(getHeight() / 
-						static_cast<float>(getWidth())), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+	float angle = (M_PI * fov) / 360.0;
+	float xMax = tan(angle);
+	float yMax= (xMax * getHeight()) / getWidth();
 
-	return Matrix4(values);
+	return createScaleMatrix(-1.0 / xMax, 1.0 / yMax, 1.0);
 
 }
 

@@ -17,6 +17,8 @@ private:
 	//the current scene
 	Scene *scene;
 
+	float fov;
+
 	Matrix4 normalMatrix;
 	Matrix4 cameraMatrix;
 
@@ -26,7 +28,7 @@ private:
 	Matrix4 getWindowingMatrix() const;
 
 	//returns the normal matrix
-	Matrix4 createNormalMatrix(const std::string &filename) const;
+	Matrix4 createNormalMatrix(const std::string &filename);
 
 	//returns the aspect ratio matrix
 	Matrix4 getAspectRatioMatrix() const;

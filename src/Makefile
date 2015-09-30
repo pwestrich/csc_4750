@@ -29,7 +29,7 @@ utilities.o: utilities.h
 
 	$(COMPILE) utilities.cpp
 
-Window.o: Window.cpp Window.h Matrix4.h Vector4.h Scene.h
+Window.o: Window.cpp Window.h Matrix4.h Vector4.h Scene.h AffineTransformations.h
 
 	$(COMPILE) Window.cpp
 
