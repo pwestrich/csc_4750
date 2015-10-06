@@ -15,8 +15,6 @@
 #include "Vector4.h"
 #include "AffineTransformations.h"
 
-class Pixel;
-
 void display();
 void resize(const int w, const int h);
 
@@ -187,11 +185,10 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 //returns the aspect matrix
 Matrix4 Window::getAspectRatioMatrix() const {
 
-	float angle = (M_PI * fov) / 360.0;
-	float xMax = tan(angle);
+	float xMax = tan((M_PI * fov) / 360.0);
 	float yMax= (xMax * getHeight()) / getWidth();
 
-	return createScaleMatrix(-1.0 / xMax, 1.0 / yMax, 1.0);
+	return createScaleMatrix(1.0 / xMax, 1.0 / yMax, 1.0);
 
 }
 
@@ -245,7 +242,7 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 
 	inFile.close();
 
-	Vector4 vup(ux, uy, uz, 0);
+	Vector4 vup(ux, uy, uz, 0.0);
 	vup = vup.normalize();
 
 	//now calculate N, U, and V
@@ -254,7 +251,7 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	//v is hard
 	float vdotN = vup.dot(N);
 	float vdotN2 = vdotN * vdotN;
-	float bottom = sqrt(1 - vdotN2);
+	float bottom = sqrt(1.0 - vdotN2);
 	float alpha = vdotN / bottom;
 	float beta = 1.0 / bottom;
 
@@ -276,7 +273,6 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 						0.0  , 0.0  , 0.0  , 1.0   };
 
 	return Matrix4(values);
-
 
 }
 
@@ -302,9 +298,7 @@ void resize(const int w, const int h){
 	glEnable(GL_CULL_FACE);
 
 	//draw the scene here
-
 	static Window *win = Window::getWindow();
-
 	win->render();
 
 	glutSwapBuffers();

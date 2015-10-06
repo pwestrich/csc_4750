@@ -101,16 +101,19 @@ Vector4::Vector4(const float x, const float y, const float z, const float w){
 
 float Vector4::dot(const Vector4 &other) const {
 
-	return (x() * other.x())+ (y() * other.y()) + (z() * other.z());
+	return (x() * other.x()) + (y() * other.y()) + (z() * other.z());
 
 }
 
 //returns the cross product of two vectors
 Vector4 Vector4::cross(const Vector4 &other) const {
 
-	float nx = y() * other.z() - z() - other.y();
-	float ny = z() * other.x() - x() - other.z();
-	float nz = x() * other.y() - y() - other.x();
+	//only vectors can be crossed
+	assert(w() == 0.0 && other.w() == 0.0);
+
+	float nx = (y() * other.z()) - (z() * other.y());
+	float ny = (z() * other.x()) - (x() * other.z());
+	float nz = (x() * other.y()) - (y() * other.x());
 
 	return Vector4(nx, ny, nz, 0.0);
 
@@ -119,43 +122,56 @@ Vector4 Vector4::cross(const Vector4 &other) const {
 //returns a normalizes version of this vector
 Vector4 Vector4::normalize() const {
 
-	return Vector4(values[0] / mag, values[1] / mag, values[2] / mag, values[3] / mag);
+	//only vectors can be normalized
+	assert(w() == 0.0);
+
+	if (mag == 1.0) return Vector4(values);
+
+	float denom = 1.0 / mag;
+
+	return Vector4(values[0] * denom, values[1] * denom, values[2] * denom, 0.0);
 
 }
 
 //homogenizes the vector
 Vector4 Vector4::homogenize() const {
 
+	//only points can be homogenized
+	assert(values[3] != 0.0);
+
 	float nx = values[0] / values[3];
 	float ny = values[1] / values[3];
 	float nz = values[2] / values[3];
-	float nw = values[3] / values[3];
 
-	return Vector4(nx, ny, nz, nw);
+	return Vector4(nx, ny, nz, 1.0);
 
 }
 
 //operators
 Vector4 Vector4::operator*(const float scalar) const {
 
+	//only vectors can be scaled
+	assert(w() == 0.0);
+
 	float nx = values[0] * scalar;
 	float ny = values[1] * scalar;
 	float nz = values[2] * scalar;
-	float nw = values[3] * scalar;
 
-	return Vector4(nx, ny, nz, nw);
+	return Vector4(nx, ny, nz, 0.0);
 
 }
 
 //adds two vectors
 Vector4 Vector4::operator+(const Vector4 &other) const {
 
+	//only vectors can be added together
+	assert(other.w() == 0.0 && w() == 0.0);
+
 	float nx = values[0] + other.x();
 	float ny = values[1] + other.y();
 	float nz = values[2] + other.z();
-	float nw = values[3] + other.w();
 
-	return Vector4(nx, ny, nz, nw);
+	return Vector4(nx, ny, nz, 0.0);
 
 }
 
@@ -181,7 +197,7 @@ float Vector4::operator[](const int index) const {
 
 float Vector4::calculateMag() const {
 
-	float sum = (values[0] * values[0]) + (values[1] * values[1]) + (values[2] * values[2]) + (values[3] * values[3]);
+	float sum = (values[0] * values[0]) + (values[1] * values[1]) + (values[2] * values[2]);
 	return sqrt(sum);
 
 }

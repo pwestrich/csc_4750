@@ -60,9 +60,7 @@ InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filena
 	Matrix4 RZ = createRotationMatrixZ(zr);
 	Matrix4 S = createScaleMatrix(xs, ys, zs);
 
-	Matrix4 transform = T * RX * RY * RZ * S;
-
-	buildTransform(transform);
+	instanceTransform = T * RX * RY * RZ * S;
 
 }
 
