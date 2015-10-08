@@ -13,8 +13,6 @@ private:
 	Vector4 *pointTwo;
 	Vector4 *pointThree;
 
-	//Vector3 normal //future
-
 	//implements the DDA line drawing algorithm
 	void renderDDA(const Vector4 &start, const Vector4 &end) const;
 
