@@ -24,71 +24,18 @@ Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 
 Face::~Face(){}
 
-//renders the face
+//renders the face (draws only lines for now)
 void Face::render(const Matrix4 &transform) const {
-
-	const Window *win = Window::getWindow();
 
 	//convert the coordinates to screen coordinates first
 	const Vector4 newFirst  = (transform * (*pointOne)).homogenize();
 	const Vector4 newSecond = (transform * (*pointTwo)).homogenize();
 	const Vector4 newThird  = (transform * (*pointThree)).homogenize();
 
-	//calculate the normal of this face
-	const Vector4 v1 = newSecond - newFirst;
-	const Vector4 v2 = newThird - newFirst;
-	const Vector4 normal = v1.cross(v2).normalize();
-
-	//if the normal is facing away from the camera, do not render this face
-	if (normal.z() < 0.0) return;
-
-	//calculate the starting and ending x and y values for the polygon, but not outside the window
-	const int xMin = round(fmax(fmin(fmin(newFirst.x(), newSecond.x()), newThird.x()), 0.0));
-	const int yMin = round(fmax(fmin(fmin(newFirst.y(), newSecond.y()), newThird.y()), 0.0));
-
-	const int xMax = round(fmin(fmax(fmax(newFirst.x(), newSecond.x()), newThird.x()), win->getWidth()));
-	const int yMax = round(fmin(fmax(fmax(newFirst.y(), newSecond.y()), newThird.y()), win->getHeight()));
-
-	//next calculate the change in x and y for the lines
-	const float denom = (v1.x() * v2.y()) - (v1.y() * v2.x());
-	float alpha = ((xMin * v2.y()) - (yMin * v2.x())) / denom;
-	const float beta = ((yMin * v1.y()) - (xMin * v1.y())) / denom;
-
-	const float dAlpha = v2.y() / denom;
-	const float dBeta = v1.x() / denom;
-
-	//draw the polygon
-	for (int i = xMin; i <= xMax; ++i){
-
-		float thisBeta = beta;
-
-		if (alpha > 0.0){
-
-			for (int j = yMin; j <= yMax; ++j){
-
-				const float sum = alpha + thisBeta;
-
-				//draw point
-				if (thisBeta > 0.0 && sum <= 1.0){
-
-					win->drawPixel(i, j, 0, 1, 0);
-
-				}
-
-				thisBeta += dBeta;
-
-			}
-
-		}
-
-		alpha += dAlpha;
-
-	}
-
 	//draw using the DDA algorithm first
-	//renderDDA(newFirst, newSecond);
-	//renderDDA(newSecond, newThird);
-	//renderDDA(newThird, newFirst);
+	renderDDA(newFirst, newSecond);
+	renderDDA(newSecond, newThird);
+	renderDDA(newThird, newFirst);
 
 	//then draw the Bresham version on top of it
 	//renderBresham(newFirst, newSecond);
