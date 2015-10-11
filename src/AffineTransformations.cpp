@@ -29,15 +29,15 @@ Matrix4 createTranslateMatrix(const float tx, const float ty, const float tz){
 Matrix4 createRotationMatrix(const float rx, const float ry, const float rz, const float rw){
 
 	//first, I'll need the degree measurement in radians, as well as its (co)sine
-	float angle = (M_PI * rw) / 180.0;
-	float cosine = cos(angle);
-	float sine 	 = sin(angle);
+	const float angle  = (M_PI * rw) / 180.0;
+	const float cosine = cos(angle);
+	const float sine   = sin(angle);
 
 	//and a few more values
-	float xSq	 = rx * rx;
-	float ySq 	 = ry * ry;
-	float zSq	 = rz * rz;
-	float cos1	 = 1.0 - cosine;
+	const float xSq	 = rx * rx;
+	const float ySq  = ry * ry;
+	const float zSq	 = rz * rz;
+	const float cos1 = 1.0 - cosine;
 
 	//if you concatinate the various matricies together, it loks like this:
 	float values[16];
@@ -72,9 +72,9 @@ Matrix4 createRotationMatrix(const float rx, const float ry, const float rz, con
 Matrix4 createRotationMatrixX(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (M_PI * degrees) / 180.0;
-	float cosine = cos(radians);
-	float sine = sin(radians);
+	const float radians = (M_PI * degrees) / 180.0;
+	const float cosine = cos(radians);
+	const float sine = sin(radians);
 
 	//then create the matrix
 	float values[16] = {1, 0	 , 0     , 0,
@@ -89,9 +89,9 @@ Matrix4 createRotationMatrixX(const float degrees){
 Matrix4 createRotationMatrixY(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (M_PI * degrees) / 180.0;
-	float cosine = cos(radians);
-	float sine = sin(radians);
+	const float radians = (M_PI * degrees) / 180.0;
+	const float cosine = cos(radians);
+	const float sine = sin(radians);
 
 	//then create the matrix
 	float values[16] = {cosine, 0, sine  , 0,
@@ -106,9 +106,9 @@ Matrix4 createRotationMatrixY(const float degrees){
 Matrix4 createRotationMatrixZ(const float degrees){
 
 	//first, crunch some numbers
-	float radians = (M_PI * degrees) / 180.0;
-	float cosine = cos(radians);
-	float sine = sin(radians);
+	const float radians = (M_PI * degrees) / 180.0;
+	const float cosine = cos(radians);
+	const float sine = sin(radians);
 
 	//then create the matrix
 	float values[16] = {cosine, -sine , 0, 0,

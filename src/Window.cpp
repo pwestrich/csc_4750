@@ -76,10 +76,10 @@ void Window::render() const {
 	const Matrix4 aspect = getAspectRatioMatrix();
 	const Matrix4 final = windowing * normalMatrix * aspect * cameraMatrix;
 
-	std::cout << "Windowing: " << windowing;
-	std::cout << "Normal: " << normalMatrix;
-	std::cout << "Aspect: " << aspect;
-	std::cout << "Camera: " << cameraMatrix;
+	std::cout << "Windowing:    " << windowing;
+	std::cout << "Normal:       " << normalMatrix;
+	std::cout << "Aspect:       " << aspect;
+	std::cout << "Camera:       " << cameraMatrix;
 	std::cout << "Concatenated: " << final;
 
 	scene->render(final);
@@ -89,8 +89,8 @@ void Window::render() const {
 //draws one pixel on the screen. Takes window coordinates.
 void Window::drawPixel(const int x, const int y, const float r, const float g, const float b) const {
 
-	const int w = glutGet(GLUT_WINDOW_WIDTH);
-	const int h = glutGet(GLUT_WINDOW_HEIGHT);
+	const int w = getWidth();
+	const int h = getHeight();
 
 	//convert the window coordinates to what openGL wants
 	float xCanon = (x * 2.0) / w + (-1.0 * (w - 1)) / w;
@@ -130,8 +130,8 @@ Window::Window(){
 //returns the matrix to convert window coordinates to screen coordinates
 Matrix4 Window::getWindowingMatrix() const {
 
-	float values[16] = {static_cast<float>((getHeight()) / 2.0), 0, 0, static_cast<float>((getWidth() - 1.0) / 2.0),
-						0, static_cast<float>(getWidth() / -2.0), 0, static_cast<float>((getHeight() - 1.0) / 2.0), 
+	float values[16] = {static_cast<float>((getWidth()) / 2.0), 0, 0, static_cast<float>((getWidth() - 1.0) / 2.0),
+						0, static_cast<float>(getHeight() / -2.0), 0, static_cast<float>((getHeight() - 1.0) / 2.0), 
 						0, 0, 1, 0,
 						0, 0, 0, 1};
 
@@ -168,20 +168,21 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 
 	}
 
-	//line 1 is the FOV
+	//line 1 is the FOV, convert it to radians
 	fov = stof(lines[1]);
+	fov = (M_PI * fov) / 180.0;
 
 	//line 3 is zmax (near clip)
-	float near = stof(lines[3]);
+	const float near = stof(lines[3]);
 
 	//line 5 is zmin (far clip)
-	float far = stof(lines[5]);
+	const float far = stof(lines[5]);
 
 	inFile.close();
 
 	//calculate the normal matrix
-	float alpha = (near + far) / (far - near);
-	float beta  = (2 * near * far) / (near - far);
+	const float alpha = (near + far) / (near - far);
+	const float beta  = (2 * near * far) / (near - far);
 
 	std::cout << "FOV:   " << fov   << std::endl;
 	std::cout << "Near:  " << near  << std::endl;
@@ -189,7 +190,10 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 	std::cout << "Alpha: " << alpha << std::endl;
 	std::cout << "Beta:  " << beta  << std::endl;
 
-	float values[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, alpha, beta, 0, 0, -1, 0};
+	float values[16] = {1, 0, 0, 0, 
+						0, 1, 0, 0, 
+						0, 0, alpha, beta, 
+						0, 0, -1, 0};
 
 	return Matrix4(values);
 
@@ -198,7 +202,7 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 //returns the aspect matrix
 Matrix4 Window::getAspectRatioMatrix() const {
 
-	const float xMax = tan((M_PI * fov) / 360.0);
+	const float xMax = tan(fov / 2.0);
 	const float yMax= (xMax * getHeight()) / getWidth();
 
 	std::cout << "xmax: " << xMax << std::endl;
@@ -262,10 +266,10 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	const Vector4 vup = temp.normalize();
 
 	//now calculate N, U, and V
-	const Vector4 N = (E - A).normalize();
+	const Vector4 N = (E - A).normalize(); // eyepoint - atpoint
 
 	//v is hard
-	const float vdotN = vup.dot(N);
+	/*const float vdotN = vup.dot(N);
 	const float vdotN2 = vdotN * vdotN;
 	const float bottom = sqrt(1.0 - vdotN2);
 	const float alpha = vdotN / bottom;
@@ -273,7 +277,14 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 
 	const Vector4 one = N * alpha;
 	const Vector4 two = vup * beta;
-	const Vector4 V = (one + two).normalize();
+	const Vector4 V = (one + two).normalize();*/
+	const float fraction = vup.dot(N) / N.dot(N);
+
+	const float vx = vup.x() -  (N.x() * fraction);
+	const float vy = vup.y() -  (N.y() * fraction);
+	const float vz = vup.z() -  (N.z() * fraction);
+
+	const Vector4 V(vx, vy, vz, 0.0);
 
 	//u isn't so bad now
 	const Vector4 U = (V.cross(N)).normalize();
