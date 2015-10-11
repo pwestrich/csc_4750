@@ -2,6 +2,8 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
+#include <iostream>
+
 class Vector4;
 
 class Matrix4 {
@@ -39,6 +41,8 @@ public:
 	float *getValues() const;
 
 	//operators
+
+	friend std::ostream &operator<<(std::ostream &out, const Matrix4 &mat);
 
 	//multiplies a 4x4 matrix with a 1z4 vector
 	Vector4 operator*(const Vector4 &vec) const;

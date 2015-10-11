@@ -74,8 +74,15 @@ void Window::render() const {
 
 	const Matrix4 windowing = getWindowingMatrix();
 	const Matrix4 aspect = getAspectRatioMatrix();
+	const Matrix4 final = windowing * normalMatrix * aspect * cameraMatrix;
 
-	scene->render(windowing * normalMatrix * aspect * cameraMatrix);
+	std::cout << "Windowing: " << windowing;
+	std::cout << "Normal: " << normalMatrix;
+	std::cout << "Aspect: " << aspect;
+	std::cout << "Camera: " << cameraMatrix;
+	std::cout << "Concatenated: " << final;
+
+	scene->render(final);
 
 }
 
@@ -176,6 +183,12 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 	float alpha = (near + far) / (far - near);
 	float beta  = (2 * near * far) / (near - far);
 
+	std::cout << "FOV:   " << fov   << std::endl;
+	std::cout << "Near:  " << near  << std::endl;
+	std::cout << "Far:   " << far   << std::endl;
+	std::cout << "Alpha: " << alpha << std::endl;
+	std::cout << "Beta:  " << beta  << std::endl;
+
 	float values[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, alpha, beta, 0, 0, -1, 0};
 
 	return Matrix4(values);
@@ -185,8 +198,11 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 //returns the aspect matrix
 Matrix4 Window::getAspectRatioMatrix() const {
 
-	float xMax = tan((M_PI * fov) / 360.0);
-	float yMax= (xMax * getHeight()) / getWidth();
+	const float xMax = tan((M_PI * fov) / 360.0);
+	const float yMax= (xMax * getHeight()) / getWidth();
+
+	std::cout << "xmax: " << xMax << std::endl;
+	std::cout << "ymax: " << yMax << std::endl;
 
 	return createScaleMatrix(1.0 / xMax, 1.0 / yMax, 1.0);
 
@@ -222,50 +238,57 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	}
 
 	//lines 1, 2, 3 are the eye point
-	float ex = stof(lines[1]);
-	float ey = stof(lines[2]);
-	float ez = stof(lines[3]);
+	const float ex = stof(lines[1]);
+	const float ey = stof(lines[2]);
+	const float ez = stof(lines[3]);
 
-	Vector4 E(ex, ey, ez, 1.0);
+	const Vector4 E(ex, ey, ez, 1.0);
 
 	//lines 5, 6, 7 are the at point
-	float ax = stof(lines[5]);
-	float ay = stof(lines[6]);
-	float az = stof(lines[7]);
+	const float ax = stof(lines[5]);
+	const float ay = stof(lines[6]);
+	const float az = stof(lines[7]);
 
-	Vector4 A(ax, ay, az, 1.0);
+	const Vector4 A(ax, ay, az, 1.0);
 
 	//lines 9, 10, 11 are the up vector
-	float ux = stof(lines[9]);
-	float uy = stof(lines[10]);
-	float uz = stof(lines[11]);
+	const float ux = stof(lines[9]);
+	const float uy = stof(lines[10]);
+	const float uz = stof(lines[11]);
 
 	inFile.close();
 
-	Vector4 vup(ux, uy, uz, 0.0);
-	vup = vup.normalize();
+	const Vector4 temp(ux, uy, uz, 0.0);
+	const Vector4 vup = temp.normalize();
 
 	//now calculate N, U, and V
-	Vector4 N = (E - A).normalize();
+	const Vector4 N = (E - A).normalize();
 
 	//v is hard
-	float vdotN = vup.dot(N);
-	float vdotN2 = vdotN * vdotN;
-	float bottom = sqrt(1.0 - vdotN2);
-	float alpha = vdotN / bottom;
-	float beta = 1.0 / bottom;
+	const float vdotN = vup.dot(N);
+	const float vdotN2 = vdotN * vdotN;
+	const float bottom = sqrt(1.0 - vdotN2);
+	const float alpha = vdotN / bottom;
+	const float beta = 1.0 / bottom;
 
-	Vector4 one = N * alpha;
-	Vector4 two = vup * beta;
-	Vector4 V = (one + two).normalize();
+	const Vector4 one = N * alpha;
+	const Vector4 two = vup * beta;
+	const Vector4 V = (one + two).normalize();
 
 	//u isn't so bad now
-	Vector4 U = (V.cross(N)).normalize();
+	const Vector4 U = (V.cross(N)).normalize();
 
 	//now we can work on the matrix
-	float edotU = -1.0 * E.dot(U);
-	float edotV = -1.0 * E.dot(V);
-	float eDotN = -1.0 * E.dot(N);
+	const float edotU = -1.0 * E.dot(U);
+	const float edotV = -1.0 * E.dot(V);
+	const float eDotN = -1.0 * E.dot(N);
+
+	std::cout << "Eyepoint: " << E;
+	std::cout << "Atpoint:  " << A;
+	std::cout << "V_up:     " << vup;
+	std::cout << "N:        " << N;
+	std::cout << "U:        " << U;
+	std::cout << "V:        " << V;
 
 	float values[16] = {U.x(), U.y(), U.z(), edotU,
 						V.x(), V.y(), V.z(), edotV,

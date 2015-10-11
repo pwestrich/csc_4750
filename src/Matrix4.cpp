@@ -1,5 +1,7 @@
 
 #include <cassert>
+#include <iostream>
+#include <iomanip>
 
 #include "Matrix4.h"
 #include "Vector4.h"
@@ -68,6 +70,23 @@ float *Matrix4::getValues() const {
 }
 
 //operators
+
+std::ostream &operator<<(std::ostream &out, const Matrix4 &mat){
+
+ 	out << "Matrix4:" << std::endl;
+	out << std::setw(9) << mat.values[0] << ", " << std::setw(9) << mat.values[1] << ", " 
+		<< std::setw(9) << mat.values[2] << ", " << std::setw(9) << mat.values[3] << std::endl;
+	out << std::setw(9) << mat.values[4] << ", " << std::setw(9) << mat.values[5] << ", " 
+		<< std::setw(9) << mat.values[6] << ", " << std::setw(9) << mat.values[7] << std::endl;
+	out << std::setw(9) << mat.values[8] << ", " << std::setw(9) << mat.values[9] << ", " 
+		<< std::setw(9) << mat.values[10] << ", " << std::setw(9) << mat.values[11] << std::endl;
+	out << std::setw(9) << mat.values[12] << ", " << std::setw(9) << mat.values[13] << ", " 
+		<< std::setw(9) << mat.values[14] << ", " << std::setw(9) << mat.values[15] << std::endl;
+	out << std::endl;
+
+	return out;
+
+}
 
 //multiplies a 4x4 matrix with a 1z4 vector
 Vector4 Matrix4::operator*(const Vector4 &vec) const {

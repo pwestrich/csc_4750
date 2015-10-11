@@ -2,6 +2,8 @@
 #ifndef VECTOR4_H
 #define VECTOR4_H
 
+#include <iostream>
+
 class Vector4 {
 
 private:
@@ -48,6 +50,9 @@ public:
 	Vector4 homogenize() const;
 
 	//operators
+
+	friend std::ostream& operator<<(std::ostream &out, const Vector4 &vec);
+
 	Vector4 operator*(const float scalar) const;
 
 	//adds two vectors
