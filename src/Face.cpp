@@ -37,7 +37,7 @@ void Face::render(const Matrix4 &transform) const {
 	//calculate the normal of this face
 	const Vector4 v1 = newSecond - newFirst;
 	const Vector4 v2 = newThird - newFirst;
-	const Vector4 normal = v1.cross(v2).normalize();
+	const Vector4 normal = (v1.cross(v2)).normalize();
 
 	//if the normal is facing away from the camera, do not render this face
 	if (normal.z() < 0.0) return;
@@ -49,35 +49,43 @@ void Face::render(const Matrix4 &transform) const {
 	const int xMax = round(fmin(fmax(fmax(newFirst.x(), newSecond.x()), newThird.x()), win->getWidth()));
 	const int yMax = round(fmin(fmax(fmax(newFirst.y(), newSecond.y()), newThird.y()), win->getHeight()));
 
-	//next calculate the change in x and y for the lines
-	const float denom = (v1.x() * v2.y()) - (v1.y() * v2.x());
-	float alpha = ((xMin * v2.y()) - (yMin * v2.x())) / denom;
-	const float beta = ((yMin * v1.y()) - (xMin * v1.y())) / denom;
+	//don't render if the polygon is off the screen either
+	if (xMax < 0 || yMax < 0 || xMin > win->getWidth() || yMin > win->getHeight()) return;
 
-	const float dAlpha = v2.y() / denom;
-	const float dBeta = v1.x() / denom;
+	//calculate the alphas and betas and such for the start point of the bounding box
+	const float denom = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
+	const float dAlpha = v2.y() * denom;
+	const float dBeta = v1.x() * denom;
+	const float startBeta = ((yMin * v1.x()) - (xMin * v1.y())) * denom;
+	float alpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;
 
-	//draw the polygon
-	for (int i = xMin; i <= xMax; ++i){
+	/*std::cout << "v1: " << v1;
+	std::cout << "v2: " << v2;
+	std::cout << "p:  " << newFirst;
 
-		float thisBeta = beta;
+	std::cout << "alpha:  " << alpha << std::endl;
+	std::cout << "dAlpha: " << dAlpha << std::endl;
+	std::cout << "beta:   " << startBeta << std::endl;
+	std::cout << "dBeta:  " << dBeta << std::endl;
+	std::cout << std::endl;*/
 
-		if (alpha > 0.0){
+	//draw the pixels in the triangle
+	for (int x = xMin; x <= xMax; ++x){
 
-			for (int j = yMin; j <= yMax; ++j){
+		float beta = startBeta;
 
-				const float sum = alpha + thisBeta;
+		for (int y = yMin; y <= yMax; ++y){
 
-				//draw point
-				if (thisBeta > 0.0 && sum <= 1.0){
+			const float sum = alpha + beta;
 
-					win->drawPixel(i, j, 0, 1, 0);
+			if (sum >= 0.0 && sum <= 1.0){
 
-				}
-
-				thisBeta += dBeta;
+				const float z = (v1.z() * alpha) + (v2.z() * beta);
+				win->drawPixel(x, y, 0.0, 1.0, 0.0);
 
 			}
+
+			beta += dBeta;
 
 		}
 
@@ -86,9 +94,9 @@ void Face::render(const Matrix4 &transform) const {
 	}
 
 	//draw using the DDA algorithm first
-	//renderDDA(newFirst, newSecond);
-	//renderDDA(newSecond, newThird);
-	//renderDDA(newThird, newFirst);
+	renderDDA(newFirst, newSecond);
+	renderDDA(newSecond, newThird);
+	renderDDA(newThird, newFirst);
 
 	//then draw the Bresham version on top of it
 	//renderBresham(newFirst, newSecond);
