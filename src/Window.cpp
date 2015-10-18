@@ -49,6 +49,10 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	normalMatrix = createNormalMatrix(normalFile);
 	cameraMatrix = createCameraMatrix(cameraFile);
 
+	//create z-buffer
+	zBufferSize = 1920 * 1080;
+	zBuffer = new float[zBufferSize];
+
 	init = true;
 
 }
@@ -62,6 +66,13 @@ Window::~Window(){
 
 	}
 
+	if (zBuffer){
+
+		delete [] zBuffer;
+		zBuffer = NULL;
+
+	}
+
 }
 
 void Window::show(){
@@ -70,8 +81,9 @@ void Window::show(){
 
 }
 
-void Window::render() const {
+void Window::render(){
 
+	//make the transformation matricies
 	const Matrix4 windowing = getWindowingMatrix();
 	const Matrix4 aspect = getAspectRatioMatrix();
 	const Matrix4 final = windowing * normalMatrix * aspect * cameraMatrix;
@@ -82,15 +94,46 @@ void Window::render() const {
 	std::cout << "Camera:       " << cameraMatrix;
 	std::cout << "Concatenated: " << final;
 
+	//resize the z-buffer if needed
+	const int size = getWidth() * getHeight();
+
+	if (zBufferSize < size){
+
+		delete [] zBuffer;
+		zBuffer = new float[size];
+		zBufferSize = size;
+
+	}
+
+	//write lots of -1.0s to the z-buffer
+	for (int i = 0; i < zBufferSize; ++i){
+
+		zBuffer[i] = -1.0;
+
+	}
+
+	//travesrse the scene graph
 	scene->render(final);
 
 }
 
 //draws one pixel on the screen. Takes window coordinates.
-void Window::drawPixel(const int x, const int y, const float r, const float g, const float b) const {
+void Window::drawPixel(const int x, const int y, const float z, const float r, const float g, const float b){
 
 	const int w = getWidth();
 	const int h = getHeight();
+	const float zBufferVal = zBuffer[x * w + y];
+
+	if ((z > 1.0) || (z < -1.0) || (z < zBufferVal)){
+
+		//don't even try if the pixel is not between (-1.0, 1.0)
+		//don't draw if the current value in the z-buffer is greater (closer to camera)
+		return;
+
+	}
+
+	//this point should be drawn
+	zBuffer[x * w + y] = z;
 
 	//convert the window coordinates to what openGL wants
 	float xCanon = (x * 2.0) / w + (-1.0 * (w - 1)) / w;

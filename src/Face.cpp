@@ -27,7 +27,7 @@ Face::~Face(){}
 //renders the face
 void Face::render(const Matrix4 &transform) const {
 
-	const Window *win = Window::getWindow();
+	Window *const win = Window::getWindow();
 
 	//convert the coordinates to screen coordinates first
 	const Vector4 newFirst  = (transform * (*pointOne)).homogenize();
@@ -53,11 +53,13 @@ void Face::render(const Matrix4 &transform) const {
 	if (xMax < 0 || yMax < 0 || xMin > win->getWidth() || yMin > win->getHeight()) return;
 
 	//calculate the alphas and betas and such for the start point of the bounding box
-	const float denom = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
-	const float dAlpha = v2.y() * denom;
-	const float dBeta = v1.x() * denom;
+	const float denom   = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
+	/*const float dAlphaX = v2.y() * denom;
+	const float dBetaX  = v1.x() * denom * -1.0;
+	const float dAlphaY = v2.x() * denom * -1.0; 
+	const float dBetaY  = v1.y() * denom;
 	const float startBeta = ((yMin * v1.x()) - (xMin * v1.y())) * denom;
-	float alpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;
+	const float startAlpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;*/
 
 	/*std::cout << "v1: " << v1;
 	std::cout << "v2: " << v2;
@@ -70,26 +72,28 @@ void Face::render(const Matrix4 &transform) const {
 	std::cout << std::endl;*/
 
 	//draw the pixels in the triangle
-	for (int x = xMin; x <= xMax; ++x){
+	for (int y = yMin; y <= yMax; ++y){
 
-		float beta = startBeta;
+		//float alpha = startAlpha + ((y - yMin) * dAlphaY);
+		//float beta = startBeta + ((y - yMin) * dBetaY);
 
-		for (int y = yMin; y <= yMax; ++y){
+		for (int x = xMin; x <= xMax; ++x){
 
+			const float alpha = ((x * v2.y()) - (y * v2.x())) * denom;
+			const float beta  = ((y * v1.x()) - (x * v1.y())) * denom;
 			const float sum = alpha + beta;
 
 			if (sum >= 0.0 && sum <= 1.0){
 
-				const float z = (v1.z() * alpha) + (v2.z() * beta);
-				win->drawPixel(x, y, 0.0, 1.0, 0.0);
+				//const float z = (v1.z() * alpha) + (v2.z() * beta) ;
+				win->drawPixel(x, y, 0.0, 0.0, 1.0, 0.0);
 
 			}
 
-			beta += dBeta;
+			//alpha += dAlphaX;
+			//beta += dBetaX;
 
 		}
-
-		alpha += dAlpha;
 
 	}
 
@@ -114,7 +118,7 @@ void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
 	Vector4 two = end;
 
 	//for drawing pixels
-	const Window *win = Window::getWindow();
+	Window *const win = Window::getWindow();
 
 	//compute the parameters of our line
 	float m = (two.y() - one.y()) / (two.x() - one.x());
@@ -137,7 +141,7 @@ void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
 		while (currentY <= endY){
 
 			int thisX = round(currentX);
-			win->drawPixel(thisX, currentY, 1, 0, 0);
+			win->drawPixel(thisX, currentY, 0.0, 1, 0, 0);
 			currentX += m;
 			currentY++;
 
@@ -162,7 +166,7 @@ void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
 		while (currentX <= endX){
 
 			int thisY = round(currentY);
-			win->drawPixel(currentX, thisY, 1, 0, 0);
+			win->drawPixel(currentX, thisY, 0.0, 1, 0, 0);
 			currentY += m;
 			currentX++;
 
@@ -175,7 +179,7 @@ void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
 //implements the Bresham line drawing algorithm
 void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 
-	const Window *win = Window::getWindow();
+	Window *const win = Window::getWindow();
 
 	//calculate the change in x and y
 	int dx = round(end.x()) - round(start.x());
@@ -196,7 +200,7 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 	const int yf = round(end.y());
 
 	//draw the starting point and begin the loop
-	win->drawPixel(xc, yc, 0.0, 0.0, 1.0);
+	win->drawPixel(xc, yc, 0.0, 0.0, 0.0, 1.0);
 
 	if (dx > dy){
 
@@ -215,7 +219,7 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 			e += dy;
 			xc += xInc;
 
-			win->drawPixel(xc, yc, 0.0, 0.0, 1.0);
+			win->drawPixel(xc, yc, 0.0, 0.0, 0.0, 1.0);
 
 		}
 
@@ -236,7 +240,7 @@ void Face::renderBresham(const Vector4 &start, const Vector4 &end) const {
 			e += dx;
 			yc += yInc;
 
-			win->drawPixel(xc, yc, 0.0, 0.0, 1.0);
+			win->drawPixel(xc, yc, 0.0, 0.0, 0.0, 1.0);
 
 		}
 

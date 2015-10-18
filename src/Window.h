@@ -17,10 +17,16 @@ private:
 	//the current scene
 	Scene *scene;
 
+	//the field of view, in radians
 	float fov;
 
+	//the normalization and camera matricies
 	Matrix4 normalMatrix;
 	Matrix4 cameraMatrix;
+
+	//the z-buffer
+	float *zBuffer;
+	int zBufferSize;
 
 	Window();
 
@@ -50,10 +56,10 @@ public:
 	//displays the window on screen
 	void show();
 
-	void render() const;
+	void render();
 
 	//draws one pixel on the screen. takes window coordinates.
-	void drawPixel(const int x, const int y, const float r, const float g, const float b) const;
+	void drawPixel(const int x, const int y, const float z, const float r, const float g, const float b);
 
 	//get the width and height of the window 
 	int getWidth() const;

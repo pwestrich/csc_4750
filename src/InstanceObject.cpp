@@ -29,7 +29,7 @@ InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filena
 
 	} while (!inFile.eof());
 
-	if (lines.size() != 13){
+	if (lines.size() < 13){
 
 		std::cerr << "Error: File invalid: " << filename << std::endl;
 		exit(EXIT_FAILURE);
