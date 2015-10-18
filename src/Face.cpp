@@ -46,11 +46,11 @@ void Face::render(const Matrix4 &transform) const {
 	const int xMin = round(fmax(fmin(fmin(newFirst.x(), newSecond.x()), newThird.x()), 0.0));
 	const int yMin = round(fmax(fmin(fmin(newFirst.y(), newSecond.y()), newThird.y()), 0.0));
 
-	const int xMax = round(fmin(fmax(fmax(newFirst.x(), newSecond.x()), newThird.x()), win->getWidth()));
-	const int yMax = round(fmin(fmax(fmax(newFirst.y(), newSecond.y()), newThird.y()), win->getHeight()));
+	const int xMax = round(fmin(fmax(fmax(newFirst.x(), newSecond.x()), newThird.x()), win->getWidth() - 1));
+	const int yMax = round(fmin(fmax(fmax(newFirst.y(), newSecond.y()), newThird.y()), win->getHeight() - 1));
 
 	//don't render if the polygon is off the screen either
-	if (xMax < 0 || yMax < 0 || xMin > win->getWidth() || yMin > win->getHeight()) return;
+	if (xMax < 0 || yMax < 0 || xMin >= win->getWidth() || yMin >= win->getHeight()) return;
 
 	//calculate the alphas and betas and such for the start point of the bounding box
 	const float denom   = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
@@ -85,7 +85,7 @@ void Face::render(const Matrix4 &transform) const {
 
 			if (sum >= 0.0 && sum <= 1.0){
 
-				//const float z = (v1.z() * alpha) + (v2.z() * beta) ;
+				//const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
 				win->drawPixel(x, y, 0.0, 0.0, 1.0, 0.0);
 
 			}

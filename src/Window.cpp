@@ -2,6 +2,7 @@
 //for math constants, like pi
 #define _USE_MATH_DEFINES
 
+#include <cassert>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -122,7 +123,12 @@ void Window::drawPixel(const int x, const int y, const float z, const float r, c
 
 	const int w = getWidth();
 	const int h = getHeight();
-	const float zBufferVal = zBuffer[x * w + y];
+	const int index = (y * w) + x;
+
+	//don't draw off the screen
+	if ((x < 0) || (y < 0) || (x >= w) || (y >= h)) return;
+
+	const float zBufferVal = zBuffer[index];
 
 	if ((z > 1.0) || (z < -1.0) || (z < zBufferVal)){
 
@@ -133,7 +139,7 @@ void Window::drawPixel(const int x, const int y, const float z, const float r, c
 	}
 
 	//this point should be drawn
-	zBuffer[x * w + y] = z;
+	zBuffer[index] = z;
 
 	//convert the window coordinates to what openGL wants
 	float xCanon = (x * 2.0) / w + (-1.0 * (w - 1)) / w;
