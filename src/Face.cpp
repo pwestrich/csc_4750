@@ -25,7 +25,7 @@ Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 Face::~Face(){}
 
 //renders the face
-void Face::render(const Matrix4 &transform) const {
+void Face::render(const Matrix4 &transform, const Vector4 &material) const {
 
 	Window *const win = Window::getWindow();
 
@@ -71,6 +71,7 @@ void Face::render(const Matrix4 &transform) const {
 	const Vector4 c1 = color2 - color1;
 	const Vector4 c2 = color3 - color1;
 
+	//diagnostic prints
 	/*std::cout << "v1: " << v1;
 	std::cout << "v2: " << v2;
 	std::cout << "p1: " << newFirst;
@@ -93,12 +94,14 @@ void Face::render(const Matrix4 &transform) const {
 	//draw the pixels in the triangle
 	for (int y = yMin; y <= yMax; ++y){
 
+		//calculate alpha and beta for the incremental approach
 		const int offset = y - yMin;
 		float alpha = (startAlpha) + (offset * dAlphaY);
 		float beta = (startBeta) + (offset * dBetaY);
 
 		for (int x = xMin; x <= xMax; ++x){
 			
+			//use the slow way
 			//const float pPrimeX = x - newFirst.x();
 			//const float pPrimeY = y - newFirst.y();
 			//const float alpha = ((pPrimeX * v2.y()) - (pPrimeY * v2.x())) * denom;
@@ -116,15 +119,22 @@ void Face::render(const Matrix4 &transform) const {
 				std::cout << "x:   " << x << std::endl;
 				std::cout << "y:   " << y << std::endl;
 				std::cout << "z:   " << z << std::endl;
-				std::cout << "firstZ: " << newFirst.z() << std::endl;
+				std::cout << "p1:  " << (transform *(*pointOne));
+				std::cout << "p2:  " << (transform *(*pointTwo));
+				std::cout << "p3:  " << (transform *(*pointThree));
 				std::cout << "a:   " << alpha << std::endl;
 				std::cout << "b:   " << beta << std::endl;
 				std::cout << "sum: " << sum << std::endl;*/
 
+				//draw using interpolated color
 				win->drawPixel(x, y, 0.0, r, g, b);
+
+				//draw using material color
+				//win->drawPixel(x, y, 0.0, material.x(), material.y(), material.z());
 
 			}
 
+			//increment alpha and beta in the x direction
 			alpha += dAlphaX;
 			beta += dBetaX;
 
@@ -132,12 +142,10 @@ void Face::render(const Matrix4 &transform) const {
 
 	}
 
-	//draw using the DDA algorithm first
-	renderDDA(newFirst, newSecond);
-	renderDDA(newSecond, newThird);
-	renderDDA(newThird, newFirst);
-
-	//then draw the Bresham version on top of it
+	//line drawing algorithms
+	//renderDDA(newFirst, newSecond);
+	//renderDDA(newSecond, newThird);
+	//renderDDA(newThird, newFirst);
 	//renderBresham(newFirst, newSecond);
 	//renderBresham(newSecond, newThird);
 	//renderBresham(newThird, newFirst);

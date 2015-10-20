@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "Vector4.h"
 #include "Matrix4.h"
 
 class BasicObject;
@@ -19,11 +20,14 @@ private:
 	//the instance transform of the object
 	Matrix4 instanceTransform;
 
+	//the object's material color
+	Vector4 material;
+
 public:
 
 	//constructs the InstanceObject with its parent and optional initial transform
 	InstanceObject(const BasicObject *obj) : InstanceObject(obj, Matrix4::identity()){}
-	InstanceObject(const BasicObject *obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform){}
+	InstanceObject(const BasicObject *obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0){}
 
 	//optional constructor to accept a transformation file
 	InstanceObject(const BasicObject *obj, const std::string &filename);// : InstanceObject(obj, Matrix4::identity());

@@ -37,19 +37,24 @@ InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filena
 	}
 
 	//lines 1, 2, 3 have the scale in x, y, and z
-	float xs = stof(lines[1]);
-	float ys = stof(lines[2]);
-	float zs = stof(lines[3]);
+	const float xs = stof(lines[1]);
+	const float ys = stof(lines[2]);
+	const float zs = stof(lines[3]);
 
 	//lines 5, 6, 7, have the rotations in x, y, and z
-	float xr = stof(lines[5]);
-	float yr = stof(lines[6]);
-	float zr = stof(lines[7]);
+	const float xr = stof(lines[5]);
+	const float yr = stof(lines[6]);
+	const float zr = stof(lines[7]);
 
 	//lines 9, 10, 11 have the translate in x, y, and z
-	float xt = stof(lines[9]);
-	float yt = stof(lines[10]);
-	float zt = stof(lines[11]);
+	const float xt = stof(lines[9]);
+	const float yt = stof(lines[10]);
+	const float zt = stof(lines[11]);
+
+	//lines 13, 14, 15 are the material color
+	const float r = stof(lines[13]);
+	const float g = stof(lines[14]);
+	const float b = stof(lines[15]);
 
 	inFile.close();
 
@@ -61,6 +66,8 @@ InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filena
 	Matrix4 S = createScaleMatrix(xs, ys, zs);
 
 	instanceTransform = T * RX * RY * RZ * S;
+
+	material = Vector4(r, g, b, 1.0);
 
 }
 
@@ -76,6 +83,6 @@ void InstanceObject::buildTransform(const Matrix4 &newTransform){
 void InstanceObject::render(const Matrix4 &transform) const {
 
 	//tell the BasicObject to render with the instance transform
-	parent->render(transform * instanceTransform);
+	parent->render(transform * instanceTransform, material);
 
 }

@@ -25,7 +25,7 @@ public:
 	BasicObject(const std::string &filename);
 
 	//draws the object
-	void render(const Matrix4 &transform) const;
+	void render(const Matrix4 &transform, const Vector4 &material) const;
 
 };
 

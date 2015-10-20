@@ -89,11 +89,12 @@ void Window::render(){
 	const Matrix4 aspect = getAspectRatioMatrix();
 	const Matrix4 final = windowing * normalMatrix * aspect * cameraMatrix;
 
-	//std::cout << "Windowing:    " << windowing;
-	//std::cout << "Normal:       " << normalMatrix;
-	//std::cout << "Aspect:       " << aspect;
-	//std::cout << "Camera:       " << cameraMatrix;
-	//std::cout << "Concatenated: " << final;
+	std::cout << "New frame --------------------------------" << std::endl;
+	std::cout << "Windowing:    " << windowing;
+	std::cout << "Normal:       " << normalMatrix;
+	std::cout << "Aspect:       " << aspect;
+	std::cout << "Camera:       " << cameraMatrix;
+	std::cout << "Concatenated: " << final;
 
 	//resize the z-buffer if needed
 	const int size = getWidth() * getHeight();
