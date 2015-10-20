@@ -54,44 +54,60 @@ void Face::render(const Matrix4 &transform) const {
 
 	//calculate the alphas and betas and such for the start point of the bounding box
 	const float denom   = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
-	/*const float dAlphaX = v2.y() * denom;
+	const float dAlphaX = v2.y() * denom;
 	const float dBetaX  = v1.x() * denom * -1.0;
 	const float dAlphaY = v2.x() * denom * -1.0; 
 	const float dBetaY  = v1.y() * denom;
 	const float startBeta = ((yMin * v1.x()) - (xMin * v1.y())) * denom;
-	const float startAlpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;*/
+	const float startAlpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;
 
-	/*std::cout << "v1: " << v1;
+	std::cout << "v1: " << v1;
 	std::cout << "v2: " << v2;
-	std::cout << "p:  " << newFirst;
-
-	std::cout << "alpha:  " << alpha << std::endl;
-	std::cout << "dAlpha: " << dAlpha << std::endl;
-	std::cout << "beta:   " << startBeta << std::endl;
-	std::cout << "dBeta:  " << dBeta << std::endl;
-	std::cout << std::endl;*/
+	std::cout << "p1: " << newFirst;
+	std::cout << "p2: " << newSecond;
+	std::cout << "p3: " << newThird;
+	std::cout << "n:  " << normal; 
+	std::cout << "xmin:    " << xMin << std::endl;
+	std::cout << "xmax:    " << xMax << std::endl;
+	std::cout << "ymin:    " << yMin << std::endl; 
+	std::cout << "yMax:    " << yMax << std::endl;
+	std::cout << "denom:   " << denom << std::endl;
+	std::cout << "alpha:   " << startAlpha << std::endl;
+	std::cout << "beta:    " << startBeta << std::endl;
+	std::cout << "dAlphaX: " << dAlphaX << std::endl;
+	std::cout << "dAlphaY: " << dAlphaY << std::endl;
+	std::cout << "dBetaX:  " << dBetaX << std::endl;
+	std::cout << "dBetaY:  " << dBetaY << std::endl;
+	std::cout << std::endl;
 
 	//draw the pixels in the triangle
 	for (int y = yMin; y <= yMax; ++y){
 
-		//float alpha = startAlpha + ((y - yMin) * dAlphaY);
-		//float beta = startBeta + ((y - yMin) * dBetaY);
+		const int offset = y - yMin;
+		float alpha = (startAlpha * 0.01) + (offset * dAlphaY);
+		float beta = (startBeta * 0.01) + (offset * dBetaY);
 
 		for (int x = xMin; x <= xMax; ++x){
 
-			const float alpha = ((x * v2.y()) - (y * v2.x())) * denom;
-			const float beta  = ((y * v1.x()) - (x * v1.y())) * denom;
+			//const float alpha = ((x * v2.y()) - (y * v2.x())) * denom;
+			//const float beta  = ((y * v1.x()) - (x * v1.y())) * denom;
 			const float sum = alpha + beta;
 
 			if (sum >= 0.0 && sum <= 1.0){
 
+				/*std::cout << "DRAWING" << std::endl;
+				std::cout << "x:   " << x << std::endl;
+				std::cout << "y:   " << y << std::endl;
+				std::cout << "a:   " << alpha << std::endl;
+				std::cout << "b:   " << beta << std::endl;
+				std::cout << "sum: " << sum << std::endl;*/
 				//const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
 				win->drawPixel(x, y, 0.0, 0.0, 1.0, 0.0);
 
 			}
 
-			//alpha += dAlphaX;
-			//beta += dBetaX;
+			alpha += dAlphaX;
+			beta += dBetaX;
 
 		}
 

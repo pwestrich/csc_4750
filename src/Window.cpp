@@ -89,11 +89,11 @@ void Window::render(){
 	const Matrix4 aspect = getAspectRatioMatrix();
 	const Matrix4 final = windowing * normalMatrix * aspect * cameraMatrix;
 
-	std::cout << "Windowing:    " << windowing;
-	std::cout << "Normal:       " << normalMatrix;
-	std::cout << "Aspect:       " << aspect;
-	std::cout << "Camera:       " << cameraMatrix;
-	std::cout << "Concatenated: " << final;
+	//std::cout << "Windowing:    " << windowing;
+	//std::cout << "Normal:       " << normalMatrix;
+	//std::cout << "Aspect:       " << aspect;
+	//std::cout << "Camera:       " << cameraMatrix;
+	//std::cout << "Concatenated: " << final;
 
 	//resize the z-buffer if needed
 	const int size = getWidth() * getHeight();
@@ -233,12 +233,6 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 	const float alpha = (near + far) / (near - far);
 	const float beta  = (2 * near * far) / (near - far);
 
-	std::cout << "FOV:   " << fov   << std::endl;
-	std::cout << "Near:  " << near  << std::endl;
-	std::cout << "Far:   " << far   << std::endl;
-	std::cout << "Alpha: " << alpha << std::endl;
-	std::cout << "Beta:  " << beta  << std::endl;
-
 	float values[16] = {1, 0, 0, 0, 
 						0, 1, 0, 0, 
 						0, 0, alpha, beta, 
@@ -253,9 +247,6 @@ Matrix4 Window::getAspectRatioMatrix() const {
 
 	const float xMax = tan(fov / 2.0);
 	const float yMax= (xMax * getHeight()) / getWidth();
-
-	std::cout << "xmax: " << xMax << std::endl;
-	std::cout << "ymax: " << yMax << std::endl;
 
 	return createScaleMatrix(1.0 / xMax, 1.0 / yMax, 1.0);
 
@@ -342,13 +333,6 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	const float edotU = -1.0 * E.dot(U);
 	const float edotV = -1.0 * E.dot(V);
 	const float eDotN = -1.0 * E.dot(N);
-
-	std::cout << "Eyepoint: " << E;
-	std::cout << "Atpoint:  " << A;
-	std::cout << "V_up:     " << vup;
-	std::cout << "N:        " << N;
-	std::cout << "U:        " << U;
-	std::cout << "V:        " << V;
 
 	float values[16] = {U.x(), U.y(), U.z(), edotU,
 						V.x(), V.y(), V.z(), edotV,
