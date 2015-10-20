@@ -130,7 +130,7 @@ void Window::drawPixel(const int x, const int y, const float z, const float r, c
 
 	const float zBufferVal = zBuffer[index];
 
-	if ((z > 1.0) || (z < -1.0) || (z < zBufferVal)){
+	if ((z > 1.0) || (z < zBufferVal)){
 
 		//don't even try if the pixel is not between (-1.0, 1.0)
 		//don't draw if the current value in the z-buffer is greater (closer to camera)
@@ -221,17 +221,17 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 	fov = stof(lines[1]);
 	fov = (M_PI * fov) / 180.0;
 
-	//line 3 is zmax (near clip)
-	const float near = stof(lines[3]);
+	//line 3 is zmax (xMax clip)
+	const float xMax = stof(lines[3]);
 
-	//line 5 is zmin (far clip)
-	const float far = stof(lines[5]);
+	//line 5 is zmin (xMin clip)
+	const float xMin = stof(lines[5]);
 
 	inFile.close();
 
 	//calculate the normal matrix
-	const float alpha = (near + far) / (near - far);
-	const float beta  = (2 * near * far) / (near - far);
+	const float alpha = (xMax + xMin) / (xMax - xMin);
+	const float beta  = (2 * xMax * xMin) / (xMax - xMin);
 
 	float values[16] = {1, 0, 0, 0, 
 						0, 1, 0, 0, 
@@ -332,11 +332,11 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	//now we can work on the matrix
 	const float edotU = -1.0 * E.dot(U);
 	const float edotV = -1.0 * E.dot(V);
-	const float eDotN = -1.0 * E.dot(N);
+	const float edotN = -1.0 * E.dot(N);
 
 	float values[16] = {U.x(), U.y(), U.z(), edotU,
 						V.x(), V.y(), V.z(), edotV,
-						N.x(), N.y(), N.z(), eDotN,
+						N.x(), N.y(), N.z(), edotN,
 						0.0  , 0.0  , 0.0  , 1.0   };
 
 	return Matrix4(values);

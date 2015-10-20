@@ -37,7 +37,7 @@ void Face::render(const Matrix4 &transform) const {
 	//calculate the normal of this face
 	const Vector4 v1 = newSecond - newFirst;
 	const Vector4 v2 = newThird - newFirst;
-	const Vector4 normal = (v1.cross(v2)).normalize();
+	const Vector4 normal = (v2.cross(v1)).normalize();
 
 	//if the normal is facing away from the camera, do not render this face
 	if (normal.z() < 0.0) return;
@@ -55,13 +55,23 @@ void Face::render(const Matrix4 &transform) const {
 	//calculate the alphas and betas and such for the start point of the bounding box
 	const float denom   = 1.0 / ((v1.x() * v2.y()) - (v1.y() * v2.x()));
 	const float dAlphaX = v2.y() * denom;
-	const float dBetaX  = v1.x() * denom * -1.0;
+	const float dBetaX  = v1.y() * denom * -1.0;
 	const float dAlphaY = v2.x() * denom * -1.0; 
-	const float dBetaY  = v1.y() * denom;
-	const float startBeta = ((yMin * v1.x()) - (xMin * v1.y())) * denom;
-	const float startAlpha = ((xMin * v2.y()) - (yMin* v2.x())) * denom;
+	const float dBetaY  = v1.x() * denom;
+	const float xPrime = xMin - newFirst.x();
+	const float yPrime = yMin - newFirst.y();
+	const float startAlpha = ((xPrime * v2.y()) - (yPrime * v2.x())) * denom;
+	const float startBeta = ((yPrime * v1.x()) - (xPrime * v1.y())) * denom;
 
-	std::cout << "v1: " << v1;
+	//and the colors for each vertex
+	const Vector4 color1(1.0, 0.0, 0.0, 1.0);
+	const Vector4 color2(0.0, 1.0, 0.0, 1.0);
+	const Vector4 color3(0.0, 0.0, 1.0, 1.0);
+
+	const Vector4 c1 = color2 - color1;
+	const Vector4 c2 = color3 - color1;
+
+	/*std::cout << "v1: " << v1;
 	std::cout << "v2: " << v2;
 	std::cout << "p1: " << newFirst;
 	std::cout << "p2: " << newSecond;
@@ -78,31 +88,40 @@ void Face::render(const Matrix4 &transform) const {
 	std::cout << "dAlphaY: " << dAlphaY << std::endl;
 	std::cout << "dBetaX:  " << dBetaX << std::endl;
 	std::cout << "dBetaY:  " << dBetaY << std::endl;
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 
 	//draw the pixels in the triangle
 	for (int y = yMin; y <= yMax; ++y){
 
 		const int offset = y - yMin;
-		float alpha = (startAlpha * 0.01) + (offset * dAlphaY);
-		float beta = (startBeta * 0.01) + (offset * dBetaY);
+		float alpha = (startAlpha) + (offset * dAlphaY);
+		float beta = (startBeta) + (offset * dBetaY);
 
 		for (int x = xMin; x <= xMax; ++x){
-
-			//const float alpha = ((x * v2.y()) - (y * v2.x())) * denom;
-			//const float beta  = ((y * v1.x()) - (x * v1.y())) * denom;
+			
+			//const float pPrimeX = x - newFirst.x();
+			//const float pPrimeY = y - newFirst.y();
+			//const float alpha = ((pPrimeX * v2.y()) - (pPrimeY * v2.x())) * denom;
+			//const float beta  = ((pPrimeY * v1.x()) - (pPrimeX * v1.y())) * denom;
 			const float sum = alpha + beta;
 
-			if (sum >= 0.0 && sum <= 1.0){
-
+			if ((alpha > 0.0) && (beta > 0.0) && (sum <= 1.0)){
+				
+				const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
+				const float r = (c1.x() * alpha) + (c2.x() * beta) + color1.x();
+				const float g = (c1.y() * alpha) + (c2.y() * beta) + color1.y();
+				const float b = (c1.z() * alpha) + (c2.z() * beta) + color1.z();
+				
 				/*std::cout << "DRAWING" << std::endl;
 				std::cout << "x:   " << x << std::endl;
 				std::cout << "y:   " << y << std::endl;
+				std::cout << "z:   " << z << std::endl;
+				std::cout << "firstZ: " << newFirst.z() << std::endl;
 				std::cout << "a:   " << alpha << std::endl;
 				std::cout << "b:   " << beta << std::endl;
 				std::cout << "sum: " << sum << std::endl;*/
-				//const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
-				win->drawPixel(x, y, 0.0, 0.0, 1.0, 0.0);
+
+				win->drawPixel(x, y, 0.0, r, g, b);
 
 			}
 
