@@ -13,20 +13,20 @@ void SceneNode::buildTransform(const Matrix4 &newTransform){
 }
 
 //renders every child
-void SceneNode::render(const Matrix4 &newTransform) const {
+void SceneNode::render(const Matrix4 &newTransform, const Matrix4 &windowingMatrix) const {
 
 	//apply this node's instance transform to every child
 	Matrix4 current = newTransform * transform;
 
 	for (size_t i = 0; i < objects.size(); ++i){
 
-		objects[i]->render(current);
+		objects[i]->render(current, windowingMatrix);
 
 	}
 
 	for (size_t i = 0; i < children.size(); ++i){
 
-		children[i]->render(current);
+		children[i]->render(current, windowingMatrix);
 
 	}
 

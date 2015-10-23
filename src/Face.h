@@ -30,7 +30,7 @@ public:
 	inline Vector4 *getThird() const { return pointThree;}
 
 	//renders the face (draws only lines for now)
-	void render(const Matrix4 &transform, const Vector4 &material) const;
+	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &material) const;
 
 };
 

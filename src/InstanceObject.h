@@ -36,7 +36,7 @@ public:
 	void buildTransform(const Matrix4 &newTransform);
 
 	//renders the object using the current instance transform
-	void render(const Matrix4 &transform) const;
+	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix) const;
 
 };
 

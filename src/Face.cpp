@@ -25,14 +25,14 @@ Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 Face::~Face(){}
 
 //renders the face
-void Face::render(const Matrix4 &transform, const Vector4 &material) const {
+void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &material) const {
 
 	Window *const win = Window::getWindow();
 
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (transform * (*pointOne)).homogenize();
-	const Vector4 newSecond = (transform * (*pointTwo)).homogenize();
-	const Vector4 newThird  = (transform * (*pointThree)).homogenize();
+	const Vector4 newFirst  = (windowingMatrix * (transform * (*pointOne))).homogenize();
+	const Vector4 newSecond = (windowingMatrix * (transform * (*pointTwo))).homogenize();
+	const Vector4 newThird  = (windowingMatrix * (transform * (*pointThree))).homogenize();
 
 	//calculate the normal of this face
 	const Vector4 v1 = newSecond - newFirst;
