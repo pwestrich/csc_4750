@@ -80,7 +80,8 @@ void InstanceObject::buildTransform(const Matrix4 &newTransform){
 }
 
 //renders the object using the current instance transform
-void InstanceObject::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Light &ambient, const Light &point,  const float attenuation) const {
+void InstanceObject::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Light &ambient, 
+							const Light &point,  const float attenuation) const {
 
 	//tell the BasicObject to render with the instance transform
 	parent->render(transform * instanceTransform, windowingMatrix, eyepoint, material, ambient, point, attenuation);

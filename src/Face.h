@@ -14,6 +14,9 @@ private:
 	Vector4 *pointTwo;
 	Vector4 *pointThree;
 
+	//function to calcualte color
+	
+
 	//implements the DDA line drawing algorithm
 	void renderDDA(const Vector4 &start, const Vector4 &end) const;
 
@@ -30,7 +33,8 @@ public:
 	inline Vector4 *getThird() const { return pointThree;}
 
 	//renders the face (draws only lines for now)
-	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const Light &ambient, const Light &point,  const float attenuation, const float shininess) const;
+	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
+				const Light &ambient, const Light &point,  const float attenuation, const float shininess) const;
 
 };
 

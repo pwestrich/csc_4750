@@ -28,7 +28,8 @@ public:
 	BasicObject(const std::string &filename, const float shininess);
 
 	//draws the object
-	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const Light &ambient, const Light &point,  const float attenuation) const;
+	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
+				const Light &ambient, const Light &point,  const float attenuation) const;
 
 };
 
