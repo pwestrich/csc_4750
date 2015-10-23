@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include "Light.h"
+
 class BasicObject;
 class InstanceObject;
 class SceneNode;
@@ -19,8 +21,17 @@ private:
 	std::vector<BasicObject*> objects;
 	std::vector<InstanceObject*> instances;
 
+	//the lights of the scene
+	Light point;
+	Light ambient;
+
+	float attenuation;
+	float shininess;
+
 	//the root scene node
 	SceneNode *rootSceneNode;
+
+	void readLights(const std::string &filename);
 
 public:
 

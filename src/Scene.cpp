@@ -1,4 +1,6 @@
 
+#include <fstream>
+
 #include "Scene.h"
 #include "SceneNode.h"
 #include "BasicObject.h"
@@ -25,6 +27,9 @@ Scene::Scene(){
 	rootSceneNode->addChildObject(sphere);
 
 	instances.push_back(sphere);
+
+	//add lights
+	readLights("shade.txt");
 
 	/*
 	//now make the instance objects needed of each
@@ -128,5 +133,56 @@ Scene::~Scene(){
 void Scene::render(const Matrix4 &windowingMatrix) const {
 
 	rootSceneNode->render(windowingMatrix);
+
+}
+
+//private methods below here ----------------------------------------------------------------------
+void Scene::readLights(const std::string &filename){
+
+	std::fstream inFile(filename);
+
+	if (!inFile){
+
+		std::cerr << "Invalid filename: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	std::string buffer;
+	std::vector<std::string> lines;
+
+	do {
+
+		getline(inFile, buffer);
+		lines.push_back(buffer);
+
+	} while (!inFile.eof());
+
+	/*if (lines.size() != 12){
+
+		std::cerr << "Error: File invalid: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}*/
+
+	//lines 1, 2, 3 are the point light's position
+	const float px = stof(lines[1]);
+	const float py = stof(lines[2]);
+	const float pz = stof(lines[3]);
+
+	//lines 5, 6, 7 are the ambient light color
+	const float ar = stof(lines[5]);
+	const float ag = stof(lines[6]);
+	const float ab = stof(lines[7]);
+
+	//line 9 is linear attenuation
+	attenuation = stof(lines[9]);
+
+	//line 11 is the shininess
+	shininess = stof(lines[11]);
+
+	//assume point light is white, and the ambient is a zero, because it dioesn't amtter
+	point = Light(1.0, 1.0, 1.0, px, py, pz);
+	ambient = Light(ar, ag, ab, 0.0, 0.0, 0.0);
 
 }
