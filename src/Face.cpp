@@ -25,7 +25,7 @@ Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 Face::~Face(){}
 
 //renders the face
-void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material) const {
+void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const float attenuation) const {
 
 	Window *const win = Window::getWindow();
 
