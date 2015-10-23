@@ -10,7 +10,9 @@
 #include "Face.h"
 
 //reads in an object from a .obj file
-BasicObject::BasicObject(const std::string &filename){
+BasicObject::BasicObject(const std::string &filename, const float _shininess){
+
+	shininess = _shininess;
 
 	std::ifstream inFile(filename);
 	std::string line;
@@ -90,7 +92,7 @@ void BasicObject::render(const Matrix4 &transform, const Matrix4 &windowingMatri
 	//tell each face to render itself
 	for (size_t i = 0; i < faces.size(); ++i){
 
-		faces[i]->render(transform, windowingMatrix, eyepoint, material, attenuation);
+		faces[i]->render(transform, windowingMatrix, eyepoint, material, attenuation, shininess);
 
 	}
 

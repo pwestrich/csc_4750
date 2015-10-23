@@ -27,12 +27,11 @@ private:
 	Light ambient;
 
 	float attenuation;
-	float shininess;
 
 	//the root scene node
 	SceneNode *rootSceneNode;
 
-	void readLights(const std::string &filename);
+	float readLights(const std::string &filename);
 
 public:
 

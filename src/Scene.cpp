@@ -13,13 +13,16 @@ Scene::Scene(){
 	//the root scene node has no parent
 	rootSceneNode = new SceneNode();
 
-	//create the absic objects for the robot
-	BasicObject *basicCube = new BasicObject("cube.txt");
-	BasicObject *basicCylinder = new BasicObject("cylinder.txt");
-	BasicObject *basicSphere = new BasicObject("sphere.txt");
+	//add lights
+	const float shininess = readLights("shade.txt");
 
-	objects.push_back(basicCube);
-	objects.push_back(basicCylinder);
+	//create the absic objects for the robot
+	//BasicObject *basicCube = new BasicObject("cube.txt");
+	//BasicObject *basicCylinder = new BasicObject("cylinder.txt");
+	BasicObject *basicSphere = new BasicObject("sphere.txt", shininess);
+
+	//objects.push_back(basicCube);
+	//objects.push_back(basicCylinder);
 	objects.push_back(basicSphere);
 
 	InstanceObject *sphere = new InstanceObject(basicSphere, "trs.txt");
@@ -27,9 +30,6 @@ Scene::Scene(){
 	rootSceneNode->addChildObject(sphere);
 
 	instances.push_back(sphere);
-
-	//add lights
-	readLights("shade.txt");
 
 	/*
 	//now make the instance objects needed of each
@@ -137,7 +137,7 @@ void Scene::render(const Matrix4 &windowingMatrix, const Vector4 &eyepoint) cons
 }
 
 //private methods below here ----------------------------------------------------------------------
-void Scene::readLights(const std::string &filename){
+float Scene::readLights(const std::string &filename){
 
 	std::fstream inFile(filename);
 
@@ -179,10 +179,12 @@ void Scene::readLights(const std::string &filename){
 	attenuation = stof(lines[9]);
 
 	//line 11 is the shininess
-	shininess = stof(lines[11]);
+	const float shininess = stof(lines[11]);
 
 	//assume point light is white, and the ambient is a zero, because it dioesn't amtter
 	point = Light(1.0, 1.0, 1.0, px, py, pz);
 	ambient = Light(ar, ag, ab, 0.0, 0.0, 0.0);
+
+	return shininess;
 
 }
