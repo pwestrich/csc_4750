@@ -115,7 +115,7 @@ void Window::render(){
 	}
 
 	//travesrse the scene graph
-	scene->render(final);
+	scene->render(final, eyepoint);
 
 }
 
@@ -171,7 +171,7 @@ int Window::getHeight() const {
 
 //private methods & functions ---------------------------------------------------------------------
 
-Window::Window(){
+Window::Window() : eyepoint(Vector4::identity()){
 
 	init = false;
 
@@ -254,7 +254,7 @@ Matrix4 Window::getAspectRatioMatrix() const {
 }
 
 //returns the camera matrix
-Matrix4 Window::createCameraMatrix(const std::string &filename) const {
+Matrix4 Window::createCameraMatrix(const std::string &filename) {
 
 	std::fstream inFile(filename);
 
@@ -287,7 +287,7 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	const float ey = stof(lines[2]);
 	const float ez = stof(lines[3]);
 
-	const Vector4 E(ex, ey, ez, 1.0);
+	eyepoint = Vector4(ex, ey, ez, 1.0);
 
 	//lines 5, 6, 7 are the at point
 	const float ax = stof(lines[5]);
@@ -307,7 +307,7 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	const Vector4 vup = temp.normalize();
 
 	//now calculate N, U, and V
-	const Vector4 N = (E - A).normalize(); // eyepoint - atpoint
+	const Vector4 N = (eyepoint - A).normalize(); // eyepoint - atpoint
 
 	//v is hard
 	/*const float vdotN = vup.dot(N);
@@ -331,9 +331,9 @@ Matrix4 Window::createCameraMatrix(const std::string &filename) const {
 	const Vector4 U = (V.cross(N)).normalize();
 
 	//now we can work on the matrix
-	const float edotU = -1.0 * E.dot(U);
-	const float edotV = -1.0 * E.dot(V);
-	const float edotN = -1.0 * E.dot(N);
+	const float edotU = -1.0 * eyepoint.dot(U);
+	const float edotV = -1.0 * eyepoint.dot(V);
+	const float edotN = -1.0 * eyepoint.dot(N);
 
 	float values[16] = {U.x(), U.y(), U.z(), edotU,
 						V.x(), V.y(), V.z(), edotV,

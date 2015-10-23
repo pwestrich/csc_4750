@@ -10,6 +10,7 @@ class BasicObject;
 class InstanceObject;
 class SceneNode;
 class Matrix4;
+class Vector4;
 
 class Scene {
 
@@ -39,7 +40,7 @@ public:
 	~Scene();
 
 	//renders every InstanceObjectgiven the windowing matrix
-	void render(const Matrix4 &windowingMatrix) const;
+	void render(const Matrix4 &windowingMatrix, const Vector4 &eyepoint) const;
 
 };
 

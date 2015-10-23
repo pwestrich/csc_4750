@@ -3,6 +3,8 @@
 #define WINDOW_H
 
 #include <string>
+
+#include "Vector4.h"
 #include "Matrix4.h"
 
 class Scene;
@@ -28,6 +30,9 @@ private:
 	float *zBuffer;
 	int zBufferSize;
 
+	//the eyepoint, needed for lighting
+	Vector4 eyepoint;
+
 	Window();
 
 	//returns the matrix to convert window coordinates to screen coordinates
@@ -40,7 +45,7 @@ private:
 	Matrix4 getAspectRatioMatrix() const;
 
 	//returns the camera matrix
-	Matrix4 createCameraMatrix(const std::string &filename) const;
+	Matrix4 createCameraMatrix(const std::string &filename);
 
 public:
 

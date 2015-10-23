@@ -14,7 +14,7 @@ private:
 
 public:
 
-	Light(const float r, const float g, const float b, const float x, const float y, const float z) : location(x, y, x, 1.0), color(r, g, b, 1.0){}
+	Light(const float r, const float g, const float b, const float x, const float y, const float z) : location(x, y, z, 1.0), color(r, g, b, 1.0){}
 	Light(const Vector4 &_color, const Vector4 &_location) : location(_location), color(_color){}
 	Light() : Light(0.0, 0.0, 0.0, 0.0, 0.0, 0.0){}
 
