@@ -4,6 +4,7 @@
 
 class Matrix4;
 class Vector4;
+class Light;
 
 class Face {
 
@@ -23,14 +24,13 @@ public:
 
 	//Face will retain a pointer to these, but will not delete them
 	Face(Vector4 *first, Vector4 *second, Vector4 *third);
-	~Face();
 
 	inline Vector4 *getFirst() const { return pointOne;}
 	inline Vector4 *getSecond() const { return pointTwo;}
 	inline Vector4 *getThird() const { return pointThree;}
 
 	//renders the face (draws only lines for now)
-	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const float attenuation, const float shininess) const;
+	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const Light &ambient, const Light &point,  const float attenuation, const float shininess) const;
 
 };
 

@@ -132,7 +132,7 @@ Scene::~Scene(){
 //renders every InstanceObjectgiven the windowing matrix
 void Scene::render(const Matrix4 &windowingMatrix, const Vector4 &eyepoint) const {
 
-	rootSceneNode->render(Matrix4::identity(), windowingMatrix, eyepoint, attenuation);
+	rootSceneNode->render(Matrix4::identity(), windowingMatrix, eyepoint, ambient, point, attenuation);
 
 }
 

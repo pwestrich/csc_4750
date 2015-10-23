@@ -7,6 +7,7 @@
 #include "Matrix4.h"
 
 class InstanceObject;
+class Light;
 
 class SceneNode {
 
@@ -30,7 +31,7 @@ public:
 	void buildTransform(const Matrix4 &newTransform);
 
 	//renders every child
-	void render(const Matrix4 &newTransform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const float attenuation) const;
+	void render(const Matrix4 &newTransform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Light &ambient, const Light &point, const float attenuation) const;
 
 	//add a new child node
 	void addChildNode(SceneNode *newNode);

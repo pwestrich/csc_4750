@@ -8,6 +8,7 @@
 #include "Face.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+#include "Light.h"
 
 //Face will retain a pointer to these, but will not delete them
 Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
@@ -22,17 +23,17 @@ Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
 
 }
 
-Face::~Face(){}
-
 //renders the face
-void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const float attenuation, const float shininess) const {
+void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const Light &ambient, const Light &point,  const float attenuation, const float shininess) const {
 
 	Window *const win = Window::getWindow();
 
+	const Matrix4 matrix = windowingMatrix * transform;
+
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (windowingMatrix * (transform * (*pointOne))).homogenize();
-	const Vector4 newSecond = (windowingMatrix * (transform * (*pointTwo))).homogenize();
-	const Vector4 newThird  = (windowingMatrix * (transform * (*pointThree))).homogenize();
+	const Vector4 newFirst  = (matrix * (*pointOne)).homogenize();
+	const Vector4 newSecond = (matrix * (*pointTwo)).homogenize();
+	const Vector4 newThird  = (matrix * (*pointThree)).homogenize();
 
 	//calculate the normal of this face
 	const Vector4 v1 = newSecond - newFirst;
