@@ -29,17 +29,39 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 	Window *const win = Window::getWindow();
 
-	const Matrix4 matrix = windowingMatrix * transform;
-
 	//convert the coordinates to screen coordinates first
-	const Vector4 newFirst  = (matrix * (*pointOne)).homogenize();
-	const Vector4 newSecond = (matrix * (*pointTwo)).homogenize();
-	const Vector4 newThird  = (matrix * (*pointThree)).homogenize();
+	Vector4 newFirst  = (transform * (*pointOne)).homogenize();
+	Vector4 newSecond = (transform * (*pointTwo)).homogenize();
+	Vector4 newThird  = (transform * (*pointThree)).homogenize();
 
 	//calculate the normal of this face
-	const Vector4 v1 = newSecond - newFirst;
-	const Vector4 v2 = newThird - newFirst;
-	const Vector4 normal = (v2.cross(v1)).normalize();
+	Vector4 v1 = newSecond - newFirst;
+	Vector4 v2 = newThird - newFirst;
+	Vector4 normal = (v2.cross(v1)).normalize();
+
+	//this must be done in world space
+	const Vector4 color1 = calculateColor(newFirst, normal, eyepoint, material, point, attenuation) + calculateColor(newFirst, normal, eyepoint, material, ambient, attenuation);
+	const Vector4 color2 = calculateColor(newSecond, normal, eyepoint, material, point, attenuation) + calculateColor(newSecond, normal, eyepoint, material, ambient, attenuation);
+	const Vector4 color3 = calculateColor(newThird, normal, eyepoint, material, point, attenuation) + calculateColor(newThird, normal, eyepoint, material, ambient, attenuation);
+
+	//std::cout << "color1: " << color1;
+	//std::cout << "color2: " << color2;
+	//std::cout << "color3: " << color3;
+
+	const Vector4 c1 = color2 - color1;
+	const Vector4 c2 = color3 - color1;
+
+	const Matrix4 mat = windowingMatrix * transform;
+
+	//now move to screen space
+	newFirst  = (mat * (*pointOne)).homogenize();
+	newSecond = (mat * (*pointTwo)).homogenize();
+	newThird  = (mat * (*pointThree)).homogenize();
+
+	//calculate the normal of this face
+	v1 = newSecond - newFirst;
+	v2 = newThird - newFirst;
+	normal = (v2.cross(v1)).normalize();
 
 	//if the normal is facing away from the camera, do not render this face
 	if (normal.z() < 0.0) return;
@@ -66,12 +88,9 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	const float startBeta = ((yPrime * v1.x()) - (xPrime * v1.y())) * denom;
 
 	//and the colors for each vertex
-	const Vector4 color1(1.0, 0.0, 0.0, 1.0);
-	const Vector4 color2(0.0, 1.0, 0.0, 1.0);
-	const Vector4 color3(0.0, 0.0, 1.0, 1.0);
-
-	const Vector4 c1 = color2 - color1;
-	const Vector4 c2 = color3 - color1;
+	//const Vector4 color1(1.0, 0.0, 0.0, 1.0);
+	//const Vector4 color2(0.0, 1.0, 0.0, 1.0);
+	//const Vector4 color3(0.0, 0.0, 1.0, 1.0);
 
 	//diagnostic prints
 	/*std::cout << "v1: " << v1;
@@ -121,12 +140,9 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 				std::cout << "x:   " << x << std::endl;
 				std::cout << "y:   " << y << std::endl;
 				std::cout << "z:   " << z << std::endl;
-				std::cout << "p1:  " << (transform *(*pointOne));
-				std::cout << "p2:  " << (transform *(*pointTwo));
-				std::cout << "p3:  " << (transform *(*pointThree));
-				std::cout << "a:   " << alpha << std::endl;
-				std::cout << "b:   " << beta << std::endl;
-				std::cout << "sum: " << sum << std::endl;*/
+				std::cout << "r:   " << r << std::endl;
+				std::cout << "g:   " << g << std::endl;
+				std::cout << "b:   " << b << std::endl;*/
 
 				//draw using interpolated color
 				win->drawPixel(x, y, 0.0, r, g, b);
@@ -155,6 +171,39 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 }
 
 //private methods ---------------------------------------------------------------------------------
+
+Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, 
+							 const Vector4 &material, const Light &light, const float attenuation) const {
+
+	//fudge factors
+	const static float a = 1;
+	const static float b = 1;
+	const static float c = 1;
+
+	//first, calculate l
+	Vector4 l = light.getLocation() - vertex;
+	const float distance = l.length();
+	l = l.normalize();
+
+	const float ldotN = l.dot(normal);
+
+	//then r
+	const Vector4 r = (normal * (ldotN * 2)) - l;
+
+	//then v
+	const Vector4 v = (eyepoint - vertex).normalize();
+
+	const Vector4 diffuse  = (material * light.getColor()) * ldotN;
+	const Vector4 specular =  Vector4::identity_p() * pow(r.dot(v), attenuation);
+	const float denom = a + (b * distance) + (c * distance * distance);
+
+	//std::cout << "diffuse: " << diffuse;
+	//std::cout << "specular " << specular;
+	//std::cout << "denom:   " << denom << std::endl;
+
+	return ((diffuse + specular) / denom);
+
+}
 
 //implements the DDA line drawing algorithm
 void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {

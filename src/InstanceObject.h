@@ -31,7 +31,7 @@ public:
 	InstanceObject(const BasicObject *obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0){}
 
 	//optional constructor to accept a transformation file
-	InstanceObject(const BasicObject *obj, const std::string &filename);// : InstanceObject(obj, Matrix4::identity());
+	InstanceObject(const BasicObject *obj, const std::string &filename);
 
 	//used to build up several transforms
 	void buildTransform(const Matrix4 &newTransform);

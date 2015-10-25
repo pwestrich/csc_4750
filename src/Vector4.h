@@ -16,6 +16,7 @@ private:
 public:
 
 	static Vector4 identity();
+	static Vector4 identity_p();
 	static Vector4 zero();
 	static Vector4 x_up();
 	static Vector4 y_up();
@@ -54,6 +55,9 @@ public:
 	friend std::ostream& operator<<(std::ostream &out, const Vector4 &vec);
 
 	Vector4 operator*(const float scalar) const;
+	Vector4 operator*(const Vector4 &other) const;
+
+	Vector4 operator/(const float &denom) const;
 
 	//adds two vectors
 	Vector4 operator+(const Vector4 &other) const;
