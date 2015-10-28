@@ -15,7 +15,8 @@ private:
 	Vector4 *pointThree;
 
 	//function to calcualte color
-	Vector4 calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, const Vector4 &material, const Light &light, const float attenuation) const;
+	Vector4 calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, const Vector4 &material, 
+						   const Light &light, const Light &ambient, const float attenuation, const float shininess) const;
 	
 
 	//implements the DDA line drawing algorithm

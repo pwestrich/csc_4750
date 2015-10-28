@@ -160,7 +160,6 @@ std::ostream& operator<<(std::ostream &out, const Vector4 &vec){
 
 	out << "Vector4, magnitude: " << vec.mag << std::endl;
 	out << vec.values[0] << ", " << vec.values[1] << ", " << vec.values[2] << ", " << vec.values[3] << std::endl;
-	out << std::endl;
 
 	return out;
 
@@ -203,7 +202,7 @@ Vector4 Vector4::operator/(const float &denom) const {
 Vector4 Vector4::operator+(const Vector4 &other) const {
 
 	//only vectors can be added together
-	assert(other.w() == 0.0 && w() == 0.0);
+	//assert(other.w() == 0.0 && w() == 0.0);
 
 	const float nx = x() + other.x();
 	const float ny = y() + other.y();

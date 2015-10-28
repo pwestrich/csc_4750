@@ -30,9 +30,9 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	Window *const win = Window::getWindow();
 
 	//convert the coordinates to screen coordinates first
-	Vector4 newFirst  = (transform * (*pointOne)).homogenize();
-	Vector4 newSecond = (transform * (*pointTwo)).homogenize();
-	Vector4 newThird  = (transform * (*pointThree)).homogenize();
+	Vector4 newFirst  = transform * (*pointOne);
+	Vector4 newSecond = transform * (*pointTwo);
+	Vector4 newThird  = transform * (*pointThree);
 
 	//calculate the normal of this face
 	Vector4 v1 = newSecond - newFirst;
@@ -40,13 +40,13 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	Vector4 normal = (v2.cross(v1)).normalize();
 
 	//this must be done in world space
-	const Vector4 color1 = calculateColor(newFirst, normal, eyepoint, material, point, attenuation) + calculateColor(newFirst, normal, eyepoint, material, ambient, attenuation);
-	const Vector4 color2 = calculateColor(newSecond, normal, eyepoint, material, point, attenuation) + calculateColor(newSecond, normal, eyepoint, material, ambient, attenuation);
-	const Vector4 color3 = calculateColor(newThird, normal, eyepoint, material, point, attenuation) + calculateColor(newThird, normal, eyepoint, material, ambient, attenuation);
+	const Vector4 color1 = calculateColor(newFirst, normal, eyepoint, material, point, ambient, attenuation, shininess);
+	const Vector4 color2 = calculateColor(newSecond, normal, eyepoint, material, point, ambient, attenuation, shininess); 
+	const Vector4 color3 = calculateColor(newThird, normal, eyepoint, material, point, ambient, attenuation, shininess);
 
-	//std::cout << "color1: " << color1;
-	//std::cout << "color2: " << color2;
-	//std::cout << "color3: " << color3;
+	std::cout << "color1: " << color1;
+	std::cout << "color2: " << color2;
+	std::cout << "color3: " << color3 << std::endl;;
 
 	const Vector4 c1 = color2 - color1;
 	const Vector4 c2 = color3 - color1;
@@ -87,31 +87,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	const float startAlpha = ((xPrime * v2.y()) - (yPrime * v2.x())) * denom;
 	const float startBeta = ((yPrime * v1.x()) - (xPrime * v1.y())) * denom;
 
-	//and the colors for each vertex
-	//const Vector4 color1(1.0, 0.0, 0.0, 1.0);
-	//const Vector4 color2(0.0, 1.0, 0.0, 1.0);
-	//const Vector4 color3(0.0, 0.0, 1.0, 1.0);
-
-	//diagnostic prints
-	/*std::cout << "v1: " << v1;
-	std::cout << "v2: " << v2;
-	std::cout << "p1: " << newFirst;
-	std::cout << "p2: " << newSecond;
-	std::cout << "p3: " << newThird;
-	std::cout << "n:  " << normal; 
-	std::cout << "xmin:    " << xMin << std::endl;
-	std::cout << "xmax:    " << xMax << std::endl;
-	std::cout << "ymin:    " << yMin << std::endl; 
-	std::cout << "yMax:    " << yMax << std::endl;
-	std::cout << "denom:   " << denom << std::endl;
-	std::cout << "alpha:   " << startAlpha << std::endl;
-	std::cout << "beta:    " << startBeta << std::endl;
-	std::cout << "dAlphaX: " << dAlphaX << std::endl;
-	std::cout << "dAlphaY: " << dAlphaY << std::endl;
-	std::cout << "dBetaX:  " << dBetaX << std::endl;
-	std::cout << "dBetaY:  " << dBetaY << std::endl;
-	std::cout << std::endl;*/
-
 	//draw the pixels in the triangle
 	for (int y = yMin; y <= yMax; ++y){
 
@@ -147,9 +122,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 				//draw using interpolated color
 				win->drawPixel(x, y, 0.0, r, g, b);
 
-				//draw using material color
-				//win->drawPixel(x, y, 0.0, material.x(), material.y(), material.z());
-
 			}
 
 			//increment alpha and beta in the x direction
@@ -172,16 +144,11 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 //private methods ---------------------------------------------------------------------------------
 
-Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, 
-							 const Vector4 &material, const Light &light, const float attenuation) const {
-
-	//fudge factors
-	const static float a = 1;
-	const static float b = 1;
-	const static float c = 1;
+Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, const Vector4 &material,
+							 const Light &light, const Light &ambient, const float attenuation, const float shininess) const {
 
 	//first, calculate l
-	Vector4 l = light.getLocation() - vertex;
+	Vector4 l = vertex - light.getLocation();
 	const float distance = l.length();
 	l = l.normalize();
 
@@ -193,15 +160,23 @@ Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const
 	//then v
 	const Vector4 v = (eyepoint - vertex).normalize();
 
+	float rdotV = r.dot(v);
+
+	if (rdotV < 0.0){
+
+		rdotV = 0.0;
+
+	}
+
 	const Vector4 diffuse  = (material * light.getColor()) * ldotN;
-	const Vector4 specular =  Vector4::identity_p() * pow(r.dot(v), attenuation);
-	const float denom = a + (b * distance) + (c * distance * distance);
+	const Vector4 specular =  Vector4::identity_p() * pow(rdotV, shininess);
+	const float denom = (attenuation * distance);
 
-	//std::cout << "diffuse: " << diffuse;
-	//std::cout << "specular " << specular;
-	//std::cout << "denom:   " << denom << std::endl;
+	std::cout << "diffuse: " << diffuse;
+	std::cout << "specular " << specular;
+	std::cout << "denom:   " << denom << std::endl;
 
-	return ((diffuse + specular) / denom);
+	return ((diffuse + specular + ambient.getColor()) / denom);
 
 }
 
