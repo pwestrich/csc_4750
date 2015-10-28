@@ -44,10 +44,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	const Vector4 color2 = calculateColor(newSecond, normal, eyepoint, material, point, ambient, attenuation, shininess); 
 	const Vector4 color3 = calculateColor(newThird, normal, eyepoint, material, point, ambient, attenuation, shininess);
 
-	std::cout << "color1: " << color1;
-	std::cout << "color2: " << color2;
-	std::cout << "color3: " << color3 << std::endl;;
-
 	const Vector4 c1 = color2 - color1;
 	const Vector4 c2 = color3 - color1;
 
@@ -152,7 +148,9 @@ Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const
 	const float distance = l.length();
 	l = l.normalize();
 
-	const float ldotN = l.dot(normal);
+	float ldotN = l.dot(normal);
+
+	if (ldotN < 0.0) ldotN = 0.0;
 
 	//then r
 	const Vector4 r = (normal * (ldotN * 2)) - l;
@@ -162,21 +160,25 @@ Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const
 
 	float rdotV = r.dot(v);
 
-	if (rdotV < 0.0){
+	if (rdotV < 0.0) rdotV = 0.0;
 
-		rdotV = 0.0;
-
-	}
 
 	const Vector4 diffuse  = (material * light.getColor()) * ldotN;
 	const Vector4 specular =  Vector4::identity_p() * pow(rdotV, shininess);
 	const float denom = (attenuation * distance);
 
+	const Vector4 color = (diffuse + specular + ambient.getColor()) / denom;
+
+	std::cout << "color:   " << color;
 	std::cout << "diffuse: " << diffuse;
 	std::cout << "specular " << specular;
-	std::cout << "denom:   " << denom << std::endl;
+	std::cout << "atten:   " << attenuation << std::endl;
+	std::cout << "shiny:   " << shininess << std::endl;
+	std::cout << "l.n:     " << ldotN << std::endl;
+	std::cout << "r.v:     " << rdotV << std::endl; 
+	std::cout << "denom:   " << denom << std::endl << std::endl;
 
-	return ((diffuse + specular + ambient.getColor()) / denom);
+	return color;
 
 }
 
