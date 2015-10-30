@@ -94,12 +94,7 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 		float beta = (startBeta) + (offset * dBetaY);
 
 		for (int x = xMin; x <= xMax; ++x){
-			
-			//use the slow way
-			//const float pPrimeX = x - newFirst.x();
-			//const float pPrimeY = y - newFirst.y();
-			//const float alpha = ((pPrimeX * v2.y()) - (pPrimeY * v2.x())) * denom;
-			//const float beta  = ((pPrimeY * v1.x()) - (pPrimeX * v1.y())) * denom;
+
 			const float sum = alpha + beta;
 
 			if ((alpha > 0.0) && (beta > 0.0) && (sum <= 1.0)){
@@ -108,14 +103,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 				const float r = (c1.x() * alpha) + (c2.x() * beta) + color1.x();
 				const float g = (c1.y() * alpha) + (c2.y() * beta) + color1.y();
 				const float b = (c1.z() * alpha) + (c2.z() * beta) + color1.z();
-				
-				/*std::cout << "DRAWING" << std::endl;
-				std::cout << "x:   " << x << std::endl;
-				std::cout << "y:   " << y << std::endl;
-				std::cout << "z:   " << z << std::endl;
-				std::cout << "r:   " << r << std::endl;
-				std::cout << "g:   " << g << std::endl;
-				std::cout << "b:   " << b << std::endl;*/
 
 				//draw using interpolated color
 				win->drawPixel(x, y, 0.0, r, g, b);
@@ -129,14 +116,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 		}
 
 	}
-
-	//line drawing algorithms
-	//renderDDA(newFirst, newSecond);
-	//renderDDA(newSecond, newThird);
-	//renderDDA(newThird, newFirst);
-	//renderBresham(newFirst, newSecond);
-	//renderBresham(newSecond, newThird);
-	//renderBresham(newThird, newFirst);
 
 }
 
@@ -162,7 +141,7 @@ Vector4 Face::calculateColor(const Vertex &vertex, const Matrix4 &transform, con
 	const Vector4 r = (normal * (ldotN * 2)) - l;
 
 	//then v
-	const Vector4 v = (eyepoint - point).normalize();
+	const Vector4 v = (point - eyepoint).normalize();
 
 	float rdotV = r.dot(v);
 
@@ -175,14 +154,14 @@ Vector4 Face::calculateColor(const Vertex &vertex, const Matrix4 &transform, con
 
 	const Vector4 color = (diffuse + specular + ambient.getColor()) / denom;
 
-	std::cout << "color:   " << color;
+	/*std::cout << "color:   " << color;
 	std::cout << "diffuse: " << diffuse;
 	std::cout << "specular " << specular;
 	std::cout << "atten:   " << attenuation << std::endl;
 	std::cout << "shiny:   " << shininess << std::endl;
 	std::cout << "l.n:     " << ldotN << std::endl;
 	std::cout << "r.v:     " << rdotV << std::endl; 
-	std::cout << "denom:   " << denom << std::endl << std::endl;
+	std::cout << "denom:   " << denom << std::endl << std::endl;*/
 
 	return color;
 
