@@ -2,20 +2,22 @@
 #ifndef FACE_H
 #define FACE_H
 
+#include "Vector4.h"
+#include "Vertex.h"
+
 class Matrix4;
-class Vector4;
 class Light;
 
 class Face {
 
 private:
 
-	Vector4 *pointOne;
-	Vector4 *pointTwo;
-	Vector4 *pointThree;
+	Vertex *const pointOne;
+	Vertex *const pointTwo;
+	Vertex *const pointThree;
 
 	//function to calcualte color
-	Vector4 calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, const Vector4 &material, 
+	Vector4 calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material, 
 						   const Light &light, const Light &ambient, const float attenuation, const float shininess) const;
 	
 
@@ -28,11 +30,13 @@ private:
 public:
 
 	//Face will retain a pointer to these, but will not delete them
-	Face(Vector4 *first, Vector4 *second, Vector4 *third);
+	Face(Vertex *const first, Vertex *const second, Vertex *const third);
 
-	inline Vector4 *getFirst() const { return pointOne;}
-	inline Vector4 *getSecond() const { return pointTwo;}
-	inline Vector4 *getThird() const { return pointThree;}
+	inline Vector4 getFirst() const { return pointOne->vector();}
+	inline Vector4 getSecond() const { return pointTwo->vector();}
+	inline Vector4 getThird() const { return pointThree->vector();}
+
+	Vector4 getNormal(const Matrix4 &transform) const;
 
 	//renders the face (draws only lines for now)
 	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 

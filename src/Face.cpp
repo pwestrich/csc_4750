@@ -7,19 +7,31 @@
 #include "Window.h"
 #include "Face.h"
 #include "Vector4.h"
+#include "Vertex.h"
 #include "Matrix4.h"
 #include "Light.h"
 
 //Face will retain a pointer to these, but will not delete them
-Face::Face(Vector4 *first, Vector4 *second, Vector4 *third){
+Face::Face(Vertex *const first, Vertex *const second, Vertex *const third) 
+		: pointOne(first), pointTwo(second), pointThree(third) {
 
 	assert(first);
 	assert(second);
 	assert(third);
 
-	pointOne = first;
-	pointTwo = second;
-	pointThree = third;
+}
+
+Vector4 Face::getNormal(const Matrix4 &transform) const {
+
+	//convert the coordinates to screen coordinates first
+	Vector4 newFirst  = transform * pointOne->vector();
+	Vector4 newSecond = transform * pointTwo->vector();
+	Vector4 newThird  = transform * pointThree->vector();
+
+	//calculate the normal of this face
+	Vector4 v1 = newSecond - newFirst;
+	Vector4 v2 = newThird - newFirst;
+	return  (v2.cross(v1)).normalize();
 
 }
 
@@ -29,20 +41,10 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 	Window *const win = Window::getWindow();
 
-	//convert the coordinates to screen coordinates first
-	Vector4 newFirst  = transform * (*pointOne);
-	Vector4 newSecond = transform * (*pointTwo);
-	Vector4 newThird  = transform * (*pointThree);
-
-	//calculate the normal of this face
-	Vector4 v1 = newSecond - newFirst;
-	Vector4 v2 = newThird - newFirst;
-	Vector4 normal = (v2.cross(v1)).normalize();
-
 	//this must be done in world space
-	const Vector4 color1 = calculateColor(newFirst, normal, eyepoint, material, point, ambient, attenuation, shininess);
-	const Vector4 color2 = calculateColor(newSecond, normal, eyepoint, material, point, ambient, attenuation, shininess); 
-	const Vector4 color3 = calculateColor(newThird, normal, eyepoint, material, point, ambient, attenuation, shininess);
+	const Vector4 color1 = calculateColor(*pointOne, transform, eyepoint, material, point, ambient, attenuation, shininess);
+	const Vector4 color2 = calculateColor(*pointTwo, transform, eyepoint, material, point, ambient, attenuation, shininess); 
+	const Vector4 color3 = calculateColor(*pointThree, transform, eyepoint, material, point, ambient, attenuation, shininess);
 
 	const Vector4 c1 = color2 - color1;
 	const Vector4 c2 = color3 - color1;
@@ -50,14 +52,14 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 	const Matrix4 mat = windowingMatrix * transform;
 
 	//now move to screen space
-	newFirst  = (mat * (*pointOne)).homogenize();
-	newSecond = (mat * (*pointTwo)).homogenize();
-	newThird  = (mat * (*pointThree)).homogenize();
+	const Vector4 newFirst  = (mat * pointOne->vector()).homogenize();
+	const Vector4 newSecond = (mat * pointTwo->vector()).homogenize();
+	const Vector4 newThird  = (mat * pointThree->vector()).homogenize();
 
 	//calculate the normal of this face
-	v1 = newSecond - newFirst;
-	v2 = newThird - newFirst;
-	normal = (v2.cross(v1)).normalize();
+	const Vector4 v1 = newSecond - newFirst;
+	const Vector4 v2 = newThird - newFirst;
+	const Vector4 normal = (v2.cross(v1)).normalize();
 
 	//if the normal is facing away from the camera, do not render this face
 	if (normal.z() < 0.0) return;
@@ -140,11 +142,15 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 //private methods ---------------------------------------------------------------------------------
 
-Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const Vector4 &eyepoint, const Vector4 &material,
+Vector4 Face::calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material,
 							 const Light &light, const Light &ambient, const float attenuation, const float shininess) const {
 
+	//get the average normal for this point
+	const Vector4 normal = vertex.averageNormal(transform);
+	const Vector4 point = transform * vertex.vector();
+
 	//first, calculate l
-	Vector4 l = vertex - light.getLocation();
+	Vector4 l = point - light.getLocation();
 	const float distance = l.length();
 	l = l.normalize();
 
@@ -156,7 +162,7 @@ Vector4 Face::calculateColor(const Vector4 &vertex, const Vector4 &normal, const
 	const Vector4 r = (normal * (ldotN * 2)) - l;
 
 	//then v
-	const Vector4 v = (eyepoint - vertex).normalize();
+	const Vector4 v = (eyepoint - point).normalize();
 
 	float rdotV = r.dot(v);
 

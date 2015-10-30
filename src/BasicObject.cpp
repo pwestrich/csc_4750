@@ -7,6 +7,7 @@
 #include "BasicObject.h"
 #include "Matrix4.h"
 #include "Vector4.h"
+#include "Vertex.h"
 #include "Face.h"
 
 //reads in an object from a .obj file
@@ -65,7 +66,7 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 			float y = atof(tokens[2].c_str());
 			float z = atof(tokens[3].c_str());
 
-			points.push_back(new Vector4(x, y, z, 1.0));
+			points.push_back(new Vertex(Vector4(x, y, z, 1.0)));
 
 		} else if (line.find("f") == 0){
 
@@ -77,6 +78,11 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 			int three = atoi(tokens[3].c_str());
 
 			faces.push_back(new Face(points[one - 1], points[two - 1], points[three - 1]));
+
+			//add this face to each vertex
+			points[one - 1]->addFace(faces.back());
+			points[two - 1]->addFace(faces.back());
+			points[three - 1]->addFace(faces.back());
 
 		}
 

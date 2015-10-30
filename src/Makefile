@@ -45,11 +45,11 @@ AffineTransformations.o: AffineTransformations.cpp AffineTransformations.h Vecto
 
 	$(COMPILE) AffineTransformations.cpp
 
-Face.o: Face.cpp Face.h Vector4.h Window.h
+Face.o: Face.cpp Face.h Vector4.h Window.h Vertex.h
 
 	$(COMPILE) Face.cpp
 
-BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vector4.h Matrix4.h
+BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vector4.h Matrix4.h Vertex.h
 
 	$(COMPILE) BasicObject.cpp
 
@@ -64,3 +64,7 @@ Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h SceneNode.h 
 SceneNode.o: SceneNode.cpp SceneNode.h InstanceObject.h Matrix4.h
 
 	$(COMPILE) SceneNode.cpp
+
+Vertex.o: Vertex.cpp Vertex.h Vector4.h Matrix4.h Face.h
+
+	$(COMPILE) Vertex.cpp
