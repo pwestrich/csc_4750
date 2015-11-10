@@ -68,3 +68,7 @@ SceneNode.o: SceneNode.cpp SceneNode.h InstanceObject.h Matrix4.h
 Vertex.o: Vertex.cpp Vertex.h Vector4.h Matrix4.h Face.h
 
 	$(COMPILE) Vertex.cpp
+
+Texture.o: Texture.cpp Texture.h Vector4.h
+
+	$(COMPILE) Texture.cpp

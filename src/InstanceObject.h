@@ -6,6 +6,7 @@
 
 #include "Vector4.h"
 #include "Matrix4.h"
+#include "Texture.h"
 
 class BasicObject;
 class Light;
@@ -23,6 +24,9 @@ private:
 
 	//the object's material color
 	Vector4 material;
+
+	//the object's texture
+	Texture tex;
 
 public:
 
