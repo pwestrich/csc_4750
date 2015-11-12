@@ -9,6 +9,8 @@ TARGET = program
 
 all: $(TARGET)
 
+	$(MAKE) -C ./sphere_coords all
+
 run: all
 
 	./$(TARGET)

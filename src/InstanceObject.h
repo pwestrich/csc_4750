@@ -26,7 +26,7 @@ private:
 	Vector4 material;
 
 	//the object's texture
-	Texture tex;
+	//Texture tex;
 
 public:
 
