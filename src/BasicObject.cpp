@@ -33,7 +33,7 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 
 			goto next_line; //ignore comments
 
-		} else if (line.find("mtllib") == 0) {
+		/*} else if (line.find("mtllib") == 0) {
 
 			goto next_line; //ignore material info
 
@@ -55,7 +55,7 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 
 		} else if (line.find("end") == 0){
 
-			goto next_line; //end of file marker
+			goto next_line; //end of file marker*/
 
 		} else if (line.find("v") == 0){
 
