@@ -6,6 +6,7 @@
 
 #include "Vector4.h"
 #include "Matrix4.h"
+#include "Texture.h"
 
 class BasicObject;
 class Light;
@@ -24,14 +25,16 @@ private:
 	//the object's material color
 	Vector4 material;
 
+	const Texture tex;
+
 public:
 
 	//constructs the InstanceObject with its parent and optional initial transform
-	InstanceObject(const BasicObject *obj) : InstanceObject(obj, Matrix4::identity()){}
-	InstanceObject(const BasicObject *obj, const Matrix4 &transform) : parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0){}
+	InstanceObject(const BasicObject *obj, const Matrix4 &transform, const std::string &texFilename, const int tw, const int th) 
+		: parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0), tex(texFilename, tw, th){}
 
 	//optional constructor to accept a transformation file
-	InstanceObject(const BasicObject *obj, const std::string &filename);
+	InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, const int tw, const int th);
 
 	//used to build up several transforms
 	void buildTransform(const Matrix4 &newTransform);

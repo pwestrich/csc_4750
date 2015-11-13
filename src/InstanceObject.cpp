@@ -8,7 +8,8 @@
 #include "Matrix4.h"
 #include "AffineTransformations.h"
 
-InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filename) : InstanceObject(obj, Matrix4::identity()){
+InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, const int tw, const int th) 
+	: InstanceObject(obj, Matrix4::identity(), texFilename, tw, th){
 
 	std::ifstream inFile(filename);
 
@@ -84,6 +85,6 @@ void InstanceObject::render(const Matrix4 &transform, const Matrix4 &windowingMa
 							const Light &point,  const float attenuation) const {
 
 	//tell the BasicObject to render with the instance transform
-	parent->render(transform * instanceTransform, windowingMatrix, eyepoint, material, ambient, point, attenuation);
+	parent->render(transform * instanceTransform, windowingMatrix, eyepoint, material, ambient, point, tex, attenuation);
 
 }

@@ -6,8 +6,8 @@
 const int x = 800;
 const int y = 600;
 const char *title = "CSC 4750";
-const std::string normalFile("fov.txt");
-const std::string cameraFile("camera.txt");
+const std::string normalFile("./data/fov.txt");
+const std::string cameraFile("./data/camera.txt");
 
 int main(const int argc, const char **argv){
 

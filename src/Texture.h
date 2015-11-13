@@ -40,7 +40,7 @@ public:
 	inline int getWidth() const { return width;}
 	inline int getHeight() const { return height;}
 
-	Vector4 getColor(const float t, const float s) const;
+	Vector4 getColor(const float s, const float t) const;
 
 };
 

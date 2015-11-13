@@ -123,12 +123,13 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 }
 
 //draws the object
-void BasicObject::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, const Light &ambient, const Light &point,  const float attenuation) const {
+void BasicObject::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
+						 const Light &ambient, const Light &point, const Texture &tex, const float attenuation) const {
 
 	//tell each face to render itself
 	for (size_t i = 0; i < faces.size(); ++i){
 
-		faces[i]->render(transform, windowingMatrix, eyepoint, material, ambient, point, attenuation, shininess);
+		faces[i]->render(transform, windowingMatrix, eyepoint, material, ambient, point, tex, attenuation, shininess);
 
 	}
 

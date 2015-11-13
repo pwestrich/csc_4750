@@ -44,7 +44,7 @@ void Face::addTextureCoordinates(const TextureCoordinates &coords){
 
 //renders the face
 void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
-				  const Light &ambient, const Light &point,  const float attenuation, const float shininess) const {
+				  const Light &ambient, const Light &point, const Texture &tex,  const float attenuation, const float shininess) const {
 
 	Window *const win = Window::getWindow();
 

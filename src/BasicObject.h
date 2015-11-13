@@ -10,6 +10,7 @@ class Vector4;
 class Vertex;
 class Face;
 class Light;
+class Texture;
 
 class BasicObject {
 
@@ -30,7 +31,7 @@ public:
 
 	//draws the object
 	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
-				const Light &ambient, const Light &point,  const float attenuation) const;
+				const Light &ambient, const Light &point, const Texture &tex, const float attenuation) const;
 
 };
 
