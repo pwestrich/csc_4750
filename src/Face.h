@@ -2,8 +2,11 @@
 #ifndef FACE_H
 #define FACE_H
 
+#include <vector>
+
 #include "Vector4.h"
 #include "Vertex.h"
+#include "Texture.h"
 
 class Matrix4;
 class Light;
@@ -15,6 +18,8 @@ private:
 	Vertex *const pointOne;
 	Vertex *const pointTwo;
 	Vertex *const pointThree;
+
+	std::vector<TextureCoordinates> texCoords;
 
 	//function to calcualte color
 	Vector4 calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material, 
@@ -37,6 +42,8 @@ public:
 	inline Vector4 getThird() const { return pointThree->vector();}
 
 	Vector4 getNormal(const Matrix4 &transform) const;
+
+	void addTextureCoordinates(const TextureCoordinates &coords);
 
 	//renders the face (draws only lines for now)
 	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 

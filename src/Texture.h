@@ -6,6 +6,17 @@
 
 class Vector4;
 
+struct TextureCoordinates {
+
+	float s1;
+	float s2;
+	float s3;
+	float t1;
+	float t2;
+	float t3;
+
+};
+
 class Texture {
 
 private:

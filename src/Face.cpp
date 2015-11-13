@@ -10,6 +10,7 @@
 #include "Vertex.h"
 #include "Matrix4.h"
 #include "Light.h"
+#include "Texture.h"
 
 //Face will retain a pointer to these, but will not delete them
 Face::Face(Vertex *const first, Vertex *const second, Vertex *const third) 
@@ -32,6 +33,12 @@ Vector4 Face::getNormal(const Matrix4 &transform) const {
 	Vector4 v1 = newSecond - newFirst;
 	Vector4 v2 = newThird - newFirst;
 	return  (v2.cross(v1)).normalize();
+
+}
+
+void Face::addTextureCoordinates(const TextureCoordinates &coords){
+
+	texCoords.push_back(coords);
 
 }
 
