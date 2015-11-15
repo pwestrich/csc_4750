@@ -116,7 +116,7 @@ float Vector4::dot(const Vector4 &other) const {
 Vector4 Vector4::cross(const Vector4 &other) const {
 
 	//only vectors can be crossed
-	assert(w() == 0.0 && other.w() == 0.0);
+	//assert(w() == 0.0 && other.w() == 0.0);
 
 	const float nx = (y() * other.z()) - (z() * other.y());
 	const float ny = (z() * other.x()) - (x() * other.z());
@@ -144,13 +144,13 @@ Vector4 Vector4::normalize() const {
 Vector4 Vector4::homogenize() const {
 
 	//only points can be homogenized
-	assert(values[3] != 0.0);
+	//assert(values[3] != 0.0);
 
 	const float nx = x() / w();
 	const float ny = y() / w();
 	const float nz = z() / w();
 
-	return Vector4(nx, ny, nz, 1.0);
+	return Vector4(nx, ny, nz, w());
 
 }
 

@@ -18,7 +18,6 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 
 	std::ifstream inFile(filename);
 	std::string line;
-	int texCount = 0;
 	int faceCount = 0;
 
 	if (!inFile){
@@ -78,14 +77,7 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 
 			faces[faceCount]->addTextureCoordinates(coords);
 
-			++texCount;
-
-			if (texCount == 2){
-
-				++faceCount;
-				texCount = 0;
-
-			}
+			++faceCount;
 
 		} else if (line.find("v") == 0){
 
