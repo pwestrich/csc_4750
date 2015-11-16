@@ -14,7 +14,7 @@ const std::string TRS_FILE   = "./data/trs.txt";
 const std::string TEX_FILE   = "./data/MoonMap.raw";
 
 const int TEX_W = 800;
-const int TEX_H = 600;
+const int TEX_H = 400;
 
 Scene::Scene(){
 

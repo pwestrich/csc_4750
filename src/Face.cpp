@@ -48,14 +48,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 	Window *const win = Window::getWindow();
 
-	//this must be done in world space
-	const Vector4 color1 = calculateColor(*pointOne, transform, eyepoint, material, point, ambient, attenuation, shininess);
-	const Vector4 color2 = calculateColor(*pointTwo, transform, eyepoint, material, point, ambient, attenuation, shininess); 
-	const Vector4 color3 = calculateColor(*pointThree, transform, eyepoint, material, point, ambient, attenuation, shininess);
-
-	const Vector4 c1 = color2 - color1;
-	const Vector4 c2 = color3 - color1;
-
 	const Matrix4 mat = windowingMatrix * transform;
 
 	//now move to screen space
@@ -105,11 +97,8 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 			const float sum = alpha + beta;
 
 			if ((alpha > 0.0) && (beta > 0.0) && (sum <= 1.0)){
-				/*
-				const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
-				const float r = (c1.x() * alpha) + (c2.x() * beta) + color1.x();
-				const float g = (c1.y() * alpha) + (c2.y() * beta) + color1.y();
-				const float b = (c1.z() * alpha) + (c2.z() * beta) + color1.z();*/
+				
+				//const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
 
 				//hyperbolic interpolation
 				const float ph = 1.0 / newFirst.w();
@@ -117,10 +106,6 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 				const float rh = 1.0 / newThird.w();
 
 				const float h = ph + (alpha * (qh - ph)) + (beta * (rh - ph));
-
-				//const float r = h * ((color1.x() * ph) + (alpha * ((color2.x() * qh) - (color1.x() * ph))) + (beta * ((color3.x() * rh) - (color1.x() * ph))));
-				//const float g = h * ((color1.y() * ph) + (alpha * ((color2.y() * qh) - (color1.y() * ph))) + (beta * ((color3.y() * rh) - (color1.y() * ph))));
-				//const float b = h * ((color1.z() * ph) + (alpha * ((color2.z() * qh) - (color1.z() * ph))) + (beta * ((color3.z() * rh) - (color1.z() * ph))));
 
 				const float s = h * ((texCoords[0].s1 * ph) + (alpha * ((texCoords[0].s2 * qh) - (texCoords[0].s1 * ph))) + (beta * ((texCoords[0].s3 * rh) - (texCoords[0].s1 * ph))));
 				const float t = h * ((texCoords[0].t1 * ph) + (alpha * ((texCoords[0].t2 * qh) - (texCoords[0].t1 * ph))) + (beta * ((texCoords[0].t3 * rh) - (texCoords[0].t1 * ph))));
