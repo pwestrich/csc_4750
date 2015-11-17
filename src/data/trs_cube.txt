@@ -14,7 +14,3 @@ material
 1.0
 0.0
 0.0
-texture
-TTU.raw
-128
-128

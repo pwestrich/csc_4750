@@ -21,9 +21,11 @@ private:
 
 	std::vector<TextureCoordinates> texCoords;
 
+	float calculateLighting(const Vertex &vertex, const Matrix4 &transform, const Light &light) const;
+
 	//function to calcualte color
-	Vector4 calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material, 
-						   const Light &light, const Light &ambient, const float attenuation, const float shininess) const;
+	/*Vector4 calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material, 
+						   const Light &light, const Light &ambient, const float attenuation, const float shininess) const;*/
 	
 
 	//implements the DDA line drawing algorithm

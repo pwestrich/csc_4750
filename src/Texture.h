@@ -27,6 +27,7 @@ private:
 	//dimensions of the texture
 	int width;
 	int height;
+	int size;
 
 public:
 

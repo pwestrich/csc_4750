@@ -168,7 +168,7 @@ std::ostream& operator<<(std::ostream &out, const Vector4 &vec){
 Vector4 Vector4::operator*(const float scalar) const {
 
 	//only vectors can be scaled
-	assert(w() == 0.0);
+	//assert(w() == 0.0);
 
 	const float nx = x() * scalar;
 	const float ny = y() * scalar;

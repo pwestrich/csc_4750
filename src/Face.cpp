@@ -52,6 +52,11 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 	const Matrix4 mat = windowingMatrix * transform;
 
+	//calculate l.n for each vertex in world space for interpolation later
+	const float ln1 = calculateLighting(*pointOne, transform, point);
+	const float ln2 = calculateLighting(*pointTwo, transform, point);
+	const float ln3 = calculateLighting(*pointThree, transform, point);
+
 	//now move to screen space
 	const Vector4 newFirst  = (mat * pointOne->vector()).homogenize();
 	const Vector4 newSecond = (mat * pointTwo->vector()).homogenize();
@@ -99,20 +104,24 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 			const float sum = alpha + beta;
 
 			if ((alpha > 0.0) && (beta > 0.0) && (sum <= 1.0)){
-				
-				//interpolate z
-				const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
 
-				//hyperbolic interpolation of texture coordinates
+				//hyperbolic interpolation of everything
 				const float ph = 1.0 / newFirst.w();
 				const float qh = 1.0 / newSecond.w();
 				const float rh = 1.0 / newThird.w();
-
 				const float h = ph + (alpha * (qh - ph)) + (beta * (rh - ph));
 
-				const float s = h * ((texCoords[0].s * ph) + (alpha * ((texCoords[1].s * qh) - (texCoords[0].s * ph))) + (beta * ((texCoords[2].s * rh) - (texCoords[0].s * ph))));
-				const float t = h * ((texCoords[0].t * ph) + (alpha * ((texCoords[1].t * qh) - (texCoords[0].t * ph))) + (beta * ((texCoords[2].t * rh) - (texCoords[0].t * ph))));
-				const Vector4 texColor = tex.getColor(s, t);
+				const float ldn = 100 * h * ((ln1 * ph) + (alpha * ((ln2 * qh) - (ln1 * ph))) 
+												  + (beta  * ((ln3 * rh) - (ln1 * ph))));
+				const float z   = h * ((newFirst.z() * ph) + (alpha * ((newSecond.z() * qh) - (newFirst.z() * ph)))
+														   + (beta  * ((newThird.z()  * rh) - (newFirst.z() * ph))));
+				const float s = h * ((texCoords[0].s * ph) + (alpha * ((texCoords[1].s * qh) - (texCoords[0].s * ph))) 
+														   + (beta  * ((texCoords[2].s * rh) - (texCoords[0].s * ph))));
+				const float t = h * ((texCoords[0].t * ph) + (alpha * ((texCoords[1].t * qh) - (texCoords[0].t * ph))) 
+														   + (beta  * ((texCoords[2].t * rh) - (texCoords[0].t * ph))));
+
+				//get texture color and modulate its color
+				const Vector4 texColor = tex.getColor(s, t);// * ldn;
 				
 				//draw using interpolated z and color
 				win->drawPixel(x, y, z, texColor.x(), texColor.y(), texColor.z());
@@ -131,6 +140,22 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 //private methods ---------------------------------------------------------------------------------
 
+float Face::calculateLighting(const Vertex &vertex, const Matrix4 &transform, const Light &light) const {
+
+	//get the average normal for this point
+	const Vector4 normal = vertex.averageNormal(transform);
+	const Vector4 point = transform * vertex.vector();
+
+	//first, calculate l
+	Vector4 l = point - light.getLocation();
+	const float distance = l.length();
+	l = l.normalize();
+
+	return l.dot(normal);
+
+}
+
+/*
 Vector4 Face::calculateColor(const Vertex &vertex, const Matrix4 &transform, const Vector4 &eyepoint, const Vector4 &material,
 							 const Light &light, const Light &ambient, const float attenuation, const float shininess) const {
 
@@ -171,11 +196,11 @@ Vector4 Face::calculateColor(const Vertex &vertex, const Matrix4 &transform, con
 	std::cout << "shiny:   " << shininess << std::endl;
 	std::cout << "l.n:     " << ldotN << std::endl;
 	std::cout << "r.v:     " << rdotV << std::endl; 
-	std::cout << "denom:   " << denom << std::endl << std::endl;*/
+	std::cout << "denom:   " << denom << std::endl << std::endl;
 
 	return color;
 
-}
+}*/
 
 //implements the DDA line drawing algorithm
 void Face::renderDDA(const Vector4 &start, const Vector4 &end) const {
