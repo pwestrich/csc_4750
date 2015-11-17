@@ -43,7 +43,7 @@ public:
 
 	Vector4 getNormal(const Matrix4 &transform) const;
 
-	void addTextureCoordinates(const TextureCoordinates &coords);
+	void addTextureCoordinates(const float s, const float t);
 
 	//renders the face (draws only lines for now)
 	void render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 

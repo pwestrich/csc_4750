@@ -231,7 +231,7 @@ Matrix4 Window::createNormalMatrix(const std::string &filename) {
 	inFile.close();
 
 	//calculate the normal matrix
-	const float alpha = (xMax + xMin) / (xMax - xMin);
+	const float alpha = (xMax + xMin) / (xMin - xMax);
 	const float beta  = (2 * xMax * xMin) / (xMax - xMin);
 
 	float values[16] = {1, 0, 0, 0, 

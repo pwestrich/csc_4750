@@ -9,7 +9,6 @@
 #include "Vector4.h"
 #include "Vertex.h"
 #include "Face.h"
-#include "Texture.h"
 
 //reads in an object from a .obj file
 BasicObject::BasicObject(const std::string &filename, const float _shininess){
@@ -62,20 +61,20 @@ BasicObject::BasicObject(const std::string &filename, const float _shininess){
 		} else if (line.find("vt") == 0){
 
 			//texture line
-			TextureCoordinates coords;
-
 			std::vector<std::string> tokens = split(line, ' ');
 
-			coords.s1 = stof(tokens[1]);
-			coords.t1 = stof(tokens[2]);
+			const float s1 = stof(tokens[1]);
+			const float t1 = stof(tokens[2]);
 
-			coords.s2 = stof(tokens[3]);
-			coords.t2 = stof(tokens[4]);
+			const float s2 = stof(tokens[3]);
+			const float t2 = stof(tokens[4]);
 
-			coords.s3 = stof(tokens[5]);
-			coords.t3 = stof(tokens[6]);
+			const float s3 = stof(tokens[5]);
+			const float t3 = stof(tokens[6]);
 
-			faces[faceCount]->addTextureCoordinates(coords);
+			faces[faceCount]->addTextureCoordinates(s1, t1);
+			faces[faceCount]->addTextureCoordinates(s2, t2);
+			faces[faceCount]->addTextureCoordinates(s3, t3);
 
 			++faceCount;
 

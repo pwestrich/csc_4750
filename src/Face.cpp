@@ -36,15 +36,17 @@ Vector4 Face::getNormal(const Matrix4 &transform) const {
 
 }
 
-void Face::addTextureCoordinates(const TextureCoordinates &coords){
+void Face::addTextureCoordinates(const float s, const float t){
 
-	texCoords.push_back(coords);
+	texCoords.push_back(TextureCoordinates(s, t));
 
 }
 
 //renders the face
 void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
 				  const Light &ambient, const Light &point, const Texture &tex,  const float attenuation, const float shininess) const {
+
+	assert(texCoords.size() == 3);	//make sure we have three texture coordinates
 
 	Window *const win = Window::getWindow();
 
@@ -98,21 +100,22 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 
 			if ((alpha > 0.0) && (beta > 0.0) && (sum <= 1.0)){
 				
-				//const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
+				//interpolate z
+				const float z = (v1.z() * alpha) + (v2.z() * beta) + newFirst.z();
 
-				//hyperbolic interpolation
+				//hyperbolic interpolation of texture coordinates
 				const float ph = 1.0 / newFirst.w();
 				const float qh = 1.0 / newSecond.w();
 				const float rh = 1.0 / newThird.w();
 
 				const float h = ph + (alpha * (qh - ph)) + (beta * (rh - ph));
 
-				const float s = h * ((texCoords[0].s1 * ph) + (alpha * ((texCoords[0].s2 * qh) - (texCoords[0].s1 * ph))) + (beta * ((texCoords[0].s3 * rh) - (texCoords[0].s1 * ph))));
-				const float t = h * ((texCoords[0].t1 * ph) + (alpha * ((texCoords[0].t2 * qh) - (texCoords[0].t1 * ph))) + (beta * ((texCoords[0].t3 * rh) - (texCoords[0].t1 * ph))));
+				const float s = h * ((texCoords[0].s * ph) + (alpha * ((texCoords[1].s * qh) - (texCoords[0].s * ph))) + (beta * ((texCoords[2].s * rh) - (texCoords[0].s * ph))));
+				const float t = h * ((texCoords[0].t * ph) + (alpha * ((texCoords[1].t * qh) - (texCoords[0].t * ph))) + (beta * ((texCoords[2].t * rh) - (texCoords[0].t * ph))));
 				const Vector4 texColor = tex.getColor(s, t);
 				
-				//draw using intertolated color
-				win->drawPixel(x, y, 0.0, texColor.x(), texColor.y(), texColor.z());
+				//draw using interpolated z and color
+				win->drawPixel(x, y, z, texColor.x(), texColor.y(), texColor.z());
 
 			}
 

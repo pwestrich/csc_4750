@@ -6,17 +6,17 @@
 
 class Vector4;
 
+//structure for holding a texture coordinate
 struct TextureCoordinates {
 
-	float s1;
-	float s2;
-	float s3;
-	float t1;
-	float t2;
-	float t3;
+	const float s;
+	const float t;
+
+	TextureCoordinates(const float _s, const float _t) : s(_s), t(_t){}
 
 };
 
+//class for holding a texture
 class Texture {
 
 private:
@@ -30,6 +30,7 @@ private:
 
 public:
 
+	//do not allow copying
 	Texture(const std::string &filename, const int w, const int h);
 	Texture(const Texture&) 			= delete;
 	Texture& operator=(const Texture&)  = delete;

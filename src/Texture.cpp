@@ -46,7 +46,7 @@ Vector4 Texture::getColor(const float t, const float s) const {
 
 	//calculate the texel coordinate
 	const int tTexel = height - (static_cast<int>(height * t) % height) - 1;
-	const int sTexel =width - (static_cast<int>(width * s) % width) - 1;
+	const int sTexel = static_cast<int>(width * s) % width;
 	const int index = ((tTexel * width) + sTexel) * 3;
 
 	const float r = data[index + 0] / 255.0;
