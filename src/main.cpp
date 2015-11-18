@@ -5,12 +5,12 @@
 
 const int x = 800;
 const int y = 600;
-const char *title = "CSC 4750";/*
+const char *title = "CSC 4750";
 const std::string normalFile("./data/fov.txt");
-const std::string cameraFile("./data/camera.txt");*/
-
+const std::string cameraFile("./data/camera.txt");
+/*
 const std::string normalFile("./data/fov_cube.txt");
-const std::string cameraFile("./data/camera_cube.txt");
+const std::string cameraFile("./data/camera_cube.txt");*/
 
 int main(const int argc, const char **argv){
 

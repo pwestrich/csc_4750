@@ -16,6 +16,14 @@ struct TextureCoordinates {
 
 };
 
+inline std::ostream &operator<<(std::ostream &out, const TextureCoordinates &tex){
+
+	out << "(" << tex.s << ", " << tex.t << ")";
+
+	return out;
+
+}
+
 //class for holding a texture
 class Texture {
 

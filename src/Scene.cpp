@@ -8,20 +8,20 @@
 #include "Matrix4.h"
 #include "AffineTransformations.h"
 
-const std::string LIGHT_FILE = "./data/shade.txt";/*
+const std::string LIGHT_FILE = "./data/shade.txt";
 const std::string OBJ_FILE   = "./data/sphere_tex.txt";
 const std::string TRS_FILE   = "./data/trs.txt";
 const std::string TEX_FILE   = "./data/MoonMap.raw";
 
 const int TEX_W = 800;
-const int TEX_H = 400;*/
-
+const int TEX_H = 400;
+/*
 const std::string OBJ_FILE   = "./data/cube_texture.txt";
 const std::string TRS_FILE   = "./data/trs_cube.txt";
 const std::string TEX_FILE   = "./data/TTU.raw";
 
 const int TEX_W = 128;
-const int TEX_H = 128;
+const int TEX_H = 128;*/
 
 Scene::Scene(){
 

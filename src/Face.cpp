@@ -111,17 +111,18 @@ void Face::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, cons
 				const float rh = 1.0 / newThird.w();
 				const float h = ph + (alpha * (qh - ph)) + (beta * (rh - ph));
 
-				const float ldn = 100 * h * ((ln1 * ph) + (alpha * ((ln2 * qh) - (ln1 * ph))) 
-												  + (beta  * ((ln3 * rh) - (ln1 * ph))));
-				const float z   = h * ((newFirst.z() * ph) + (alpha * ((newSecond.z() * qh) - (newFirst.z() * ph)))
-														   + (beta  * ((newThird.z()  * rh) - (newFirst.z() * ph))));
+				//the constant here is to prevent things from being too dark
+				const float ldn = 10 * h * ((ln1 * ph) + (alpha * ((ln2 * qh) - (ln1 * ph))) 
+												  		+ (beta  * ((ln3 * rh) - (ln1 * ph))));
+				const float z   = h * ((newFirst.z() * ph) + (alpha * ((newSecond.z()  * qh) - (newFirst.z() * ph)))
+														   + (beta  * ((newThird.z()   * rh) - (newFirst.z() * ph))));
 				const float s = h * ((texCoords[0].s * ph) + (alpha * ((texCoords[1].s * qh) - (texCoords[0].s * ph))) 
 														   + (beta  * ((texCoords[2].s * rh) - (texCoords[0].s * ph))));
 				const float t = h * ((texCoords[0].t * ph) + (alpha * ((texCoords[1].t * qh) - (texCoords[0].t * ph))) 
 														   + (beta  * ((texCoords[2].t * rh) - (texCoords[0].t * ph))));
 
 				//get texture color and modulate its color
-				const Vector4 texColor = tex.getColor(s, t);// * ldn;
+				const Vector4 texColor = tex.getColor(s, t) * ldn;
 				
 				//draw using interpolated z and color
 				win->drawPixel(x, y, z, texColor.x(), texColor.y(), texColor.z());

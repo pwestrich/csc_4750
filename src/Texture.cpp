@@ -23,10 +23,20 @@ Texture::Texture(const std::string &filename, const int w, const int h){
 
 	}
 
-	//start readg in stuff
-	size = w * h * 3;
-	data = new unsigned char[size];
+	//start reading in stuff
+	size = w * h * 3;						//expected size
+	inFile.seekg(0, inFile.end);
+	const int fileLength = inFile.tellg();	//actual size
 
+	if (fileLength != size){
+
+		std::cerr << "Error: Expected file length " << size << ", actual file length was " << fileLength << "." << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	data = new unsigned char[size];
+	inFile.seekg(0, inFile.beg);
 	inFile.read(reinterpret_cast<char*>(data), size);
 	inFile.close();
 
@@ -50,16 +60,10 @@ Vector4 Texture::getColor(const float s, const float t) const {
 	const int sTexel = static_cast<int>(width * s) % width;
 	const int index = ((tTexel * width) + sTexel) * 3;
 
-	//the data is stored as unsignedf ints/ Divide by 255 to get a float from 0-1.
+	//the data is stored as unsigned ints. Divide by 255 to get a float from 0-1.
 	const float r = data[index + 0] / 255.0;
 	const float g = data[index + 1] / 255.0;
 	const float b = data[index + 2] / 255.0;
-
-	/*std::cout << "s:      " << s << std::endl;
-	std::cout << "t:      " << t << std::endl;
-	std::cout << "sTexel: " << sTexel << std::endl;
-	std::cout << "tTexel: " << tTexel << std::endl;
-	std::cout << "index:  " << index << std::endl;*/
 
 	return Vector4(r, g, b, 1.0);
 
