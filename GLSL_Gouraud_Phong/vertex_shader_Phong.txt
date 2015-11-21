@@ -1,0 +1,10 @@
+varying vec3 transformed_normal_vertex_program;  //want these to be interpolated by rasterizer
+varying vec4 eye_coord_position_vertex_program;  //this refers to the vertex position in eye coordinates
+
+void main()
+{
+   transformed_normal_vertex_program = normalize(gl_NormalMatrix*gl_Normal);
+   eye_coord_position_vertex_program = vec4(gl_ModelViewMatrix*gl_Vertex);  //location in eye coordinates (camera at origin)
+   //gl_Position = gl_ModelViewProjectionMatrix*gl_Vertex;
+   gl_Position = gl_Vertex;
+}

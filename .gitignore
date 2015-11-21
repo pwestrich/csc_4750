@@ -1,6 +1,6 @@
-p0
 *.a
 *.o
 *.exe
 program
-sphere_main
+main_*
+*_main

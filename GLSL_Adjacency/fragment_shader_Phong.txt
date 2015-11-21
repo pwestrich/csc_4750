@@ -1,0 +1,37 @@
+varying vec3 transformed_normal_geometry_program;
+varying vec4 eye_coord_position_geometry_program;
+
+void main()
+{
+   vec3 transformed_normal_fragment_program = transformed_normal_geometry_program;
+   vec4 eye_coord_position_fragment_program = eye_coord_position_geometry_program;
+
+   vec3 light_position = gl_LightSource[0].position.xyz;  //light is in eye coordinates
+   vec3 light_vector = normalize(light_position - eye_coord_position_fragment_program);
+   transformed_normal_fragment_program = normalize(transformed_normal_fragment_program);
+   float diffuse_intensity = dot(light_vector, transformed_normal_fragment_program);
+   if (diffuse_intensity < 0)
+   {
+      diffuse_intensity = 0;
+   }
+
+   vec3 eye_position = vec3(0.0,0.0,0.0); //always 0 in eye coords
+   vec3 view_vector = normalize(eye_position - eye_coord_position_fragment_program);
+   vec3 reflect_vector = reflect(-1*light_vector, transformed_normal_fragment_program);
+   float specular_intensity = dot(view_vector, reflect_vector);
+   if (specular_intensity < 0 || diffuse_intensity == 0)
+   {
+      specular_intensity = 0;
+   }
+   else
+   {
+      float shiny = gl_FrontMaterial.shininess;
+      specular_intensity = pow(specular_intensity, shiny);
+   }
+
+   vec4 diffuse_material = gl_FrontMaterial.diffuse;
+   vec4 diffuse_color = diffuse_material*diffuse_intensity;
+   vec4 specular_color = vec4(1.0, 1.0, 1.0, 1.0)*specular_intensity;
+
+   gl_FragColor = diffuse_color + specular_color;  //must be done in the fragment shader
+}
