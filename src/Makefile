@@ -31,7 +31,7 @@ utilities.o: utilities.h
 
 	$(COMPILE) utilities.cpp
 
-Window.o: Window.cpp Window.h Matrix4.h Vector4.h Scene.h AffineTransformations.h
+Window.o: Window.cpp Window.h Scene.h
 
 	$(COMPILE) Window.cpp
 
@@ -47,11 +47,7 @@ AffineTransformations.o: AffineTransformations.cpp AffineTransformations.h Vecto
 
 	$(COMPILE) AffineTransformations.cpp
 
-Face.o: Face.cpp Face.h Vector4.h Window.h Vertex.h
-
-	$(COMPILE) Face.cpp
-
-BasicObject.o: BasicObject.cpp BasicObject.h Face.h Vector4.h Matrix4.h Vertex.h
+BasicObject.o: BasicObject.cpp BasicObject.h Matrix4.h ReadObject.h
 
 	$(COMPILE) BasicObject.cpp
 
@@ -59,17 +55,17 @@ InstanceObject.o: InstanceObject.cpp InstanceObject.h BasicObject.h Matrix4.h Ve
 
 	$(COMPILE) InstanceObject.cpp
 
-Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h SceneNode.h Light.h
+ReadObject.o: ReadObject.cpp ReadObject.h
+
+	$(COMPILE) ReadObject.cpp
+
+Scene.o: Scene.cpp Scene.h Matrix4.h BasicObject.h InstanceObject.h SceneNode.h
 
 	$(COMPILE) Scene.cpp
 
 SceneNode.o: SceneNode.cpp SceneNode.h InstanceObject.h Matrix4.h
 
 	$(COMPILE) SceneNode.cpp
-
-Vertex.o: Vertex.cpp Vertex.h Vector4.h Matrix4.h Face.h
-
-	$(COMPILE) Vertex.cpp
 
 Texture.o: Texture.cpp Texture.h Vector4.h
 

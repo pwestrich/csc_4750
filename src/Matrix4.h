@@ -40,6 +40,9 @@ public:
 	//will return a copy of its internal array
 	float *getValues() const;
 
+	//will return a column-major copy of its array
+	float *transposeValues() const;
+
 	//operators
 
 	friend std::ostream &operator<<(std::ostream &out, const Matrix4 &mat);

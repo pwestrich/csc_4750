@@ -69,6 +69,34 @@ float *Matrix4::getValues() const {
 
 }
 
+float *Matrix4::transposeValues() const {
+
+	float *retMe = new float[16];
+
+	retMe[0] = values[0];
+	retMe[1] = values[4];
+	retMe[2] = values[8];
+	retMe[3] = values[12];
+
+	retMe[4] = values[1];
+	retMe[5] = values[5];
+	retMe[6] = values[9];
+	retMe[7] = values[13];
+
+	retMe[8] = values[2];
+	retMe[9] = values[6];
+	retMe[10] = values[10];
+	retMe[11] = values[14];
+
+	retMe[12] = values[3];
+	retMe[13] = values[7];
+	retMe[14] = values[11];
+	retMe[15] = values[15];
+
+	return retMe;
+
+}
+
 //operators
 
 std::ostream &operator<<(std::ostream &out, const Matrix4 &mat){

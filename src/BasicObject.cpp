@@ -3,125 +3,66 @@
 #include <fstream>
 #include <string>
 
+#include <GL/glew.h>
+#include <GL/glut.h>
+
 #include "utilities.h"
 #include "BasicObject.h"
 #include "Matrix4.h"
 #include "Vector4.h"
-#include "Vertex.h"
-#include "Face.h"
+#include "ReadObject.h"	//shamelessly stolen from Dr. Boshart
 
 //reads in an object from a .obj file
 BasicObject::BasicObject(const std::string &filename, const float _shininess){
 
-	shininess = _shininess;
+	shininess    = _shininess;
 
-	std::ifstream inFile(filename);
-	std::string line;
-	int faceCount = 0;
+	_numVerticies = numVertices(filename.c_str());
+	_numFaces 	  = numFaces(filename.c_str());
+	_indexCount   = _numFaces * 3;
 
-	if (!inFile){
+	verticies 	  = getVertices(filename.c_str(), _numVerticies);
+	normals 	  = getNormals(filename.c_str(), _numVerticies);
+	faces 		  = getFaces(filename.c_str(), _numFaces);
+	texCoords 	  = getTextureCoords(filename.c_str(), _numVerticies);
 
-		cerr << "Error opening file: " << filename << endl;
-		exit(EXIT_FAILURE);
+}
 
-	}
+BasicObject::~BasicObject(){
 
-	getline(inFile, line, '\n');
-
-	while (!inFile.eof()){
-
-		if (line.find("#") == 0){
-
-			goto next_line; //ignore comments
-
-		/*} else if (line.find("mtllib") == 0) {
-
-			goto next_line; //ignore material info
-
-		} else if (line.find("o") == 0){
-
-			goto next_line; //ignore object names
-
-		} else if (line.find("vn") == 0){
-
-			goto next_line; //ignore normals
-
-		} else if (line.find("g") == 0){
-
-			goto next_line; //ignore this line
-
-		} else if (line.find("usemtl") == 0){
-
-			goto next_line; //no materials
-
-		} else if (line.find("end") == 0){
-
-			goto next_line; //end of file marker*/
-
-		} else if (line.find("vt") == 0){
-
-			//texture line
-			std::vector<std::string> tokens = split(line, ' ');
-
-			const float s1 = stof(tokens[1]);
-			const float t1 = stof(tokens[2]);
-
-			const float s2 = stof(tokens[3]);
-			const float t2 = stof(tokens[4]);
-
-			const float s3 = stof(tokens[5]);
-			const float t3 = stof(tokens[6]);
-
-			faces[faceCount]->addTextureCoordinates(s1, t1);
-			faces[faceCount]->addTextureCoordinates(s2, t2);
-			faces[faceCount]->addTextureCoordinates(s3, t3);
-
-			++faceCount;
-
-		} else if (line.find("v") == 0){
-
-			//this is a vertex
-			std::vector<std::string> tokens = split(line, ' ');
-
-			float x = stof(tokens[1]);
-			float y = stof(tokens[2]);
-			float z = stof(tokens[3]);
-
-			points.push_back(new Vertex(Vector4(x, y, z, 1.0)));
-
-		} else if (line.find("f") == 0){
-
-			//this is a face definition
-			std::vector<std::string> tokens = split(line, ' ');
-
-			int one   = stoi(tokens[1]);
-			int two   = stoi(tokens[2]);
-			int three = stoi(tokens[3]);
-
-			faces.push_back(new Face(points[one - 1], points[two - 1], points[three - 1]));
-
-			//add this face to each vertex
-			points[one   - 1]->addFace(faces.back());
-			points[two   - 1]->addFace(faces.back());
-			points[three - 1]->addFace(faces.back());
-
-		}
-
-		next_line: getline(inFile, line, '\n');
-
-	}
+	delete [] texCoords;
+	delete [] faces;
+	delete [] normals;
+	delete [] verticies;
 
 }
 
 //draws the object
-void BasicObject::render(const Matrix4 &transform, const Matrix4 &windowingMatrix, const Vector4 &eyepoint, const Vector4 &material, 
-						 const Light &ambient, const Light &point, const Texture &tex, const float attenuation) const {
+void BasicObject::render(const Matrix4 &transform, const Texture &tex) const {
 
-	//tell each face to render itself
-	for (size_t i = 0; i < faces.size(); ++i){
+	//set the transform
+	float *transformColumnMajor = transform.transposeValues();
+	glPushMatrix();
+	glPushAttrib(GL_CURRENT_BIT);
+	glMultMatrixf(transformColumnMajor);
 
-		faces[i]->render(transform, windowingMatrix, eyepoint, material, ambient, point, tex, attenuation, shininess);
+	//set the color/texture
+	const float material[] = {1, 0, 0, 0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
-	}
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, verticies);
+	glNormalPointer(GL_FLOAT, 0, normals);
+
+	glDrawElements(GL_TRIANGLES, _indexCount, GL_UNSIGNED_SHORT, faces);
+
+	//undo matrix
+	glPopAttrib();
+	glPopMatrix();
+
+	delete [] transformColumnMajor;
 
 }
