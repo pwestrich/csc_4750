@@ -6,6 +6,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include <GL/glew.h>
@@ -14,6 +15,15 @@
 #include "Window.h"
 #include "Scene.h"
 
+const float Z_MIN = 1.0;
+const float Z_MAX = 1.0;
+const float FOV_X = 90.0;
+
+const std::string FILE_SHADER_VERTEX   = "data/vertex_shader_Texture.txt";
+const std::string FILE_SHADER_FRAGMENT = "data/fragment_shader_Texture.txt";
+const std::string FILE_SHADER_GEOMETRY = "data/geometry_shader_Texture.txt";
+
+char *readText(const std::string &filename);
 void display();
 void resize(const int w, const int h);
 
@@ -63,9 +73,86 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	}
 
-	/*glProgramParameteriEXT(program, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
+	std::cout << "Using GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
+	/*
+	int status = 0;
+
+	//create shaders
+	GLuint vertexShader   = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+
+	//read in shader text
+	char *const vertexData   = readText(FILE_SHADER_VERTEX);
+	char *const fragmentData = readText(FILE_SHADER_FRAGMENT);
+	char *const geometryData = readText(FILE_SHADER_GEOMETRY);
+
+	//compile shaders
+	glShaderSource(vertexShader, 1, &vertexData, NULL);
+	glCompileShader(vertexShader);
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+
+	if (status == GL_FALSE){
+
+		std::cerr << "Vertex shader compilation failed: " << status << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	glShaderSource(fragmentShader, 1, &fragmentData, NULL);
+	glCompileShader(fragmentShader);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
+
+	if (status == GL_FALSE){
+
+		std::cerr << "Fragment shader compilation failed: " << status << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	glShaderSource(geometryShader, 1, &geometryData, NULL);
+	glCompileShader(geometryShader);
+	glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &status);
+
+	if (status == GL_FALSE){
+
+		std::cerr << "Geometry shader compilation failed: " << status << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	GLuint program = glCreateProgram();
+
+	//set what inputs and outputs each shader gets
+	glProgramParameteriEXT(program, GL_GEOMETRY_INPUT_TYPE_EXT, GL_TRIANGLES);
 	glProgramParameteriEXT(program, GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_TRIANGLE_STRIP);
-	glProgramParameteriEXT(program, GL_GEOMETRY_VERTICES_OUT_EXT, 3);*/
+	glProgramParameteriEXT(program, GL_GEOMETRY_VERTICES_OUT_EXT, 3);
+
+	glAttachShader(program, vertexShader);
+	glAttachShader(program, geometryShader);
+	glAttachShader(program, fragmentShader);
+
+	glLinkProgram(program);
+
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+
+	if (!status){
+
+		std::cerr << "Error: Shaders could not be linked: " << status << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	glUseProgram(program);
+
+	//place a value into a GPU register
+	GLint loc = glGetUniformLocation(program, "image_1");
+	//use texture unit 3 for one of the images
+	glUniform1i(loc, 3);
+
+	loc = glGetUniformLocation(program, "image_2");
+	//use texture unit 1 for one of the images
+	glUniform1i(loc, 1);*/
 
 	//initialize scene
 	scene = new Scene();
@@ -119,6 +206,31 @@ Window::Window(){
 
 }
 
+char *readText(const std::string &filename){
+
+	std::ifstream inFile(filename);
+
+	if (!inFile){
+
+		std::cerr << "Error opening file: " << filename << std::endl;
+		exit(EXIT_FAILURE);
+
+	}
+
+	//determine length of file
+	inFile.seekg(0, std::ios::end);
+	const int length = inFile.tellg();
+
+	char *data = new char[length];
+
+	//read file
+	inFile.seekg(0, std::ios::beg);
+	inFile.read(data, length);
+
+	return data;
+
+}
+
 void display(){
 
 	const int width = glutGet(GLUT_WINDOW_WIDTH);
@@ -130,20 +242,29 @@ void display(){
 
 void resize(const int w, const int h){
 
-	glViewport(0, 0, static_cast<GLsizei>(w), static_cast<GLsizei>(h));
-	glMatrixMode(GL_PROJECTION);
+	//resize the viewport
+	glViewport(0, 0, static_cast<GLsizei>(w), static_cast<GLsizei>(h));	
 
-	glLoadIdentity();
-	glOrtho(-1.0, 1.0, -1.0, 1.0, -100, 100);
-
-	glMatrixMode(GL_MODELVIEW);
+	//clear the buffers
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	//draw the scene here
+	//set the perspective matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	const float ratio = static_cast<float>(h) / w;
+	const float fov_y = 2.0 * atan(tan(FOV_X * 0.5) / ratio);
+	gluPerspective(fov_y, ratio, Z_MAX, Z_MIN);
+
+	//render the scene
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	static Window *win = Window::getWindow();
 	win->render();
 
+	//swap and flush buffers
 	glutSwapBuffers();
 	glFlush();
 

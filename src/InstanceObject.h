@@ -25,15 +25,18 @@ private:
 	Vector4 material;
 
 	const Texture tex;
+	const Texture bumpMap;
 
 public:
 
 	//constructs the InstanceObject with its parent and optional initial transform
-	InstanceObject(const BasicObject *obj, const Matrix4 &transform, const std::string &texFilename, const int tw, const int th) 
-		: parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0), tex(texFilename, tw, th){}
+	InstanceObject(const BasicObject *obj, const Matrix4 &transform, const std::string &texFilename, 
+				   const std::string &bumpMapFilename, const int tw, const int th, const int bw, const int bh) 
+		: parent(obj), instanceTransform(transform), material(1.0, 1.0, 1.0, 0.0), tex(texFilename, tw, th), bumpMap(bumpMapFilename, bw, bh){}
 
 	//optional constructor to accept a transformation file
-	InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, const int tw, const int th);
+	InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, 
+				   const std::string &bumpMapFilename, const int tw, const int th, const int bw, const int bh);
 
 	//used to build up several transforms
 	void buildTransform(const Matrix4 &newTransform);

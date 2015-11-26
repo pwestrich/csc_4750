@@ -37,6 +37,7 @@ public:
 	inline float z() const { return values[2];}
 	inline float w() const { return values[3];}
 	inline float length() const { return mag;}
+	inline const float *getValues() const { return (values + 0);}
 
 	//returns the dot product of two vectors
 	float dot(const Vector4 &other) const;

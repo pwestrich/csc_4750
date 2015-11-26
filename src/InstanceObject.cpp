@@ -8,8 +8,9 @@
 #include "Matrix4.h"
 #include "AffineTransformations.h"
 
-InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, const int tw, const int th) 
-	: InstanceObject(obj, Matrix4::identity(), texFilename, tw, th){
+InstanceObject::InstanceObject(const BasicObject *obj, const std::string &filename, const std::string &texFilename, 
+				        	   const std::string &bumpMapFilename, const int tw, const int th, const int bw, const int bh) 
+							  : InstanceObject(obj, Matrix4::identity(), texFilename, bumpMapFilename, tw, th, bw, bh){
 
 	std::ifstream inFile(filename);
 
@@ -84,6 +85,6 @@ void InstanceObject::buildTransform(const Matrix4 &newTransform){
 void InstanceObject::render(const Matrix4 &transform) const {
 
 	//tell the BasicObject to render with the instance transform
-	parent->render(transform * instanceTransform, tex);
+	parent->render(transform * instanceTransform, tex, bumpMap);
 
 }

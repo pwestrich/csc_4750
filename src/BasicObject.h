@@ -32,7 +32,7 @@ public:
 	~BasicObject();
 
 	//draws the object
-	void render(const Matrix4 &transform, const Texture &tex) const;
+	void render(const Matrix4 &transform, const Texture &tex, const Texture &bumpMap) const;
 
 };
 

@@ -1,0 +1,31 @@
+#version 120
+#extension GL_EXT_geometry_shader4 : enable
+
+varying in vec3 transformed_normal_vertex_program[6];
+varying in vec4 eye_coord_position_vertex_program[6];
+
+varying out vec3 transformed_normal_geometry_program;
+varying out vec4 eye_coord_position_geometry_program;
+
+//pass through geometry shader with adjacency information
+void main()
+{
+   //0,4,2 selected as adjacency information is not used
+
+   gl_Position = gl_PositionIn[0];
+   transformed_normal_geometry_program = transformed_normal_vertex_program[0];
+   eye_coord_position_geometry_program = eye_coord_position_vertex_program[0];
+   EmitVertex();
+
+   gl_Position = gl_PositionIn[4];
+   transformed_normal_geometry_program = transformed_normal_vertex_program[4];
+   eye_coord_position_geometry_program = eye_coord_position_vertex_program[4];
+   EmitVertex();
+
+   gl_Position = gl_PositionIn[2];
+   transformed_normal_geometry_program = transformed_normal_vertex_program[2];
+   eye_coord_position_geometry_program = eye_coord_position_vertex_program[2];
+   EmitVertex();
+
+   EndPrimitive();
+}

@@ -1,0 +1,52 @@
+#version 120
+#extension GL_EXT_geometry_shader4: enable
+
+varying in vec3 transformed_normal_vertex_program[6];
+varying in vec4 eye_coord_position_vertex_program[6];
+varying out vec3 transformed_normal_geometry_program;
+varying out vec4 eye_coord_position_geometry_program;
+
+void testSilhouette(vec3 first_normal, vec3 second_normal, 
+                    vec4 eye_coord_1, vec3 transformed_normal_1,
+                    vec4 eye_coord_2, vec3 transformed_normal_2)
+{
+
+   if(first_normal.z * second_normal.z < 0)
+   {
+      gl_Position = gl_ProjectionMatrix * eye_coord_1;
+      eye_coord_position_geometry_program = eye_coord_1;
+      transformed_normal_geometry_program = transformed_normal_1;
+      EmitVertex();
+
+      gl_Position = gl_ProjectionMatrix * eye_coord_2;
+      eye_coord_position_geometry_program = eye_coord_2;
+      transformed_normal_geometry_program = transformed_normal_2;
+      EmitVertex();
+
+      EndPrimitive();
+   }
+}
+
+void main()
+{
+   //fully transformed vertices (model view projection)
+   vec3 v0 = gl_PositionIn[0].xyz;
+   vec3 v1 = gl_PositionIn[1].xyz;
+   vec3 v2 = gl_PositionIn[2].xyz;
+   vec3 v3 = gl_PositionIn[3].xyz;
+   vec3 v4 = gl_PositionIn[4].xyz;
+   vec3 v5 = gl_PositionIn[5].xyz;
+
+   vec3 N042 = cross(v4 - v0, v2 - v0);
+   vec3 N021 = cross(v2 - v0, v1 - v0);
+   vec3 N243 = cross(v4 - v2, v3 - v2);
+   vec3 N405 = cross(v0 - v4, v5 - v4);
+
+   //three edges to test
+   testSilhouette(N042, N021, eye_coord_position_vertex_program[0], transformed_normal_vertex_program[0],
+                  eye_coord_position_vertex_program[2], transformed_normal_vertex_program[2]);
+   testSilhouette(N042, N243, eye_coord_position_vertex_program[2], transformed_normal_vertex_program[2],
+                  eye_coord_position_vertex_program[4], transformed_normal_vertex_program[4]);
+   testSilhouette(N042, N405, eye_coord_position_vertex_program[4], transformed_normal_vertex_program[4],
+                  eye_coord_position_vertex_program[0], transformed_normal_vertex_program[0]);
+}
