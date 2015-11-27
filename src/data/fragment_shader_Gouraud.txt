@@ -1,7 +1,0 @@
-varying vec4 diffuse_color_geometry_program;
-
-void main()
-{
-   vec4 diffuse_color_fragment_program = diffuse_color_geometry_program;
-   gl_FragColor = diffuse_color_fragment_program;  //must be done in the fragment shader
-}

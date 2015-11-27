@@ -161,13 +161,13 @@ float* getVertices(const char* ptr, int vcount)
    return vertices;
 }
 
-uint32_t* getFaces(const char* ptr, int fcount)
+uint16_t* getFaces(const char* ptr, int fcount)
 {
    int val = fcount*3;
-   uint32_t* indices = new uint32_t[val];    //assume each face requires 3 vertices to define it
+   uint16_t* indices = new uint16_t[val];    //assume each face requires 3 vertices to define it
 
-   int index1, index2, index3;
-   int temp;
+   uint16_t index1, index2, index3;
+   uint16_t temp;
    string str1, str2, str3, test;
    string* f = new string("f");
    ifstream infile(ptr);
@@ -191,7 +191,7 @@ uint32_t* getFaces(const char* ptr, int fcount)
          str3 = str3.erase(temp, str3.size() - 1);
 
          char* cp;
-         int len;
+         uint16_t len;
 
          cp = new char[10];
          len = str1.length();

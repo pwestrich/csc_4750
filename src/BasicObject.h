@@ -16,7 +16,7 @@ private:
 	float *texCoords;
 	float *verticies;
 	float *normals;
-	uint32_t *faces;
+	uint16_t *faces;
 
 	int _numVerticies;
 	int _numFaces;

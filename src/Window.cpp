@@ -19,9 +19,9 @@ const float Z_MIN = 1.0;
 const float Z_MAX = 1.0;
 const float FOV_X = 90.0;
 
-const std::string FILE_SHADER_VERTEX   = "data/vertex_shader_Texture.txt";
-const std::string FILE_SHADER_FRAGMENT = "data/fragment_shader_Texture.txt";
-const std::string FILE_SHADER_GEOMETRY = "data/geometry_shader_Texture.txt";
+const std::string FILE_SHADER_VERTEX   = "data/vertex_shader_Texture.glsl";
+const std::string FILE_SHADER_FRAGMENT = "data/fragment_shader_Texture.glsl";
+const std::string FILE_SHADER_GEOMETRY = "data/geometry_shader_Texture.glsl";
 
 char *readText(const std::string &filename);
 void display();
@@ -74,7 +74,7 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	}
 
 	std::cout << "Using GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
-	/*
+	
 	int status = 0;
 
 	//create shaders
@@ -94,7 +94,21 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	if (status == GL_FALSE){
 
+		GLint maxLength = 0;
+		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
+ 
+		// The maxLength includes the NULL character
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &errorLog[0]);
+
 		std::cerr << "Vertex shader compilation failed: " << status << std::endl;
+
+		for (size_t i = 0; i < errorLog.size(); ++i){
+
+			std::cerr << errorLog[i];
+
+		}
+
 		exit(EXIT_FAILURE);
 
 	}
@@ -105,7 +119,21 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	if (status == GL_FALSE){
 
+		GLint maxLength = 0;
+		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
+ 
+		// The maxLength includes the NULL character
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &errorLog[0]);
+
 		std::cerr << "Fragment shader compilation failed: " << status << std::endl;
+
+		for (size_t i = 0; i < errorLog.size(); ++i){
+
+			std::cerr << errorLog[i];
+
+		}
+
 		exit(EXIT_FAILURE);
 
 	}
@@ -116,7 +144,21 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	if (status == GL_FALSE){
 
+		GLint maxLength = 0;
+		glGetShaderiv(geometryShader, GL_INFO_LOG_LENGTH, &maxLength);
+ 
+		// The maxLength includes the NULL character
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(geometryShader, maxLength, &maxLength, &errorLog[0]);
+
 		std::cerr << "Geometry shader compilation failed: " << status << std::endl;
+
+		for (size_t i = 0; i < errorLog.size(); ++i){
+
+			std::cerr << errorLog[i];
+
+		}
+
 		exit(EXIT_FAILURE);
 
 	}
@@ -147,12 +189,12 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	//place a value into a GPU register
 	GLint loc = glGetUniformLocation(program, "image_1");
-	//use texture unit 3 for one of the images
-	glUniform1i(loc, 3);
+	//use texture unit 0 for one of the images
+	glUniform1i(loc, 0);
 
 	loc = glGetUniformLocation(program, "image_2");
 	//use texture unit 1 for one of the images
-	glUniform1i(loc, 1);*/
+	glUniform1i(loc, 1);
 
 	//initialize scene
 	scene = new Scene();
