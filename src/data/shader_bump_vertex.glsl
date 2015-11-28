@@ -1,13 +1,15 @@
 
 varying vec3 v_lightVec; 
 varying vec3 v_eyeVec;
+varying vec2 v_texCoord;
 
 attribute vec3 vTangent; 	 
 
 void main(void){
 
-	//set position e
+	//set position and tex coord
 	gl_Position = ftransform();
+	v_texCoord = gl_MultiTexCoord0.st;
 	
 	//transform the normal of the vertex
 	vec3 n = normalize(gl_NormalMatrix * gl_Normal);

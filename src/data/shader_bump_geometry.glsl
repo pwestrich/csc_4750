@@ -2,10 +2,12 @@
 //values from vertex shader
 varying vec3 v_lightVec; 
 varying vec3 v_eyeVec;
+varying vec2 v_texCoord;
 
 //values to be passed to fragment shader
 varying vec3 g_lightVec; 
 varying vec3 g_eyeVec;
+varying vec2 g_texCoord;
 
 void main(){
 
@@ -39,5 +41,6 @@ void main(){
 
    //pass along values to fragment shader
    g_lightVec = v_lightVec;
-   g_eyeVec = v_eyeVec;
+   g_eyeVec   = v_eyeVec;
+   g_texCoord = v_texCoord;
 }
