@@ -19,9 +19,9 @@ const float Z_MIN = 1.0;
 const float Z_MAX = 1.0;
 const float FOV_X = 90.0;
 
-const std::string FILE_SHADER_VERTEX   = "data/vertex_shader_Texture.glsl";
-const std::string FILE_SHADER_FRAGMENT = "data/fragment_shader_Texture.glsl";
-const std::string FILE_SHADER_GEOMETRY = "data/geometry_shader_Texture.glsl";
+const std::string FILE_SHADER_VERTEX   = "data/shader_bump_vertex.glsl";
+const std::string FILE_SHADER_FRAGMENT = "data/shader_bump_fragment.glsl";
+const std::string FILE_SHADER_GEOMETRY = "data/shader_bump_geometry.glsl";
 
 char *readText(const std::string &filename);
 void display();
@@ -180,7 +180,43 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 
 	if (!status){
 
-		std::cerr << "Error: Shaders could not be linked: " << status << std::endl;
+		std::cerr << "Error: Shaders could not be linked: " << std::endl;
+
+		GLint length = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+
+		std::vector<GLchar> log(length);
+		glGetProgramInfoLog(program, length, &length, &log[0]);
+
+		for (size_t i = 0; i < log.size(); ++i){
+
+			std::cerr << log[i];
+
+		}
+
+		exit(EXIT_FAILURE);
+
+	}
+
+	glValidateProgram(program);
+	glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
+
+	if (status == GL_FALSE){
+
+		std::cerr << "Error: Shader program invalid:" << std::endl;;
+
+		GLint length = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+
+		std::vector<GLchar> log(length);
+		glGetProgramInfoLog(program, length, &length, &log[0]);
+
+		for (size_t i = 0; i < log.size(); ++i){
+
+			std::cerr << log[i];
+
+		}
+
 		exit(EXIT_FAILURE);
 
 	}
@@ -188,11 +224,11 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	glUseProgram(program);
 
 	//place a value into a GPU register
-	GLint loc = glGetUniformLocation(program, "image_1");
+	GLint loc = glGetUniformLocation(program, "colorMap");
 	//use texture unit 0 for one of the images
 	glUniform1i(loc, 0);
 
-	loc = glGetUniformLocation(program, "image_2");
+	loc = glGetUniformLocation(program, "normalMap");
 	//use texture unit 1 for one of the images
 	glUniform1i(loc, 1);
 

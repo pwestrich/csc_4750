@@ -1,4 +1,12 @@
 
+//values from vertex shader
+varying vec3 v_lightVec; 
+varying vec3 v_eyeVec;
+
+//values to be passed to fragment shader
+varying vec3 g_lightVec; 
+varying vec3 g_eyeVec;
+
 void main(){
 
    // get the s,t coordinates of each vertex
@@ -28,4 +36,8 @@ void main(){
    }
 
    EndPrimitive();
+
+   //pass along values to fragment shader
+   g_lightVec = v_lightVec;
+   g_eyeVec = v_eyeVec;
 }
