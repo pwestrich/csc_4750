@@ -74,7 +74,7 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	}
 
 	std::cout << "Using GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
-	
+	/*
 	int status = 0;
 
 	//create shaders
@@ -231,7 +231,7 @@ void Window::initWindow(const int argc, const char **argv, const int width, cons
 	loc = glGetUniformLocation(program, "normalMap");
 	//use texture unit 1 for one of the images
 	glUniform1i(loc, 1);
-
+*/
 	//initialize scene
 	scene = new Scene();
 
